@@ -1,0 +1,165 @@
+from __future__ import annotations
+
+"""Training script for the *AdaptiveTrainer* (dynamic strategy agent).
+
+It automatically detects the task-type via the dataset name in the YAML config
+(`MNIST` → classification, `Housing` → regression). Use:
+
+$ python scripts/train_adaptive.py --config config/config.yaml         # MNIST
+$ python scripts/train_adaptive.py --config config/housing_config.yaml # Housing
+"""
+
+import sys
+from pathlib import Path
+import argparse
+from typing import Optional
+import random
+from typing import Dict, Any, Tuple
+
+import yaml
+import numpy as np
+import torch
+from torch.utils.data import DataLoader, random_split
+from torchvision import datasets, transforms
+
+# Add repo root to path
+ROOT_DIR = Path(__file__).parent.parent
+sys.path.append(str(ROOT_DIR))
+
+from src.trainer.adaptive_trainer import AdaptiveTrainer
+from src.models.cnn_model import SimpleCNN
+from src.models.custom_model import CustomModel
+from src.utils.housing_dataset import HousingDataset
+
+
+def set_seed(seed: int = 42):
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(seed)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+
+
+# ---------------------------------------------------------------------
+# MNIST helpers
+# ---------------------------------------------------------------------
+
+def _create_transforms() -> Tuple[transforms.Compose, transforms.Compose]:
+    t_train = transforms.Compose([
+        transforms.ToTensor(),
+        transforms.Normalize((0.1307,), (0.3081,)),
+    ])
+    t_test = transforms.Compose([
+        transforms.ToTensor(),
+        transforms.Normalize((0.1307,), (0.3081,)),
+    ])
+    return t_train, t_test
+
+
+def _load_mnist(cfg: Dict[str, Any]) -> Tuple[DataLoader, DataLoader]:
+    t_train, t_test = _create_transforms()
+    data_dir = ROOT_DIR / cfg["dataset"]["path"]
+    data_dir.mkdir(parents=True, exist_ok=True)
+
+    train_ds = datasets.MNIST(str(data_dir), train=True, download=True, transform=t_train)
+    test_ds = datasets.MNIST(str(data_dir), train=False, transform=t_test)
+
+    loader_kw = {
+        "batch_size": cfg["training"]["batch_size"],
+        "num_workers": 0,
+        "pin_memory": torch.cuda.is_available(),
+    }
+    return (
+        DataLoader(train_ds, shuffle=True, **loader_kw),
+        DataLoader(test_ds, shuffle=False, **loader_kw),
+    )
+
+
+# ---------------------------------------------------------------------
+# Housing helpers
+# ---------------------------------------------------------------------
+
+def _load_housing(cfg: Dict[str, Any], seed: int) -> Tuple[DataLoader, DataLoader]:
+    csv_path = ROOT_DIR / cfg["dataset"]["path"]
+    ds = HousingDataset(str(csv_path), target_scale=1e5)
+
+    val_split = float(cfg["dataset"].get("validation_split", 0.2))
+    v_size = int(len(ds) * val_split)
+    t_size = len(ds) - v_size
+
+    g = torch.Generator()
+    g.manual_seed(seed)
+    train_ds, val_ds = random_split(ds, [t_size, v_size], generator=g)
+
+    kw = {"batch_size": cfg["training"]["batch_size"], "num_workers": 0, "pin_memory": torch.cuda.is_available()}
+    return (
+        DataLoader(train_ds, shuffle=True, **kw),
+        DataLoader(val_ds, shuffle=False, **kw),
+    )
+
+
+# ---------------------------------------------------------------------
+# Main
+# ---------------------------------------------------------------------
+
+
+def main(cfg_path: Path, model_path: Optional[Path] = None):
+    with open(cfg_path, "r", encoding="utf-8") as f:
+        cfg = yaml.safe_load(f)
+
+    seed = cfg.get("training", {}).get("seed", 42)
+    set_seed(seed)
+
+    ds_name = cfg["dataset"]["name"].lower()
+
+    if ds_name == "mnist":
+        task_type = "classification"
+        train_loader, val_loader = _load_mnist(cfg)
+        model = SimpleCNN(
+            input_shape=cfg["dataset"]["input_shape"],
+            conv_layers=cfg["model"]["architecture"]["conv_layers"],
+            pool_size=cfg["model"]["architecture"]["pool_size"],
+            fc_layers=cfg["model"]["architecture"]["fc_layers"],
+            num_classes=cfg["dataset"]["num_classes"],
+            dropout=cfg["model"]["architecture"].get("dropout", 0.25),
+        )
+    elif ds_name == "housing":
+        task_type = "regression"
+        train_loader, val_loader = _load_housing(cfg, seed)
+        model = CustomModel(
+            input_dim=cfg["dataset"]["input_dim"],
+            hidden_dims=cfg["model"]["architecture"]["hidden_dims"],
+            output_dim=1,
+            dropout=cfg["model"]["architecture"].get("dropout", 0.1),
+        )
+    else:
+        raise ValueError(f"Unsupported dataset name: {ds_name}")
+
+    # 如果指定了权重文件则加载
+    if model_path and model_path.exists():
+        print(f"加载预训练权重: {model_path}")
+        model.load_state_dict(torch.load(model_path))
+
+    trainer = AdaptiveTrainer(model, task_type, cfg_path)
+
+    print("\nModel:\n", model)
+    print("\nStarting training with AdaptiveTrainer...")
+    trainer.train(train_loader, val_loader)
+    print("Training completed!")
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser("Adaptive trainer script")
+    parser.add_argument("--config", type=str, required=True, help="Path to YAML config file")
+    parser.add_argument("--model_path", type=str, default=None, help="预训练模型权重 (.pt) 路径（可选）")
+    args = parser.parse_args()
+
+    config_path = ROOT_DIR / args.config
+    if not config_path.exists():
+        raise FileNotFoundError(config_path)
+
+    model_path: Optional[Path] = Path(args.model_path) if args.model_path else None
+
+    main(config_path, model_path=model_path) 

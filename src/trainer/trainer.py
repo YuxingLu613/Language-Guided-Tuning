@@ -1,4 +1,5 @@
 import torch
+import json
 from torch import nn
 from torch.utils.data import DataLoader
 from torch.optim.lr_scheduler import ReduceLROnPlateau
@@ -10,6 +11,7 @@ import logging
 from pathlib import Path
 from ..llm.advisor import LLMAdvisor
 from ..llm.judger import LLMJudger
+from ..llm.prompt_optimizer import LLMPromptOptimizer
 from ..utils.metrics_logger import MetricsLogger
 from sklearn.metrics import precision_score, recall_score
 
@@ -40,8 +42,12 @@ class Trainer:
         self.current_params = {
             'learning_rate': self.config['training']['learning_rate']
         }
-        # 添加类别权重
-        for class_idx, weight in self.config['training']['class_weights'].items():
+
+        # 如果提供了类别权重则读取，否则使用默认 1.0（兼容非分类任务）
+        default_weights = {i: 1.0 for i in range(10)}
+        class_weights_cfg = self.config['training'].get('class_weights', default_weights)
+
+        for class_idx, weight in class_weights_cfg.items():
             self.current_params[f'weight_class_{class_idx}'] = weight
         
         # 初始化优化器
@@ -50,15 +56,26 @@ class Trainer:
         # 初始化调度器（将在train方法中设置）
         self.scheduler = None
         
-        # 初始化LLM顾问和评判器
+        # 初始化LLM顾问、评判器以及 Prompt Optimizer
         self.advisor = LLMAdvisor(self.config['llm'])
         self.judger = LLMJudger(self.config['llm'])
+        self.prompt_optimizer = LLMPromptOptimizer(self.config['llm'])
         
         # 初始化指标记录器
         self.metrics_logger = MetricsLogger(
             self.config['logging']['log_dir'],
             self.config
         )
+
+        # --------------------------------------------------
+        # Agent 输出日志简易方法
+        # --------------------------------------------------
+
+    def _log_agent_output(self, agent: str, payload: dict):
+        """将每个 Agent 的输出追加到独立文件中 (JSON lines)。"""
+        log_file = Path(self.config['logging']['log_dir']) / f"{agent.lower()}_outputs.jsonl"
+        with open(log_file, 'a', encoding='utf-8') as f:
+            f.write(json.dumps(payload, ensure_ascii=False) + "\n")
         
         # 优化历史记录
         self.optimization_history = []
@@ -334,6 +351,15 @@ class Trainer:
                 self.optimization_history
             )
 
+            # 记录 Judger 输出
+            self._log_agent_output('judger', {
+                'epoch': None,
+                'attempt': attempt_idx,
+                'use_optimized': use_optimized,
+                'reason': reason,
+                'suggestion': suggestion,
+            })
+
             if use_optimized:
                 # 采用优化结果
                 final_use_optimized = True
@@ -356,12 +382,35 @@ class Trainer:
             final_suggestion = suggestion
 
             if suggestion:
-                # 让 Advisor 根据 Judger 的建议重新给出参数
+                # 使用 PromptOptimizer 精炼 Judger 的建议
+                try:
+                    advisor_prompt_snapshot = self.advisor._create_prompt(
+                        baseline_params, baseline_metrics, self.config
+                    )
+                except Exception:
+                    advisor_prompt_snapshot = ""
+
+                refined_guidance = self.prompt_optimizer.refine_suggestion(
+                    advisor_prompt_snapshot, suggestion
+                )
+
+                self._log_agent_output('prompt_optimizer', {
+                    'attempt': attempt_idx,
+                    'refined_guidance': refined_guidance,
+                })
+
+                # 让 Advisor 根据精炼后的建议重新给出参数
                 suggestion_text, next_params, should_update = self.advisor.get_advice(
                     baseline_params,
                     baseline_metrics,
                     self.config,
+                    guidance=refined_guidance,
                 )
+
+                self._log_agent_output('advisor', {
+                    'attempt': attempt_idx,
+                    'suggestion': suggestion_text,
+                })
 
                 if should_update and next_params != attempt_params:
                     attempt_params = next_params
@@ -432,10 +481,12 @@ class Trainer:
                     self.current_params,
                     metrics,
                     self.config,
+                    guidance=None,
                 )
                 
                 # 记录建议
                 self.metrics_logger.add_llm_suggestion(epoch, suggestion)
+                self._log_agent_output('advisor', {'epoch': epoch, 'suggestion': suggestion})
                 print(f"\nLLM调优建议:\n{suggestion}\n")
                 
                 # 如果有参数更新建议，评估优化效果
@@ -455,6 +506,12 @@ class Trainer:
                             print("改进建议:", eval_result['suggestion'])
                             
                     # 重置优化尝试次数
-                    if epoch % 5 == 0:
-                        self.judger.reset_attempts()
-                        self.optimization_history = [] 
+                    # 每个 epoch 结束后都重置优化尝试次数，避免历史干扰
+                    self.judger.reset_attempts()
+                    self.optimization_history = [] 
+
+        # ---------------- 训练结束，保存最终模型 ---------------- #
+        from pathlib import Path
+        save_path = Path(self.metrics_logger.log_dir) / "model.pt"
+        torch.save(self.model.state_dict(), save_path)
+        print("模型已保存到", save_path) 

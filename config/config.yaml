@@ -14,11 +14,11 @@ model:
   name: "SimpleCNN"
   architecture:
     conv_layers:
-      - filters: 16
+      - filters: 8
         kernel_size: 3
         stride: 1
         padding: 1
-      - filters: 32
+      - filters: 8
         kernel_size: 3
         stride: 1
         padding: 1
@@ -30,12 +30,12 @@ model:
 training:
   batch_size: 256  # 增加批次大小以提高训练速度
   learning_rate: 0.001
-  optimizer: "adam"
-  epochs: 2
+  optimizer: "sgd"
+  epochs: 10
   early_stopping_patience: 5
   validation_split: 0.2
   device: "auto"
-  loss_function: "cross_entropy"
+  loss_function: "nll"
   
   # 可调整的超参数
   tunable_params:
@@ -69,7 +69,7 @@ llm:
   model: "deepseek-chat"
   api_key: "sk-b295897df8d7404a87a1ae9565e33bab"
   temperature: 0.2  # 降低温度使输出更确定性
-  max_tokens: 500
+  max_tokens: 4096  # 增加token限制以确保完整输出
   
 # 日志配置
 logging:
@@ -82,3 +82,7 @@ logging:
     - "recall"
   plot_metrics: true  # 是否绘制指标图表
   save_plots: true  # 是否保存图表 
+
+  augmentation:
+  enabled: true        # 开启增强循环
+  samples_per_epoch: 64  # 每轮向 LLM 索要多少合成样本

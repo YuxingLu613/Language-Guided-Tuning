@@ -1,0 +1,4 @@
+{"attempt_params": {"learning_rate": 0.001}, "use_opt": true, "reason": ""}
+{"attempt_params": {"learning_rate": 0.003}, "use_opt": true, "reason": ""}
+{"attempt_params": {"learning_rate": 0.01}, "use_opt": true, "reason": ""}
+{"attempt_params": {"learning_rate": 0.015, "dropout": 0.25}, "use_opt": true, "reason": ""}

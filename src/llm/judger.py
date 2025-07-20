@@ -211,7 +211,7 @@ class LLMJudger:
             use_optimized, reason, suggestion = self._parse_comparison_result(comparison_result)
             
             # 如果优化效果不好且有优化历史，获取改进建议
-            if not use_optimized and optimization_history and len(optimization_history) >= 2:
+            if not use_optimized and optimization_history:
                 if self.optimization_attempts >= self.max_attempts:
                     return False, "达到最大优化尝试次数", None
                 

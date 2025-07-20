@@ -1,0 +1,56 @@
+# 数据集配置
+dataset:
+  name: "Housing"
+  input_dim: 5              # 特征维度
+  path: "data/housing/Housing.csv"
+  validation_split: 0.2     # 从训练集中再划分验证集的比例
+
+# 模型配置
+model:
+  name: "CustomModel"
+  architecture:
+    hidden_dims: [2]
+    dropout: 0.5
+
+# 训练配置
+training:
+  batch_size: 256
+  learning_rate: 0.0005
+  optimizer: "adam"
+  epochs: 10
+  early_stopping_patience: 5
+  device: "auto"
+  loss_function: "mse"      # 回归损失
+  seed: 42
+
+  # 可调整的超参数
+  tunable_params:
+    - "learning_rate"
+    - "dropout"
+
+# LLM配置
+llm:
+  model: "deepseek-chat"
+  api_key: "sk-b295897df8d7404a87a1ae9565e33bab"
+  temperature: 0.2
+  max_tokens: 4096  # 增加token限制以确保完整输出
+
+# 日志配置
+logging:
+  log_dir: "logs/"
+  save_interval: 1
+  metrics:
+    - "loss"
+    - "mse"
+    - "mae"
+  plot_metrics: true
+  save_plots: true 
+
+# 数据增强配置（回归）
+augmentation:
+  enabled: true  # 若要关闭 augmentation，可设为 false
+  # 这里不需要 samples_per_epoch，因为我们是特征级 transform
+  methods:
+    - "gaussian_noise"
+    - "feature_dropout"
+    - "none" 

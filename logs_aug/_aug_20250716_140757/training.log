@@ -1,0 +1,3 @@
+2025-07-16 14:13:00,080 - LLM request failed: HTTPSConnectionPool(host='api.deepseek.com', port=443): Read timed out.
+2025-07-16 14:16:05,954 - LLM request failed: HTTPSConnectionPool(host='api.deepseek.com', port=443): Read timed out.
+2025-07-16 14:18:11,308 - LLM request failed: HTTPSConnectionPool(host='api.deepseek.com', port=443): Read timed out.

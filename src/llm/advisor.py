@@ -43,6 +43,7 @@ class LLMAdvisor:
         current_params: Dict[str, Any],
         metrics: Dict[str, float],
         context_cfg: Dict[str, Any],
+        guidance: Optional[str] = None,
     ) -> str:
         """
         创建提示词
@@ -63,6 +64,11 @@ class LLMAdvisor:
         
         prompt += ". If no change needed, reply 'no change'.\n\n"
         
+        # 如有来自 Judger 的额外改进建议，放在最前面提醒但不改变既有格式
+        if guidance:
+            prompt += "\nNOTE FROM JUDGER (refined):\n"
+            prompt += guidance.strip() + "\n"
+
         # 添加当前参数信息
         prompt += "Current parameters:\n"
         for param_name, value in current_params.items():
@@ -115,10 +121,10 @@ class LLMAdvisor:
             return {}, False
         
         params = {}
-        # 使用正则表达式匹配参数值对
-        pattern = r'([a-zA-Z_\d]+)\s*=\s*([\d.]+)'
+        # 使用正则表达式匹配参数值对（数字或布尔）
+        pattern = r'([a-zA-Z_\d]+)\s*=\s*([a-zA-Z_\d.\-]+)'
         matches = re.findall(pattern, suggestion)
-        
+
         for param_name, value in matches:
             # 将lr转换回learning_rate
             if param_name == 'lr':
@@ -127,9 +133,15 @@ class LLMAdvisor:
             elif param_name.startswith('class_') and param_name.endswith('_weight'):
                 class_idx = param_name.split('_')[1]
                 params[f'weight_class_{class_idx}'] = float(value)
+            # 处理布尔值
+            elif value.lower() in {'true', 'false'}:
+                params[param_name] = value.lower() == 'true'
             # 其他参数保持原样
             else:
-                params[param_name] = float(value)
+                try:
+                    params[param_name] = float(value)
+                except ValueError:
+                    params[param_name] = value  # 作为字符串保留
         
         return params, bool(params)
     
@@ -138,6 +150,7 @@ class LLMAdvisor:
         current_params: Dict[str, Any],
         metrics: Dict[str, float],
         context_cfg: Dict[str, Any],
+        guidance: Optional[str] = None,
     ) -> Tuple[str, Dict[str, float], bool]:
         """
         获取LLM的调优建议
@@ -166,7 +179,7 @@ class LLMAdvisor:
             },
             {
                 "role": "user",
-                "content": self._create_prompt(current_params, metrics, context_cfg),
+                "content": self._create_prompt(current_params, metrics, context_cfg, guidance),
             },
         ]
         

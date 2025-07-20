@@ -1,0 +1,85 @@
+# Baseline MNIST configuration with LLM data-augmentation enabled
+
+# 数据集配置
+dataset:
+  name: "MNIST"
+  input_shape: [1, 28, 28]
+  num_classes: 10
+  path: "data/"
+  train_transform:
+    - "normalize"
+  test_transform:
+    - "normalize"
+
+# 模型配置
+model:
+  name: "SimpleCNN"
+  architecture:
+    conv_layers:
+      - filters: 16
+        kernel_size: 3
+        stride: 1
+        padding: 1
+      - filters: 32
+        kernel_size: 3
+        stride: 1
+        padding: 1
+    pool_size: 2
+    fc_layers: [64]
+    dropout: 0.25
+
+# 训练配置
+training:
+  batch_size: 256
+  learning_rate: 0.001
+  optimizer: "adam"
+  epochs: 5
+  early_stopping_patience: 5
+  validation_split: 0.2
+  device: "auto"
+  loss_function: "cross_entropy"
+  # 可调整超参数
+  tunable_params:
+    - "learning_rate"
+    - "weight_class_0"
+    - "weight_class_1"
+    - "weight_class_2"
+    - "weight_class_3"
+    - "weight_class_4"
+    - "weight_class_5"
+    - "weight_class_6"
+    - "weight_class_7"
+    - "weight_class_8"
+    - "weight_class_9"
+  # 类别权重初始值（均衡分类）
+  class_weights:
+    0: 1.0
+    1: 1.0
+    2: 1.0
+    3: 1.0
+    4: 1.0
+    5: 1.0
+    6: 1.0
+    7: 1.0
+    8: 1.0
+    9: 1.0
+
+# LLM配置
+llm:
+  model: "deepseek-chat"
+  api_key: "sk-b295897df8d7404a87a1ae9565e33bab"
+  temperature: 0.2
+  max_tokens: 4096
+
+# 日志配置
+logging:
+  log_dir: "logs_aug/"   # 与 baseline 区分
+  save_interval: 1
+  metrics: ["loss", "accuracy", "precision", "recall"]
+  plot_metrics: true
+  save_plots: true
+
+# 数据增强配置
+augmentation:
+  enabled: true
+  samples_per_epoch: 64 
