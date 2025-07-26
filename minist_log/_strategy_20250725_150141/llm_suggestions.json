@@ -1,0 +1,22 @@
+[
+  {
+    "epoch": 0,
+    "suggestion": "loss=cross_entropy, optimizer=adam\n\n(Rationale: For classification tasks with low initial accuracy (19.27% train, 36.83% val), cross-entropy loss is typically more effective than NLL as it combines log-softmax and NLL in one operation. Adam optimizer is suggested over SGD as it generally provides faster convergence in early training stages, especially for CNNs on image data like MNIST. The significant gap between train and validation metrics also suggests the need for a more adaptive optimization approach.)"
+  },
+  {
+    "epoch": 1,
+    "suggestion": "loss=focal_loss, optimizer=adamw"
+  },
+  {
+    "epoch": 2,
+    "suggestion": "loss=cross_entropy, optimizer=sgd"
+  },
+  {
+    "epoch": 3,
+    "suggestion": "loss=cross_entropy, optimizer=adam"
+  },
+  {
+    "epoch": 4,
+    "suggestion": "no change"
+  }
+]

@@ -3,7 +3,7 @@ from torch import nn
 from typing import List
 
 class CustomModel(nn.Module):
-    def __init__(self, input_dim: int, hidden_dims: List[int], output_dim: int, dropout: float = 0.1):
+    def __init__(self, input_dim: int, hidden_dims: List[int] | int, output_dim: int, dropout: float = 0.1):
         """
         初始化模型
         
@@ -14,6 +14,10 @@ class CustomModel(nn.Module):
             dropout: Dropout比率
         """
         super().__init__()
+        
+        # 允许用户传入单个整数
+        if isinstance(hidden_dims, int):
+            hidden_dims = [hidden_dims]
         
         # 构建层
         layers = []

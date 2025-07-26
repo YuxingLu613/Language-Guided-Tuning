@@ -13,7 +13,7 @@ from ..llm.advisor import LLMAdvisor
 from ..llm.judger import LLMJudger
 from ..llm.prompt_optimizer import LLMPromptOptimizer
 from ..utils.metrics_logger import MetricsLogger
-from sklearn.metrics import precision_score, recall_score
+from sklearn.metrics import precision_score, recall_score, roc_auc_score
 
 class Trainer:
     def __init__(self, model: nn.Module, config_path: Union[str, Path]):
@@ -38,13 +38,17 @@ class Trainer:
         self.model = model
         self.model.to(self.device)
         
+        # ---------------- 新增：根据配置获取类别数 ---------------- #
+        self.num_classes = self.config['dataset'].get('num_classes', 10)
+        
         # 初始化训练参数
         self.current_params = {
-            'learning_rate': self.config['training']['learning_rate']
+            'learning_rate': self.config['training']['learning_rate'],
+            'weight_decay': self.config['training'].get('weight_decay', 0.0)
         }
 
         # 如果提供了类别权重则读取，否则使用默认 1.0（兼容非分类任务）
-        default_weights = {i: 1.0 for i in range(10)}
+        default_weights = {i: 1.0 for i in range(self.num_classes)}
         class_weights_cfg = self.config['training'].get('class_weights', default_weights)
 
         for class_idx, weight in class_weights_cfg.items():
@@ -102,12 +106,20 @@ class Trainer:
         optimizer_name = self.config['training']['optimizer'].lower()
         lr = self.current_params['learning_rate']
         
+        wd = self.current_params['weight_decay']
         if optimizer_name == 'adam':
-            return torch.optim.Adam(self.model.parameters(), lr=lr)
+            return torch.optim.Adam(self.model.parameters(), lr=lr, weight_decay=wd)
         elif optimizer_name == 'sgd':
-            return torch.optim.SGD(self.model.parameters(), lr=lr)
+            return torch.optim.SGD(self.model.parameters(), lr=lr, weight_decay=wd)
+        elif optimizer_name == 'adamw':
+            return torch.optim.AdamW(self.model.parameters(), lr=lr, weight_decay=wd)
+        elif optimizer_name == 'adagrad':
+            return torch.optim.Adagrad(self.model.parameters(), lr=lr, weight_decay=wd)
         else:
-            raise ValueError(f"不支持的优化器: {optimizer_name}")
+            # 回退策略：如果配置写入了损失函数等非法值，则默认使用 Adam
+            import warnings
+            warnings.warn(f"未知 optimizer '{optimizer_name}'，已回退为 Adam", RuntimeWarning)
+            return torch.optim.Adam(self.model.parameters(), lr=lr, weight_decay=wd)
     
     def _update_parameters(self, new_params: Dict[str, float]) -> None:
         """
@@ -126,6 +138,12 @@ class Trainer:
         for param_name, value in new_params.items():
             if param_name.startswith('weight_class_'):
                 self.current_params[param_name] = value
+
+        # 动态更新 weight_decay
+        if 'weight_decay' in new_params:
+            self.current_params['weight_decay'] = new_params['weight_decay']
+            for param_group in self.optimizer.param_groups:
+                param_group['weight_decay'] = new_params['weight_decay']
     
     def _calculate_metrics(self, outputs: torch.Tensor, targets: torch.Tensor) -> Dict[str, float]:
         """
@@ -135,10 +153,21 @@ class Trainer:
         predictions = outputs.argmax(dim=1).cpu().numpy()
         targets = targets.cpu().numpy()
         
+        # 计算 ROC-AUC (RUC)
+        probs = torch.softmax(outputs, dim=1).cpu().numpy()
+        try:
+            if self.num_classes == 2:
+                auc = float(roc_auc_score(targets, probs[:, 1]))
+            else:
+                auc = float(roc_auc_score(targets, probs, multi_class='ovr', average='macro'))
+        except ValueError:
+            auc = float('nan')  # 若计算失败 (如缺少类别) 设为 NaN
+
         return {
             'accuracy': float((predictions == targets).mean()),
-            'precision': float(precision_score(targets, predictions, average='macro')),
-            'recall': float(recall_score(targets, predictions, average='macro'))
+            'precision': float(precision_score(targets, predictions, average='macro', zero_division=0)),
+            'recall': float(recall_score(targets, predictions, average='macro', zero_division=0)),
+            'roc_auc': auc
         }
     
     def train_epoch(self, train_loader: DataLoader, epoch: Optional[int] = None, is_evaluation: bool = False) -> Dict[str, float]:
@@ -165,7 +194,7 @@ class Trainer:
                 
                 # 使用类别权重
                 weights = torch.tensor(
-                    [self.current_params[f'weight_class_{i}'] for i in range(10)],
+                    [self.current_params[f'weight_class_{i}'] for i in range(self.num_classes)],
                     device=self.device
                 )
                 loss = nn.functional.cross_entropy(output, target, weight=weights)
@@ -208,7 +237,7 @@ class Trainer:
                 
                 # 使用类别权重
                 weights = torch.tensor(
-                    [self.current_params[f'weight_class_{i}'] for i in range(10)],
+                    [self.current_params[f'weight_class_{i}'] for i in range(self.num_classes)],
                     device=self.device
                 )
                 loss = nn.functional.cross_entropy(output, target, weight=weights)

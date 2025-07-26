@@ -59,10 +59,10 @@ training:
     9: 1.0
   device: auto
   early_stopping_patience: 5
-  epochs: 3
+  epochs: 4
   learning_rate: 0.001
-  loss_function: nll
-  optimizer: sgd
+  loss_function: cross_entropy
+  optimizer: adam
   tunable_params:
   - learning_rate
   - weight_class_0
@@ -76,3 +76,6 @@ training:
   - weight_class_8
   - weight_class_9
   validation_split: 0.2
+
+augmentation:
+  enabled: true

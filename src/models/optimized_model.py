@@ -1,27 +1,25 @@
 # improved model code
+from __future__ import annotations
 import torch.nn as nn
+import torch.nn.functional as F
 
-class CustomModel(nn.Module):
-    def __init__(self, dropout=0.3, hidden_dims=[64, 32]):
-        super().__init__()
-        layers = []
-        in_dim = hidden_dims[0]
-        
-        # Input layer
-        layers.append(nn.Linear(1, in_dim))
-        layers.append(nn.ReLU())
-        layers.append(nn.Dropout(dropout))
-        
-        # Hidden layers
-        for i in range(1, len(hidden_dims)):
-            layers.append(nn.Linear(hidden_dims[i-1], hidden_dims[i]))
-            layers.append(nn.ReLU())
-            layers.append(nn.Dropout(dropout))
-        
-        # Output layer
-        layers.append(nn.Linear(hidden_dims[-1], 1))
-        
-        self.net = nn.Sequential(*layers)
-    
+class SimpleCNN(nn.Module):
+    def __init__(self, num_classes=10):
+        super(SimpleCNN, self).__init__()
+        self.conv1 = nn.Conv2d(3, 32, kernel_size=3, padding=1)
+        self.conv2 = nn.Conv2d(32, 64, kernel_size=3, padding=1)
+        self.conv3 = nn.Conv2d(64, 128, kernel_size=3, padding=1)
+        self.pool = nn.MaxPool2d(2, 2)
+        self.dropout = nn.Dropout(0.3)
+        self.fc1 = nn.Linear(128 * 4 * 4, 256)
+        self.fc2 = nn.Linear(256, num_classes)
+
     def forward(self, x):
-        return self.net(x)
+        x = self.pool(F.relu(self.conv1(x)))
+        x = self.pool(F.relu(self.conv2(x)))
+        x = self.pool(F.relu(self.conv3(x)))
+        x = x.view(-1, 128 * 4 * 4)
+        x = self.dropout(x)
+        x = F.relu(self.fc1(x))
+        x = self.fc2(x)
+        return x

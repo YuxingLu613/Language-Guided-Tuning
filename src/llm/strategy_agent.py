@@ -45,6 +45,7 @@ class StrategyAgent:
         self.temperature: float = llm_cfg.get("temperature", 0.2)
         self.max_tokens: int = llm_cfg.get("max_tokens", 1024)
         self.api_base: str = llm_cfg.get("api_base", "https://api.deepseek.com/v1")
+        self.timeout: int = llm_cfg.get("request_timeout", 120)
 
     # ---------------------------------------------------------------------
     # Prompt building helpers
@@ -75,9 +76,10 @@ class StrategyAgent:
             "You are an expert machine-learning practitioner.\n"
             "At the end of each epoch you will receive: (a) task type, (b) current loss\n"
             "function & optimizer, and (c) the latest training / validation metrics.\n\n"
-            "Your job: Decide the *loss function* **and** *optimizer* to use for the **next**\n"
-            "epoch. If the current combination is still appropriate, reply **exactly**\n"
-            "`no change` (case-insensitive). Otherwise reply with *one line* in the form:\n"
+            "Your job: Propose a *potentially better* pair of loss function **and** optimizer\n"
+            "for the **next** epoch. Respond with **exactly** `no change` (case-insensitive) **only** if you are absolutely certain the current combination is already optimal and cannot be improved.\n"
+            "In most cases you should suggest a new combination.\n"
+            "Return a single line in the format:\n"
             "`loss=<loss_function>, optimizer=<optimizer>` (comma-separated, no extras).\n\n"
             "Do NOT suggest learning-rate changes or any other hyper-parameters.\n\n"
             "Task type: {task_type}\n"
@@ -170,7 +172,7 @@ class StrategyAgent:
         }
 
         try:
-            resp = requests.post(f"{self.api_base}/chat/completions", headers=headers, json=data, timeout=30)
+            resp = requests.post(f"{self.api_base}/chat/completions", headers=headers, json=data, timeout=self.timeout)
             resp.raise_for_status()
             suggestion = resp.json()["choices"][0]["message"]["content"]
         except requests.exceptions.RequestException as e:

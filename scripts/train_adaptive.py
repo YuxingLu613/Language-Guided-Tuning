@@ -22,6 +22,21 @@ import torch
 from torch.utils.data import DataLoader, random_split
 from torchvision import datasets, transforms
 
+# ----------  通用随机种子设置  ---------- #
+
+
+def set_seed(seed: int = 42):
+    """为可复现性设置 Python / NumPy / PyTorch 随机种子"""
+    import numpy as np
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(seed)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+
+
 # Add repo root to path
 ROOT_DIR = Path(__file__).parent.parent
 sys.path.append(str(ROOT_DIR))
@@ -30,16 +45,50 @@ from src.trainer.adaptive_trainer import AdaptiveTrainer
 from src.models.cnn_model import SimpleCNN
 from src.models.custom_model import CustomModel
 from src.utils.housing_dataset import HousingDataset
+from src.utils.water_quality_dataset import WaterQualityDataset  # 新增
+from src.utils.iris_dataset import IrisDataset  # Iris 数据集
+
+from importlib import import_module
+import inspect
+import torch.nn as _nn
+# ------------------------ CIFAR-10 helpers ------------------------ #
+
+_CIFAR_MEAN = (0.4914, 0.4822, 0.4465)
+_CIFAR_STD = (0.2023, 0.1994, 0.2010)
 
 
-def set_seed(seed: int = 42):
-    random.seed(seed)
-    np.random.seed(seed)
-    torch.manual_seed(seed)
-    if torch.cuda.is_available():
-        torch.cuda.manual_seed_all(seed)
-    torch.backends.cudnn.deterministic = True
-    torch.backends.cudnn.benchmark = False
+def _cifar_transforms() -> Tuple[transforms.Compose, transforms.Compose]:
+    t_train = transforms.Compose([
+        transforms.RandomCrop(32, padding=4),
+        transforms.RandomHorizontalFlip(),
+        transforms.ToTensor(),
+        transforms.Normalize(_CIFAR_MEAN, _CIFAR_STD),
+    ])
+
+    t_test = transforms.Compose([
+        transforms.ToTensor(),
+        transforms.Normalize(_CIFAR_MEAN, _CIFAR_STD),
+    ])
+    return t_train, t_test
+
+
+def _load_cifar10(cfg: Dict[str, Any]) -> Tuple[DataLoader, DataLoader]:
+    t_train, t_test = _cifar_transforms()
+    data_dir = ROOT_DIR / cfg["dataset"]["path"]
+    data_dir.mkdir(parents=True, exist_ok=True)
+
+    train_ds = datasets.CIFAR10(str(data_dir), train=True, download=True, transform=t_train)
+    test_ds = datasets.CIFAR10(str(data_dir), train=False, download=True, transform=t_test)
+
+    kw = {
+        "batch_size": cfg["training"]["batch_size"],
+        "num_workers": 0,
+        "pin_memory": torch.cuda.is_available(),
+    }
+    return (
+        DataLoader(train_ds, shuffle=True, **kw),
+        DataLoader(test_ds, shuffle=False, **kw),
+    )
 
 
 # ---------------------------------------------------------------------
@@ -101,6 +150,58 @@ def _load_housing(cfg: Dict[str, Any], seed: int) -> Tuple[DataLoader, DataLoade
 
 
 # ---------------------------------------------------------------------
+# Water Quality helpers
+# ---------------------------------------------------------------------
+
+def _load_water_quality(cfg: Dict[str, Any], seed: int) -> Tuple[DataLoader, DataLoader]:
+    csv_path = ROOT_DIR / cfg["dataset"]["path"]
+    ds = WaterQualityDataset(str(csv_path))
+
+    val_split = float(cfg["dataset"].get("validation_split", 0.2))
+    v_size = int(len(ds) * val_split)
+    t_size = len(ds) - v_size
+
+    g = torch.Generator()
+    g.manual_seed(seed)
+    train_ds, val_ds = random_split(ds, [t_size, v_size], generator=g)
+
+    kw = {
+        "batch_size": cfg["training"]["batch_size"],
+        "num_workers": 0,
+        "pin_memory": torch.cuda.is_available(),
+    }
+    return (
+        DataLoader(train_ds, shuffle=True, **kw),
+        DataLoader(val_ds, shuffle=False, **kw),
+    )
+
+# ---------------------------------------------------------------------
+# Iris helpers
+# ---------------------------------------------------------------------
+
+def _load_iris(cfg: Dict[str, Any], seed: int) -> Tuple[DataLoader, DataLoader]:
+    ds = IrisDataset()
+
+    val_split = float(cfg["dataset"].get("validation_split", 0.2))
+    v_size = int(len(ds) * val_split)
+    t_size = len(ds) - v_size
+
+    g = torch.Generator()
+    g.manual_seed(seed)
+    train_ds, val_ds = random_split(ds, [t_size, v_size], generator=g)
+
+    kw = {
+        "batch_size": cfg["training"]["batch_size"],
+        "num_workers": 0,
+        "pin_memory": torch.cuda.is_available(),
+    }
+    return (
+        DataLoader(train_ds, shuffle=True, **kw),
+        DataLoader(val_ds, shuffle=False, **kw),
+    )
+
+
+# ---------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------
 
@@ -134,6 +235,71 @@ def main(cfg_path: Path, model_path: Optional[Path] = None):
             output_dim=1,
             dropout=cfg["model"]["architecture"].get("dropout", 0.1),
         )
+    elif ds_name in {"waterquality", "water_quality"}:
+        task_type = "classification"
+        train_loader, val_loader = _load_water_quality(cfg, seed)
+        # 动态加载模型，兼容优化后模型文件
+        model_name = cfg["model"]["name"]
+        try:
+            mod = import_module(f"src.models.{model_name.lower()}")
+        except ModuleNotFoundError:
+            from src.models import custom_model as mod  # type: ignore
+
+        model_cls = None
+        for _n, _o in inspect.getmembers(mod, inspect.isclass):
+            if issubclass(_o, _nn.Module):
+                model_cls = _o
+                break
+        if model_cls is None:
+            raise RuntimeError(f"未在 {mod} 找到 nn.Module 子类")
+
+        try:
+            model = model_cls(
+                input_dim=cfg["dataset"].get("input_dim", None),
+                hidden_dims=cfg["model"]["architecture"].get("hidden_dims", None),
+                output_dim=cfg["dataset"].get("num_classes", 2),
+                dropout=cfg["model"]["architecture"].get("dropout", 0.5),
+            )
+        except TypeError:
+            model = model_cls()  # type: ignore
+    elif ds_name == "cifar10":
+        task_type = "classification"
+        train_loader, val_loader = _load_cifar10(cfg)
+        model = SimpleCNN(
+            input_shape=cfg["dataset"]["input_shape"],
+            conv_layers=cfg["model"]["architecture"]["conv_layers"],
+            pool_size=cfg["model"]["architecture"]["pool_size"],
+            fc_layers=cfg["model"]["architecture"]["fc_layers"],
+            num_classes=cfg["dataset"]["num_classes"],
+            dropout=cfg["model"]["architecture"].get("dropout", 0.25),
+        )
+    elif ds_name == "iris":
+        task_type = "classification"
+        train_loader, val_loader = _load_iris(cfg, seed)
+
+        model_name = cfg["model"]["name"]
+        try:
+            mod = import_module(f"src.models.{model_name.lower()}")
+        except ModuleNotFoundError:
+            from src.models import custom_model as mod  # type: ignore
+
+        model_cls = None
+        for _n, _o in inspect.getmembers(mod, inspect.isclass):
+            if issubclass(_o, _nn.Module):
+                model_cls = _o
+                break
+        if model_cls is None:
+            raise RuntimeError(f"未在 {mod} 找到 nn.Module 子类")
+
+        try:
+            model = model_cls(
+                input_dim=cfg["dataset"].get("input_dim", None),
+                hidden_dims=cfg["model"]["architecture"].get("hidden_dims", None),
+                output_dim=cfg["dataset"].get("num_classes", 3),
+                dropout=cfg["model"].get("architecture", {}).get("dropout", 0.3),
+            )
+        except TypeError:
+            model = model_cls()  # type: ignore
     else:
         raise ValueError(f"Unsupported dataset name: {ds_name}")
 

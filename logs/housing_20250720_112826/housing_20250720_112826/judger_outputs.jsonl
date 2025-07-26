@@ -1,3 +1,0 @@
-{"attempt_params": {"learning_rate": 0.001}, "use_opt": true, "reason": ""}
-{"attempt_params": {"learning_rate": 0.002}, "use_opt": true, "reason": ""}
-{"attempt_params": {"learning_rate": 0.003}, "use_opt": false, "reason": "", "suggestion": "Consider revisiting the optimization approach as the baseline performs better on validation metrics."}

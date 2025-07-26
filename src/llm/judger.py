@@ -16,6 +16,7 @@ class LLMJudger:
         self.temperature = config["temperature"]
         self.max_tokens = config["max_tokens"]
         self.api_base = "https://api.deepseek.com/v1"
+        self.timeout = config.get("request_timeout", 120)
         self.optimization_attempts = 0  # 记录优化尝试次数
         self.max_attempts = 5  # 最大尝试次数
         self.baseline_metrics = None  # 缓存的基准指标
@@ -49,7 +50,10 @@ class LLMJudger:
 
         prompt = (
             f"Attempt {attempt_number}/{self.max_attempts}.\n"
-            "Compare ONLY the numeric metrics (e.g., loss, accuracy) between baseline and optimized models.\n"
+            "Compare ONLY the numeric metrics (e.g., loss, accuracy, mse, mae) between baseline and optimized models.\n"
+            "Give PRIMARY importance to *validation* metrics (e.g., accuracy, precision, recall, mse, mae).\n"
+            "Validation loss can be referenced but should NOT dominate the decision because loss may change substantially when switching loss functions.\n"
+            "Training metrics are secondary and should be used only when validation metrics are missing or inconclusive.\n"
             "Respond in the following strict format (uppercase keywords):\n"
             "BETTER_VERSION: BASELINE / OPTIMIZED\n"
             "SUGGESTION: <short suggestion if BASELINE is better, otherwise N/A>\n\n"
@@ -165,7 +169,11 @@ class LLMJudger:
         """
         # 更新尝试次数
         self.optimization_attempts += 1
-        
+
+        # ---- Debug: 输出收到的指标 ---- #
+        print("[Judger] baseline_metrics:", baseline_metrics)
+        print("[Judger] optimized_metrics:", optimized_metrics)
+
         # 缓存基准指标（如果还没有缓存）
         if self.baseline_metrics is None:
             self.baseline_metrics = baseline_metrics
@@ -203,7 +211,7 @@ class LLMJudger:
                 f"{self.api_base}/chat/completions",
                 headers=headers,
                 json=data,
-                timeout=30
+                timeout=self.timeout
             )
             response.raise_for_status()
             comparison_result = response.json()["choices"][0]["message"]["content"]
@@ -230,7 +238,7 @@ class LLMJudger:
                     f"{self.api_base}/chat/completions",
                     headers=headers,
                     json=data,
-                    timeout=30
+                    timeout=self.timeout
                 )
                 response.raise_for_status()
                 improvement_suggestion = response.json()["choices"][0]["message"]["content"]

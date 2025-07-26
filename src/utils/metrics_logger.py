@@ -16,16 +16,25 @@ class MetricsLogger:
         self.log_dir = Path(log_dir)
         self.log_dir.mkdir(parents=True, exist_ok=True)
         
+        self.num_classes: int = config.get('dataset', {}).get('num_classes', 10)
+
         self.metrics_history = {
             'train_loss': [],
             'val_loss': [],
             'train_accuracy': [],
             'val_accuracy': [],
+            'train_precision': [],
+            'val_precision': [],
+            'train_recall': [],
+            'val_recall': [],
+            'train_roc_auc': [],
+            'val_roc_auc': [],
             'learning_rate': [],
+            'weight_decay': [],
         }
-        
+
         # 为每个类别权重创建历史记录
-        for i in range(10):  # MNIST有10个类别
+        for i in range(self.num_classes):
             self.metrics_history[f'weight_class_{i}'] = []
         
         self.config = config
@@ -40,17 +49,24 @@ class MetricsLogger:
             metrics: 训练和验证指标
             params: 当前参数值
         """
-        # 记录损失和准确率
+        # 记录损失与基础指标
         self.metrics_history['train_loss'].append(metrics['train']['loss'])
         self.metrics_history['train_accuracy'].append(metrics['train']['accuracy'])
-        
+        self.metrics_history['train_precision'].append(metrics['train'].get('precision'))
+        self.metrics_history['train_recall'].append(metrics['train'].get('recall'))
+        self.metrics_history['train_roc_auc'].append(metrics['train'].get('roc_auc'))
+
         if 'val' in metrics:
             self.metrics_history['val_loss'].append(metrics['val']['loss'])
             self.metrics_history['val_accuracy'].append(metrics['val']['accuracy'])
+            self.metrics_history['val_precision'].append(metrics['val'].get('precision'))
+            self.metrics_history['val_recall'].append(metrics['val'].get('recall'))
+            self.metrics_history['val_roc_auc'].append(metrics['val'].get('roc_auc'))
         
         # 记录参数值
         self.metrics_history['learning_rate'].append(params['learning_rate'])
-        for i in range(10):
+        self.metrics_history['weight_decay'].append(params.get('weight_decay'))
+        for i in range(self.num_classes):
             self.metrics_history[f'weight_class_{i}'].append(params[f'weight_class_{i}'])
         
         # 保存到文件
@@ -133,7 +149,7 @@ class MetricsLogger:
         ax3.grid(True)
         
         # 4. 类别权重变化
-        for i in range(10):
+        for i in range(self.num_classes):
             ax4.plot(epochs, self.metrics_history[f'weight_class_{i}'], 
                     label=f'Class {i}', alpha=0.7)
         ax4.set_title('Class Weights over Epochs')

@@ -50,6 +50,8 @@ training:
     - "weight_class_7"
     - "weight_class_8"
     - "weight_class_9"
+    - "dropout"
+    - "weight_decay"
   
   # 类别权重初始值
   class_weights:
@@ -83,6 +85,6 @@ logging:
   plot_metrics: true  # 是否绘制指标图表
   save_plots: true  # 是否保存图表 
 
-  augmentation:
+augmentation:
   enabled: true        # 开启增强循环
   samples_per_epoch: 64  # 每轮向 LLM 索要多少合成样本

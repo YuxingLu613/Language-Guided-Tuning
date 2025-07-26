@@ -1,6 +1,0 @@
-{"attempt": 0, "use_opt": false, "suggestion": "The baseline has a slightly lower loss (0.0524 vs 0.0544) while maintaining identical accuracy, precision, and recall. Consider investigating the optimization steps for potential over-regularization or learning rate issues."}
-{"attempt": 0, "use_opt": false, "suggestion": "Consider revisiting the optimization approach as the baseline outperforms in all metrics."}
-{"attempt": 1, "use_opt": false, "suggestion": "Consider reverting to baseline hyperparameters or investigating why optimization degraded performance"}
-{"attempt": 0, "use_opt": false, "suggestion": "Consider revisiting the optimization approach as the baseline outperforms in all metrics."}
-{"attempt": 0, "use_opt": false, "suggestion": "Consider reverting to baseline hyperparameters or investigating why optimization degraded performance slightly."}
-{"attempt": 0, "use_opt": false, "suggestion": "Consider reverting to baseline hyperparameters as it achieves marginally better recall and lower loss."}

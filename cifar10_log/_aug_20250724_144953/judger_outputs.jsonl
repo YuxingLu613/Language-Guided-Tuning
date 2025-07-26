@@ -1,0 +1,3 @@
+{"attempt": 0, "use_opt": true, "suggestion": null}
+{"attempt": 0, "use_opt": false, "suggestion": "Consider reverting to the baseline model or investigating why optimization degraded performance across all key metrics (accuracy, precision, recall, roc_auc). The optimized model shows worse performance in every validation metric."}
+{"attempt": 0, "use_opt": false, "suggestion": "Revert to baseline hyperparameters or investigate why optimization degraded performance across all metrics."}

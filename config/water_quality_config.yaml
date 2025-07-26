@@ -1,0 +1,59 @@
+# 数据集配置
+dataset:
+  name: "WaterQuality"
+  input_dim: 9                 # 特征数量
+  num_classes: 2               # 二分类
+  path: "data/water_quality/water_potability.csv"
+  validation_split: 0.2
+
+# 模型配置
+model:
+  name: "CustomModel"
+  architecture:
+    hidden_dims: [32, 64]
+    dropout: 0.5
+
+# 训练配置
+training:
+  batch_size: 256
+  learning_rate: 0.001
+  optimizer: "sgd"
+  epochs: 10
+  early_stopping_patience: 5
+  device: "auto"
+  loss_function: "cross_entropy"  # 分类损失
+  seed: 42
+
+  # 可调整超参数（如需 LLM 调优）
+  tunable_params:
+    - "learning_rate"
+    - "weight_class_0"
+    - "weight_class_1"
+
+  # 类别权重 (初始都为 1.0，可根据不平衡情况调整)
+  class_weights:
+    0: 1.0
+    1: 1.0
+
+# LLM 配置（Baseline 中不会真正调用）
+llm:
+  model: "deepseek-chat"
+  api_key: "sk-b295897df8d7404a87a1ae9565e33bab"
+  temperature: 0.2
+  max_tokens: 4096
+
+# 日志配置
+logging:
+  log_dir: "logs/"
+  save_interval: 1
+  metrics:
+    - "loss"
+    - "accuracy"
+    - "precision"
+    - "recall"
+  plot_metrics: true
+  save_plots: true
+
+# 数据增强（此处默认关闭）
+augmentation:
+  enabled: true

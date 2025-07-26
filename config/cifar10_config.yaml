@@ -1,0 +1,72 @@
+# 数据集配置
+dataset:
+  name: "CIFAR10"
+  input_shape: [3, 32, 32]           # [channels, height, width]
+  num_classes: 10
+  path: "data/cifar-10"            # 数据集存放目录
+  train_transform:
+    - "random_crop"
+    - "random_flip"
+    - "normalize"
+  test_transform:
+    - "normalize"
+
+# 模型配置
+model:
+  name: "SimpleCNN"
+  architecture:
+    conv_layers:
+      - filters: 8
+        kernel_size: 3
+        stride: 1
+        padding: 1
+      - filters: 16
+        kernel_size: 3
+        stride: 1
+        padding: 1
+    pool_size: 2
+    fc_layers: [32]
+    dropout: 0.25
+
+# 训练配置
+training:
+  batch_size: 128
+  learning_rate: 0.001
+  optimizer: "sgd"
+  epochs: 10
+  early_stopping_patience: 5
+  validation_split: 0.1
+  device: "auto"
+  loss_function: "ce"
+
+  tunable_params:
+    - "learning_rate"
+    - "weight_class_0"
+    - "weight_class_1"
+    - "weight_class_2"
+    - "weight_class_3"
+    - "weight_class_4"
+    - "weight_class_5"
+    - "weight_class_6"
+    - "weight_class_7"
+    - "weight_class_8"
+    - "weight_class_9"
+
+# LLM配置（占位，因baseline脚本不会真正使用）
+llm:
+  model: "deepseek-chat"
+  api_key: "sk-b295897df8d7404a87a1ae9565e33bab"
+  temperature: 0.2
+  max_tokens: 4096
+
+# 日志配置
+logging:
+  log_dir: "cifar10_log/"
+  save_interval: 1
+  metrics:
+    - "loss"
+    - "accuracy"
+    - "precision"
+    - "recall"
+  plot_metrics: true
+  save_plots: true 

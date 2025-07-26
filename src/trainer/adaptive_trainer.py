@@ -33,7 +33,7 @@ from datetime import datetime
 import torch
 from torch import nn
 from torch.utils.data import DataLoader
-from sklearn.metrics import precision_score, recall_score  # for classification  # type: ignore
+from sklearn.metrics import precision_score, recall_score, roc_auc_score
 from tqdm import tqdm
 import yaml
 import json
@@ -50,16 +50,63 @@ class AdaptiveTrainer:
         "adam": torch.optim.Adam,
         "sgd": torch.optim.SGD,
         "rmsprop": torch.optim.RMSprop,
+        "adamw": torch.optim.AdamW,
+        "adagrad": torch.optim.Adagrad,
+        "nadam": torch.optim.NAdam,
     }
+
+    class _FocalLoss(nn.Module):
+        """Simple focal loss implementation for multi-class or binary classification."""
+        def __init__(self, gamma: float = 2.0, weight: Optional[torch.Tensor] = None, reduction: str = "mean"):
+            super().__init__()
+            self.gamma = gamma
+            self.weight = weight
+            self.reduction = reduction
+
+        def forward(self, inputs: torch.Tensor, targets: torch.Tensor):
+            ce_loss = nn.functional.cross_entropy(inputs, targets, weight=self.weight, reduction="none")
+            pt = torch.exp(-ce_loss)
+            focal_loss = ((1 - pt) ** self.gamma) * ce_loss
+            if self.reduction == "mean":
+                return focal_loss.mean()
+            elif self.reduction == "sum":
+                return focal_loss.sum()
+            else:
+                return focal_loss
+
+    class _DiceLoss(nn.Module):
+        """Dice loss for (multi-)class classification."""
+
+        def __init__(self, smooth: float = 1.0):
+            super().__init__()
+            self.smooth = smooth
+
+        def forward(self, inputs: torch.Tensor, targets: torch.Tensor):
+            # one-hot encode targets
+            num_classes = inputs.size(1)
+            targets_onehot = torch.nn.functional.one_hot(targets, num_classes).float()
+            inputs_prob = torch.softmax(inputs, dim=1)
+
+            dims = (0,)
+            intersection = (inputs_prob * targets_onehot).sum(dims)
+            union = inputs_prob.sum(dims) + targets_onehot.sum(dims)
+            dice = (2. * intersection + self.smooth) / (union + self.smooth)
+            loss = 1 - dice.mean()
+            return loss
 
     SUPPORTED_LOSSES = {
         # classification
         "cross_entropy": nn.CrossEntropyLoss,
         "nll": nn.NLLLoss,
+        "focal": _FocalLoss,
+        "dice": _DiceLoss,
+        "dice_loss": _DiceLoss,
+        "weighted_cross_entropy": "_custom",  # placeholder handled in _get_loss_fn
         # regression
         "mse": nn.MSELoss,
         "mae": nn.L1Loss,
         "huber": nn.HuberLoss,
+        "log_cosh": "_custom_reg",
     }
 
     def __init__(self, model: nn.Module, task_type: str, config_path: Union[str, Path]):
@@ -79,6 +126,9 @@ class AdaptiveTrainer:
             self.device = torch.device(self.config["training"]["device"])
 
         self.model = model.to(self.device)
+
+        # ------------- 新增: 记录类别数供指标计算 ------------- #
+        self.num_classes: int = self.config.get("dataset", {}).get("num_classes", 2)
 
         # ---------------- Strategy & Agents ---------------- #
         self.current_strategy: Dict[str, Any] = {
@@ -139,18 +189,78 @@ class AdaptiveTrainer:
     def _get_loss_fn(self, name: str):
         name = name.lower()
         if name not in self.SUPPORTED_LOSSES:
+            # 动态添加别名或自定义加权交叉熵
+            if name in {"weighted_cross_entropy", "wce"}:
+                def _wce(inputs: torch.Tensor, targets: torch.Tensor):
+                    # 构造当前类别权重张量
+                    weights = torch.tensor(
+                        [self.current_strategy.get(f"weight_class_{i}", 1.0) for i in range(self.num_classes)],
+                        device=inputs.device,
+                    )
+                    return nn.functional.cross_entropy(inputs, targets, weight=weights)
+
+                return _wce
+            if name == "log_cosh":
+                def _log_cosh(preds: torch.Tensor, targets: torch.Tensor):
+                    diff = preds.squeeze() - targets.squeeze()
+                    return torch.mean(torch.log(torch.cosh(diff)))
+
+                return _log_cosh
             raise ValueError(f"Unsupported loss function: {name}")
         if name in {"cross_entropy", "nll"}:
             # For classification, weights can be extended if needed
             return self.SUPPORTED_LOSSES[name]()
+        if name == "log_cosh":
+            def _log_cosh(preds: torch.Tensor, targets: torch.Tensor):
+                diff = preds.squeeze() - targets.squeeze()
+                return torch.mean(torch.log(torch.cosh(diff)))
+
+            return _log_cosh
+        if name in {"focal", "focal_loss"}:
+            return self.SUPPORTED_LOSSES[name]()
         return self.SUPPORTED_LOSSES[name]()
 
     def _get_optimizer(self):
-        name = self.current_strategy["optimizer"].lower()
-        if name not in self.SUPPORTED_OPTIMIZERS:
-            raise ValueError(f"Unsupported optimizer: {name}")
-        optim_cls = self.SUPPORTED_OPTIMIZERS[name]
-        return optim_cls(self.model.parameters(), lr=self.current_strategy["learning_rate"])
+        optimizer_name = self.current_strategy["optimizer"].lower()
+        lr = self.current_strategy["learning_rate"]
+        if optimizer_name not in self.SUPPORTED_OPTIMIZERS:
+            raise ValueError(f"Unsupported optimizer: {optimizer_name}")
+        optim_cls = self.SUPPORTED_OPTIMIZERS[optimizer_name]
+        wd = self.current_strategy.get('weight_decay', 0.0)
+
+        def _ensure_sgd_keys(opt: torch.optim.Optimizer, default_m: float = 0.0):
+            """确保SGD相关param_group包含 momentum/dampening 键"""
+            for g in opt.param_groups:
+                if 'momentum' not in g:
+                    g['momentum'] = default_m
+                if 'dampening' not in g:
+                    g['dampening'] = 0.0
+            return opt
+
+        if optimizer_name == 'sgd':
+            return _ensure_sgd_keys(torch.optim.SGD(self.model.parameters(), lr=lr, momentum=0.0, weight_decay=wd), 0.0)
+        elif optimizer_name in {'sgd_with_momentum', 'sgd_momentum', 'sgdm'}:
+            # 默认动量 0.9，可后续在 current_strategy 中加字段调整
+            return _ensure_sgd_keys(torch.optim.SGD(self.model.parameters(), lr=lr, momentum=0.9, weight_decay=wd), 0.9)
+        elif optimizer_name == 'adamw':
+            return _ensure_sgd_keys(torch.optim.AdamW(self.model.parameters(), lr=lr, weight_decay=wd))
+        elif optimizer_name == 'adagrad':
+            return _ensure_sgd_keys(torch.optim.Adagrad(self.model.parameters(), lr=lr, weight_decay=wd))
+        elif optimizer_name == 'rmsprop':
+            opt = torch.optim.RMSprop(self.model.parameters(), lr=lr, momentum=0.0, weight_decay=wd)
+            # 手动初始化 square_avg
+            for group in opt.param_groups:
+                for p in group['params']:
+                    state = opt.state[p]
+                    if 'square_avg' not in state:
+                        state['square_avg'] = torch.zeros_like(p, memory_format=torch.preserve_format)
+                    if 'momentum_buffer' not in state and group.get('momentum', 0.0) != 0.0:
+                        state['momentum_buffer'] = torch.zeros_like(p, memory_format=torch.preserve_format)
+                    if 'step' not in state:
+                        state['step'] = 0
+            return _ensure_sgd_keys(opt, 0.0)
+        opt_generic = optim_cls(self.model.parameters(), lr=lr, weight_decay=wd)
+        return _ensure_sgd_keys(opt_generic)
 
     # ------------------------------------------------------------------
     # Metrics
@@ -162,8 +272,9 @@ class AdaptiveTrainer:
             targets_np = targets.detach().cpu().numpy()
             return {
                 "accuracy": float((preds == targets_np).mean()),
-                "precision": float(precision_score(targets_np, preds, average="macro")),
-                "recall": float(recall_score(targets_np, preds, average="macro")),
+                "precision": float(precision_score(targets_np, preds, average="macro", zero_division=0)),
+                "recall": float(recall_score(targets_np, preds, average="macro", zero_division=0)),
+                "roc_auc": self._compute_roc_auc(targets_np, outputs, self.num_classes),
             }
         else:
             preds = outputs.squeeze().detach().cpu()
@@ -171,6 +282,17 @@ class AdaptiveTrainer:
             mse = torch.mean((preds - t) ** 2).item()
             mae = torch.mean(torch.abs(preds - t)).item()
             return {"mse": mse, "mae": mae}
+
+    @staticmethod
+    def _compute_roc_auc(y_true, logits, num_classes):
+        """计算 ROC-AUC，分类数>2 时使用 macro OVR。失败返回 NaN."""
+        try:
+            probs = torch.softmax(logits, dim=1).cpu().numpy()
+            if num_classes == 2:
+                return float(roc_auc_score(y_true, probs[:, 1]))
+            return float(roc_auc_score(y_true, probs, multi_class='ovr', average='macro'))
+        except Exception:
+            return float('nan')
 
     # ------------------------------------------------------------------
     # Training / Validation loops

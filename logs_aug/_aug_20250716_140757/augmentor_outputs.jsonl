@@ -1,3 +1,0 @@
-{"epoch": 0, "reply": "error: HTTPSConnectionPool(host='api.deepseek.com', port=443): Read timed out.", "n_samples": 0}
-{"epoch": 1, "reply": "error: HTTPSConnectionPool(host='api.deepseek.com', port=443): Read timed out.", "n_samples": 0}
-{"epoch": 2, "reply": "error: HTTPSConnectionPool(host='api.deepseek.com', port=443): Read timed out.", "n_samples": 0}

@@ -17,6 +17,7 @@ class LLMAdvisor:
         self.temperature = config["temperature"]
         self.max_tokens = config["max_tokens"]
         self.api_base = "https://api.deepseek.com/v1"
+        self.timeout = config.get("request_timeout", 120)
         
     def _format_param_name(self, param_name: str) -> str:
         """
@@ -196,7 +197,7 @@ class LLMAdvisor:
                 f"{self.api_base}/chat/completions",
                 headers=headers,
                 json=data,
-                timeout=30
+                timeout=self.timeout
             )
             response.raise_for_status()
             suggestion = response.json()["choices"][0]["message"]["content"]

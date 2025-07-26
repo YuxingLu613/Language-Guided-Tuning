@@ -10,6 +10,7 @@ class LLMPromptOptimizer:
         self.temperature = config["temperature"]
         self.max_tokens = config["max_tokens"]
         self.api_base = "https://api.deepseek.com/v1"
+        self.timeout = config.get("request_timeout", 120)
 
     def refine_suggestion(self, advisor_prompt: str, judger_suggestion: str) -> str:
         """精炼 Judger 的建议。
@@ -58,7 +59,7 @@ class LLMPromptOptimizer:
 
         try:
             response = requests.post(
-                f"{self.api_base}/chat/completions", headers=headers, json=data, timeout=30
+                f"{self.api_base}/chat/completions", headers=headers, json=data, timeout=self.timeout
             )
             response.raise_for_status()
             refined = response.json()["choices"][0]["message"]["content"]

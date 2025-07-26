@@ -1,3 +1,0 @@
-{"epoch": 0, "choice": "feature_dropout", "should_use": true}
-{"epoch": 1, "choice": "gaussian_noise", "should_use": true}
-{"epoch": 2, "choice": "feature_dropout", "should_use": true}

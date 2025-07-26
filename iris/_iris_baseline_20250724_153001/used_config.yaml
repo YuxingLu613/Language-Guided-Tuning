@@ -1,0 +1,45 @@
+augmentation:
+  enabled: true
+dataset:
+  input_dim: 4
+  name: Iris
+  num_classes: 3
+  path: sklearn
+  validation_split: 0.2
+llm:
+  api_key: sk-b295897df8d7404a87a1ae9565e33bab
+  max_tokens: 4096
+  model: deepseek-chat
+  temperature: 0.2
+logging:
+  log_dir: logs/_iris_baseline_20250724_153001
+  metrics:
+  - loss
+  - accuracy
+  - precision
+  - recall
+  plot_metrics: true
+  save_interval: 1
+  save_plots: true
+model:
+  architecture:
+    dropout: 0.3
+    hidden_dims:
+    - 64
+    - 32
+  name: CustomModel
+training:
+  batch_size: 32
+  class_weights:
+    0: 1.0
+    1: 1.0
+    2: 1.0
+  device: auto
+  early_stopping_patience: 10
+  epochs: 10
+  learning_rate: 0.005
+  loss_function: focal_loss
+  optimizer: adamw
+  seed: 42
+  tunable_params:
+  - learning_rate
