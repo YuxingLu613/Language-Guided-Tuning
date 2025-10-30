@@ -1,0 +1,157 @@
+{
+  "epoch": 2,
+  "flags": {
+    "use_adaptive_agent": true,
+    "use_aug_agent": true,
+    "use_hpo_agent": true
+  },
+  "use_optimized": true,
+  "judger_reason": "",
+  "prompt_suggestion": null,
+  "final_metrics": {
+    "train": {
+      "mse": 0.4841734766960144,
+      "mae": 0.55202317237854,
+      "loss": 0.2279008195088927
+    },
+    "val": {
+      "mse": 0.25978901982307434,
+      "mae": 0.4057237207889557,
+      "loss": 0.12813947331160308
+    },
+    "epoch": 2
+  },
+  "final_config": {
+    "augmentation": {
+      "enabled": true,
+      "methods": [
+        "gaussian_noise",
+        "feature_dropout",
+        "none"
+      ],
+      "policy": "noise"
+    },
+    "dataset": {
+      "input_dim": 5,
+      "name": "Housing",
+      "path": "data/housing/Housing.csv",
+      "validation_split": 0.2
+    },
+    "llm": {
+      "api_key": "sk-b295897df8d7404a87a1ae9565e33bab",
+      "max_tokens": 4096,
+      "model": "deepseek-chat",
+      "temperature": 0.2
+    },
+    "logging": {
+      "log_dir": "logs\\history_20251021_162538",
+      "metrics": [
+        "loss",
+        "mse",
+        "mae"
+      ],
+      "plot_metrics": true,
+      "save_interval": 1,
+      "save_plots": true,
+      "disable_trainer_subdir": true
+    },
+    "model": {
+      "architecture": {
+        "dropout": 0.3,
+        "hidden_dims": [
+          64,
+          32
+        ]
+      },
+      "name": "CustomModel"
+    },
+    "training": {
+      "batch_size": 256,
+      "device": "auto",
+      "early_stopping_patience": 5,
+      "epochs": 10,
+      "learning_rate": 0.0005,
+      "loss_function": "huber",
+      "optimizer": "adam",
+      "seed": 42,
+      "tunable_params": [
+        "learning_rate",
+        "dropout"
+      ]
+    }
+  },
+  "optimization_history": [
+    {
+      "param_changes": {
+        "epochs": {
+          "from": 10,
+          "to": 10
+        },
+        "device": {
+          "from": "auto",
+          "to": "auto"
+        },
+        "loss_function": {
+          "from": "huber",
+          "to": "huber"
+        },
+        "seed": {
+          "from": 42,
+          "to": 42
+        },
+        "early_stopping_patience": {
+          "from": 5,
+          "to": 5
+        },
+        "learning_rate": {
+          "from": 0.0005,
+          "to": 0.0005
+        },
+        "tunable_params": {
+          "from": [
+            "learning_rate",
+            "dropout"
+          ],
+          "to": [
+            "learning_rate",
+            "dropout"
+          ]
+        },
+        "batch_size": {
+          "from": 256,
+          "to": 256
+        },
+        "optimizer": {
+          "from": "adam",
+          "to": "adam"
+        }
+      },
+      "original_metrics": {
+        "train": {
+          "mse": 0.48582491278648376,
+          "mae": 0.5531785488128662,
+          "loss": 0.22824745345267522
+        },
+        "val": {
+          "mse": 0.25657543540000916,
+          "mae": 0.40421566367149353,
+          "loss": 0.12669893261045218
+        },
+        "epoch": 2
+      },
+      "optimized_metrics": {
+        "train": {
+          "mse": 0.4841734766960144,
+          "mae": 0.55202317237854,
+          "loss": 0.2279008195088927
+        },
+        "val": {
+          "mse": 0.25978901982307434,
+          "mae": 0.4057237207889557,
+          "loss": 0.12813947331160308
+        },
+        "epoch": 2
+      }
+    }
+  ]
+}

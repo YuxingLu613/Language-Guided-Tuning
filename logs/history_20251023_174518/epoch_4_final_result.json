@@ -1,0 +1,230 @@
+{
+  "epoch": 4,
+  "flags": {
+    "use_adaptive_agent": false,
+    "use_aug_agent": false,
+    "use_hpo_agent": true
+  },
+  "use_optimized": true,
+  "judger_reason": "",
+  "final_metrics": {
+    "train": {
+      "mse": 1.335968017578125,
+      "mae": 0.9547226428985596,
+      "loss": 1.335362174328725
+    },
+    "val": {
+      "mse": 0.8162323236465454,
+      "mae": 0.7777319550514221,
+      "loss": 0.8107998818159103
+    },
+    "epoch": 4
+  },
+  "final_config": {
+    "dataset": {
+      "name": "Housing",
+      "input_dim": 5,
+      "path": "data/housing/Housing.csv",
+      "validation_split": 0.2
+    },
+    "model": {
+      "name": "CustomModel",
+      "architecture": {
+        "hidden_dims": [
+          2
+        ],
+        "dropout": 0.5
+      }
+    },
+    "training": {
+      "batch_size": 256,
+      "learning_rate": 0.0005,
+      "optimizer": "adam",
+      "epochs": 10,
+      "early_stopping_patience": 5,
+      "device": "auto",
+      "loss_function": "mse",
+      "seed": 42,
+      "tunable_params": [
+        "learning_rate",
+        "dropout"
+      ],
+      "dropout": 0.4
+    },
+    "llm": {
+      "model": "deepseek-chat",
+      "api_key": "sk-b295897df8d7404a87a1ae9565e33bab",
+      "temperature": 0.2,
+      "max_tokens": 4096
+    },
+    "logging": {
+      "log_dir": "logs\\history_20251023_174518",
+      "save_interval": 1,
+      "metrics": [
+        "loss",
+        "mse",
+        "mae"
+      ],
+      "plot_metrics": true,
+      "save_plots": true,
+      "disable_trainer_subdir": true
+    },
+    "augmentation": {
+      "enabled": true,
+      "methods": [
+        "gaussian_noise",
+        "feature_dropout",
+        "none"
+      ]
+    }
+  },
+  "optimization_history": [
+    {
+      "param_changes": {
+        "dropout": {
+          "from": 0.3,
+          "to": 0.4
+        },
+        "learning_rate": {
+          "from": 0.001,
+          "to": 0.0005
+        },
+        "optimizer": {
+          "from": "adam",
+          "to": "adam"
+        },
+        "seed": {
+          "from": 42,
+          "to": 42
+        },
+        "batch_size": {
+          "from": 256,
+          "to": 256
+        },
+        "epochs": {
+          "from": 10,
+          "to": 10
+        },
+        "early_stopping_patience": {
+          "from": 5,
+          "to": 5
+        },
+        "tunable_params": {
+          "from": [
+            "learning_rate",
+            "dropout"
+          ],
+          "to": [
+            "learning_rate",
+            "dropout"
+          ]
+        },
+        "loss_function": {
+          "from": "mse",
+          "to": "mse"
+        },
+        "device": {
+          "from": "auto",
+          "to": "auto"
+        }
+      },
+      "original_metrics": {
+        "train": {
+          "mse": 1.2096937894821167,
+          "mae": 0.8949633836746216,
+          "loss": 1.2076826778946408
+        },
+        "val": {
+          "mse": 0.5724332928657532,
+          "mae": 0.6288612484931946,
+          "loss": 0.5680090457201004
+        },
+        "epoch": 4
+      },
+      "optimized_metrics": {
+        "train": {
+          "mse": 1.335968017578125,
+          "mae": 0.9547226428985596,
+          "loss": 1.335362174328725
+        },
+        "val": {
+          "mse": 0.8162323236465454,
+          "mae": 0.7777319550514221,
+          "loss": 0.8107998818159103
+        },
+        "epoch": 4
+      }
+    }
+  ],
+  "prev_metrics_used": {
+    "train": {
+      "mse": 1.8998668193817139,
+      "mae": 1.1984070539474487,
+      "loss": 1.8985116922172012
+    },
+    "val": {
+      "mse": 1.1547956466674805,
+      "mae": 0.9566469788551331,
+      "loss": 1.1475148439407348
+    },
+    "epoch": 3
+  },
+  "prev_config_used": {
+    "dataset": {
+      "name": "Housing",
+      "input_dim": 5,
+      "path": "data/housing/Housing.csv",
+      "validation_split": 0.2
+    },
+    "model": {
+      "name": "CustomModel",
+      "architecture": {
+        "hidden_dims": [
+          2
+        ],
+        "dropout": 0.5
+      }
+    },
+    "training": {
+      "batch_size": 256,
+      "learning_rate": 0.001,
+      "optimizer": "adam",
+      "epochs": 10,
+      "early_stopping_patience": 5,
+      "device": "auto",
+      "loss_function": "mse",
+      "seed": 42,
+      "tunable_params": [
+        "learning_rate",
+        "dropout"
+      ],
+      "dropout": 0.3
+    },
+    "llm": {
+      "model": "deepseek-chat",
+      "api_key": "sk-b295897df8d7404a87a1ae9565e33bab",
+      "temperature": 0.2,
+      "max_tokens": 4096
+    },
+    "logging": {
+      "log_dir": "logs\\history_20251023_174518",
+      "save_interval": 1,
+      "metrics": [
+        "loss",
+        "mse",
+        "mae"
+      ],
+      "plot_metrics": true,
+      "save_plots": true,
+      "disable_trainer_subdir": true
+    },
+    "augmentation": {
+      "enabled": true,
+      "methods": [
+        "gaussian_noise",
+        "feature_dropout",
+        "none"
+      ]
+    }
+  }
+}

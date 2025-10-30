@@ -1,0 +1,180 @@
+{
+  "epoch": 2,
+  "flags": {
+    "use_adaptive_agent": false,
+    "use_aug_agent": true,
+    "use_hpo_agent": false
+  },
+  "use_optimized": true,
+  "judger_reason": "",
+  "prompt_suggestion": null,
+  "final_metrics": {
+    "train": {
+      "accuracy": 0.975,
+      "precision": 0.9744805781391147,
+      "recall": 0.9748316498316498,
+      "roc_auc": 0.9945889212720354,
+      "loss": 0.12403961271047592
+    },
+    "val": {
+      "accuracy": 0.9,
+      "precision": 0.9411764705882352,
+      "recall": 0.9,
+      "roc_auc": 0.9905357142857142,
+      "loss": 0.24519620835781097
+    },
+    "epoch": 2
+  },
+  "final_config": {
+    "augmentation": {
+      "enabled": true,
+      "policy": "shift"
+    },
+    "dataset": {
+      "input_dim": 4,
+      "name": "Iris",
+      "num_classes": 3,
+      "path": "sklearn",
+      "validation_split": 0.2
+    },
+    "llm": {
+      "api_key": "sk-b295897df8d7404a87a1ae9565e33bab",
+      "max_tokens": 4096,
+      "model": "deepseek-chat",
+      "temperature": 0.2
+    },
+    "logging": {
+      "log_dir": "logs\\history_20251021_212958",
+      "metrics": [
+        "loss",
+        "accuracy",
+        "precision",
+        "recall"
+      ],
+      "plot_metrics": true,
+      "save_interval": 1,
+      "save_plots": true,
+      "disable_trainer_subdir": true
+    },
+    "model": {
+      "architecture": {
+        "dropout": 0.3,
+        "hidden_dims": [
+          64,
+          32
+        ]
+      },
+      "name": "CustomModel"
+    },
+    "training": {
+      "batch_size": 32,
+      "class_weights": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0
+      },
+      "device": "auto",
+      "early_stopping_patience": 10,
+      "epochs": 10,
+      "learning_rate": 0.005,
+      "loss_function": "cross_entropy",
+      "optimizer": "adam",
+      "seed": 42,
+      "tunable_params": [
+        "learning_rate"
+      ]
+    }
+  },
+  "optimization_history": [
+    {
+      "param_changes": {
+        "early_stopping_patience": {
+          "from": 10,
+          "to": 10
+        },
+        "seed": {
+          "from": 42,
+          "to": 42
+        },
+        "batch_size": {
+          "from": 32,
+          "to": 32
+        },
+        "optimizer": {
+          "from": "adam",
+          "to": "adam"
+        },
+        "learning_rate": {
+          "from": 0.005,
+          "to": 0.005
+        },
+        "device": {
+          "from": "auto",
+          "to": "auto"
+        },
+        "loss_function": {
+          "from": "cross_entropy",
+          "to": "cross_entropy"
+        },
+        "class_weights": {
+          "from": {
+            "0": 1.0,
+            "1": 1.0,
+            "2": 1.0
+          },
+          "to": {
+            "0": 1.0,
+            "1": 1.0,
+            "2": 1.0
+          }
+        },
+        "epochs": {
+          "from": 10,
+          "to": 10
+        },
+        "tunable_params": {
+          "from": [
+            "learning_rate"
+          ],
+          "to": [
+            "learning_rate"
+          ]
+        }
+      },
+      "original_metrics": {
+        "train": {
+          "accuracy": 0.9833333333333333,
+          "precision": 0.9841269841269842,
+          "recall": 0.9814814814814815,
+          "roc_auc": 0.9988238536155203,
+          "loss": 0.08716953918337822
+        },
+        "val": {
+          "accuracy": 0.9,
+          "precision": 0.9411764705882352,
+          "recall": 0.9,
+          "roc_auc": 0.9905357142857142,
+          "loss": 0.19492453336715698
+        },
+        "epoch": 2
+      },
+      "optimized_metrics": {
+        "train": {
+          "accuracy": 0.975,
+          "precision": 0.9744805781391147,
+          "recall": 0.9748316498316498,
+          "roc_auc": 0.9945889212720354,
+          "loss": 0.12403961271047592
+        },
+        "val": {
+          "accuracy": 0.9,
+          "precision": 0.9411764705882352,
+          "recall": 0.9,
+          "roc_auc": 0.9905357142857142,
+          "loss": 0.24519620835781097
+        },
+        "epoch": 2
+      }
+    }
+  ]
+}

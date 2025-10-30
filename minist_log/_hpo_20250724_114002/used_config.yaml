@@ -1,0 +1,80 @@
+augmentation:
+  enabled: true
+dataset:
+  input_shape:
+  - 1
+  - 28
+  - 28
+  name: MNIST
+  num_classes: 10
+  path: data/
+  test_transform:
+  - normalize
+  train_transform:
+  - normalize
+llm:
+  api_key: 
+  max_tokens: 4096
+  model: deepseek-chat
+  temperature: 0.2
+logging:
+  augmentation: null
+  enabled: true
+  log_dir: C:\Users\24710\Desktop\llm+deeplearning\Language-Guided-Tuning\logs\mnist_20250724_114002
+  metrics:
+  - loss
+  - accuracy
+  - precision
+  - recall
+  plot_metrics: true
+  samples_per_epoch: 64
+  save_interval: 1
+  save_plots: true
+model:
+  architecture:
+    conv_layers:
+    - filters: 16
+      kernel_size: 3
+      padding: 1
+      stride: 1
+    - filters: 32
+      kernel_size: 3
+      padding: 1
+      stride: 1
+    dropout: 0.3
+    fc_layers:
+    - 128
+    pool_size: 2
+  name: SimpleCNN
+training:
+  batch_size: 256
+  class_weights:
+    0: 1.0
+    1: 1.0
+    2: 1.0
+    3: 1.0
+    4: 1.0
+    5: 1.0
+    6: 1.0
+    7: 1.0
+    8: 1.0
+    9: 1.0
+  device: auto
+  early_stopping_patience: 5
+  epochs: 4
+  learning_rate: 0.001
+  loss_function: cross_entropy
+  optimizer: adam
+  tunable_params:
+  - learning_rate
+  - weight_class_0
+  - weight_class_1
+  - weight_class_2
+  - weight_class_3
+  - weight_class_4
+  - weight_class_5
+  - weight_class_6
+  - weight_class_7
+  - weight_class_8
+  - weight_class_9
+  validation_split: 0.2

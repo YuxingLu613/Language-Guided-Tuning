@@ -1,0 +1,646 @@
+{
+  "epoch": 7,
+  "flags": {
+    "use_adaptive_agent": true,
+    "use_aug_agent": true,
+    "use_hpo_agent": true
+  },
+  "use_optimized": false,
+  "judger_reason": "All optimization attempts rejected by Judger",
+  "final_metrics": {
+    "train": {
+      "accuracy": 0.9916666666666667,
+      "precision": 0.990990990990991,
+      "recall": 0.9916666666666667,
+      "f1": 0.9912143806716375,
+      "roc_auc": 0.9976416446208113,
+      "loss": 0.022799497470259666
+    },
+    "val": {
+      "accuracy": 0.9,
+      "precision": 0.9411764705882352,
+      "recall": 0.9,
+      "f1": 0.9089184060721062,
+      "roc_auc": 0.992202380952381,
+      "loss": 0.05590679869055748
+    },
+    "epoch": 7
+  },
+  "final_config": {
+    "augmentation": {
+      "enabled": true,
+      "policy": "rotation"
+    },
+    "dataset": {
+      "input_dim": 4,
+      "name": "Iris",
+      "type": "image",
+      "num_classes": 3,
+      "path": "sklearn",
+      "validation_split": 0.2
+    },
+    "llm": {
+      "api_key": "sk-b295897df8d7404a87a1ae9565e33bab",
+      "max_tokens": 4096,
+      "model": "deepseek-chat",
+      "temperature": 0.2
+    },
+    "logging": {
+      "log_dir": "logs\\history_20251028_184225",
+      "metrics": [
+        "loss",
+        "accuracy",
+        "precision",
+        "recall",
+        "f1",
+        "roc_auc"
+      ],
+      "plot_metrics": true,
+      "save_interval": 1,
+      "save_plots": true,
+      "disable_trainer_subdir": true
+    },
+    "model": {
+      "architecture": {
+        "dropout": 0.3,
+        "hidden_dims": [
+          64,
+          32
+        ]
+      },
+      "name": "CustomModel"
+    },
+    "training": {
+      "batch_size": 32,
+      "class_weights": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0
+      },
+      "device": "auto",
+      "early_stopping_patience": 10,
+      "epochs": 10,
+      "learning_rate": 0.001,
+      "loss_function": "focal_loss",
+      "optimizer": "adam",
+      "seed": 42,
+      "tunable_params": [
+        "learning_rate"
+      ]
+    }
+  },
+  "optimization_history": [
+    {
+      "param_changes": {
+        "batch_size": {
+          "from": 32,
+          "to": 32
+        },
+        "early_stopping_patience": {
+          "from": 10,
+          "to": 10
+        },
+        "learning_rate": {
+          "from": 0.001,
+          "to": 0.01
+        },
+        "class_weights": {
+          "from": {
+            "0": 1.0,
+            "1": 1.0,
+            "2": 1.0
+          },
+          "to": {
+            "0": 1.0,
+            "1": 1.0,
+            "2": 1.0
+          }
+        },
+        "tunable_params": {
+          "from": [
+            "learning_rate"
+          ],
+          "to": [
+            "learning_rate"
+          ]
+        },
+        "epochs": {
+          "from": 10,
+          "to": 10
+        },
+        "optimizer": {
+          "from": "adam",
+          "to": "sgd"
+        },
+        "seed": {
+          "from": 42,
+          "to": 42
+        },
+        "loss_function": {
+          "from": "focal_loss",
+          "to": "cross_entropy"
+        },
+        "device": {
+          "from": "auto",
+          "to": "auto"
+        }
+      },
+      "original_metrics": {
+        "train": {
+          "accuracy": 0.9916666666666667,
+          "precision": 0.990990990990991,
+          "recall": 0.9916666666666667,
+          "f1": 0.9912143806716375,
+          "roc_auc": 0.9976416446208113,
+          "loss": 0.022799497470259666
+        },
+        "val": {
+          "accuracy": 0.9,
+          "precision": 0.9411764705882352,
+          "recall": 0.9,
+          "f1": 0.9089184060721062,
+          "roc_auc": 0.992202380952381,
+          "loss": 0.05590679869055748
+        },
+        "epoch": 7
+      },
+      "optimized_metrics": {
+        "train": {
+          "accuracy": 0.975,
+          "precision": 0.9734349734349735,
+          "recall": 0.974074074074074,
+          "f1": 0.9736431420149124,
+          "roc_auc": 0.9967961860670194,
+          "loss": 0.17690494284033775
+        },
+        "val": {
+          "accuracy": 0.9,
+          "precision": 0.9411764705882352,
+          "recall": 0.9,
+          "f1": 0.9089184060721062,
+          "roc_auc": 0.9907142857142857,
+          "loss": 0.2896924614906311
+        },
+        "epoch": 7
+      }
+    },
+    {
+      "param_changes": {
+        "batch_size": {
+          "from": 32,
+          "to": 32
+        },
+        "early_stopping_patience": {
+          "from": 10,
+          "to": 10
+        },
+        "learning_rate": {
+          "from": 0.001,
+          "to": 0.0005
+        },
+        "class_weights": {
+          "from": {
+            "0": 1.0,
+            "1": 1.0,
+            "2": 1.0
+          },
+          "to": {
+            "0": 1.0,
+            "1": 1.0,
+            "2": 1.0
+          }
+        },
+        "tunable_params": {
+          "from": [
+            "learning_rate"
+          ],
+          "to": [
+            "learning_rate"
+          ]
+        },
+        "epochs": {
+          "from": 10,
+          "to": 10
+        },
+        "optimizer": {
+          "from": "adam",
+          "to": "adamw"
+        },
+        "seed": {
+          "from": 42,
+          "to": 42
+        },
+        "loss_function": {
+          "from": "focal_loss",
+          "to": "cross_entropy"
+        },
+        "device": {
+          "from": "auto",
+          "to": "auto"
+        }
+      },
+      "original_metrics": {
+        "train": {
+          "accuracy": 0.9916666666666667,
+          "precision": 0.990990990990991,
+          "recall": 0.9916666666666667,
+          "f1": 0.9912143806716375,
+          "roc_auc": 0.9976416446208113,
+          "loss": 0.022799497470259666
+        },
+        "val": {
+          "accuracy": 0.9,
+          "precision": 0.9411764705882352,
+          "recall": 0.9,
+          "f1": 0.9089184060721062,
+          "roc_auc": 0.992202380952381,
+          "loss": 0.05590679869055748
+        },
+        "epoch": 7
+      },
+      "optimized_metrics": {
+        "train": {
+          "accuracy": 0.975,
+          "precision": 0.9742160278745645,
+          "recall": 0.9731481481481481,
+          "f1": 0.9735698139454008,
+          "roc_auc": 0.9956321649029981,
+          "loss": 0.1960591934621334
+        },
+        "val": {
+          "accuracy": 0.9,
+          "precision": 0.9411764705882352,
+          "recall": 0.9,
+          "f1": 0.9089184060721062,
+          "roc_auc": 0.9892261904761904,
+          "loss": 0.2841874063014984
+        },
+        "epoch": 7
+      }
+    },
+    {
+      "param_changes": {
+        "batch_size": {
+          "from": 32,
+          "to": 32
+        },
+        "early_stopping_patience": {
+          "from": 10,
+          "to": 10
+        },
+        "learning_rate": {
+          "from": 0.001,
+          "to": 0.0005
+        },
+        "class_weights": {
+          "from": {
+            "0": 1.0,
+            "1": 1.0,
+            "2": 1.0
+          },
+          "to": {
+            "0": 1.0,
+            "1": 1.0,
+            "2": 1.0
+          }
+        },
+        "tunable_params": {
+          "from": [
+            "learning_rate"
+          ],
+          "to": [
+            "learning_rate"
+          ]
+        },
+        "epochs": {
+          "from": 10,
+          "to": 10
+        },
+        "optimizer": {
+          "from": "adam",
+          "to": "adam"
+        },
+        "seed": {
+          "from": 42,
+          "to": 42
+        },
+        "loss_function": {
+          "from": "focal_loss",
+          "to": "focal_loss"
+        },
+        "device": {
+          "from": "auto",
+          "to": "auto"
+        }
+      },
+      "original_metrics": {
+        "train": {
+          "accuracy": 0.9916666666666667,
+          "precision": 0.990990990990991,
+          "recall": 0.9916666666666667,
+          "f1": 0.9912143806716375,
+          "roc_auc": 0.9976416446208113,
+          "loss": 0.022799497470259666
+        },
+        "val": {
+          "accuracy": 0.9,
+          "precision": 0.9411764705882352,
+          "recall": 0.9,
+          "f1": 0.9089184060721062,
+          "roc_auc": 0.992202380952381,
+          "loss": 0.05590679869055748
+        },
+        "epoch": 7
+      },
+      "optimized_metrics": {
+        "train": {
+          "accuracy": 0.9333333333333333,
+          "precision": 0.9314814814814815,
+          "recall": 0.9314814814814815,
+          "f1": 0.9298245614035089,
+          "roc_auc": 0.989715057319224,
+          "loss": 0.060162615263834596
+        },
+        "val": {
+          "accuracy": 0.9,
+          "precision": 0.9411764705882352,
+          "recall": 0.9,
+          "f1": 0.9089184060721062,
+          "roc_auc": 0.9905357142857144,
+          "loss": 0.06304585188627243
+        },
+        "epoch": 7
+      }
+    },
+    {
+      "param_changes": {
+        "batch_size": {
+          "from": 32,
+          "to": 32
+        },
+        "early_stopping_patience": {
+          "from": 10,
+          "to": 10
+        },
+        "learning_rate": {
+          "from": 0.001,
+          "to": 0.0005
+        },
+        "class_weights": {
+          "from": {
+            "0": 1.0,
+            "1": 1.0,
+            "2": 1.0
+          },
+          "to": {
+            "0": 1.0,
+            "1": 1.0,
+            "2": 1.0
+          }
+        },
+        "tunable_params": {
+          "from": [
+            "learning_rate"
+          ],
+          "to": [
+            "learning_rate"
+          ]
+        },
+        "epochs": {
+          "from": 10,
+          "to": 10
+        },
+        "optimizer": {
+          "from": "adam",
+          "to": "sgd"
+        },
+        "seed": {
+          "from": 42,
+          "to": 42
+        },
+        "loss_function": {
+          "from": "focal_loss",
+          "to": "cross_entropy"
+        },
+        "device": {
+          "from": "auto",
+          "to": "auto"
+        }
+      },
+      "original_metrics": {
+        "train": {
+          "accuracy": 0.9916666666666667,
+          "precision": 0.990990990990991,
+          "recall": 0.9916666666666667,
+          "f1": 0.9912143806716375,
+          "roc_auc": 0.9976416446208113,
+          "loss": 0.022799497470259666
+        },
+        "val": {
+          "accuracy": 0.9,
+          "precision": 0.9411764705882352,
+          "recall": 0.9,
+          "f1": 0.9089184060721062,
+          "roc_auc": 0.992202380952381,
+          "loss": 0.05590679869055748
+        },
+        "epoch": 7
+      },
+      "optimized_metrics": {
+        "train": {
+          "accuracy": 0.9666666666666667,
+          "precision": 0.9648148148148148,
+          "recall": 0.9648148148148148,
+          "f1": 0.9648148148148148,
+          "roc_auc": 0.9985052910052911,
+          "loss": 0.1594884656369686
+        },
+        "val": {
+          "accuracy": 0.9,
+          "precision": 0.9411764705882352,
+          "recall": 0.9,
+          "f1": 0.9089184060721062,
+          "roc_auc": 0.9905357142857144,
+          "loss": 0.29881948232650757
+        },
+        "epoch": 7
+      }
+    },
+    {
+      "param_changes": {
+        "batch_size": {
+          "from": 32,
+          "to": 32
+        },
+        "early_stopping_patience": {
+          "from": 10,
+          "to": 10
+        },
+        "learning_rate": {
+          "from": 0.001,
+          "to": 0.001
+        },
+        "class_weights": {
+          "from": {
+            "0": 1.0,
+            "1": 1.0,
+            "2": 1.0
+          },
+          "to": {
+            "0": 1.0,
+            "1": 1.0,
+            "2": 1.0
+          }
+        },
+        "tunable_params": {
+          "from": [
+            "learning_rate"
+          ],
+          "to": [
+            "learning_rate"
+          ]
+        },
+        "epochs": {
+          "from": 10,
+          "to": 10
+        },
+        "optimizer": {
+          "from": "adam",
+          "to": "adam"
+        },
+        "seed": {
+          "from": 42,
+          "to": 42
+        },
+        "loss_function": {
+          "from": "focal_loss",
+          "to": "focal_loss"
+        },
+        "device": {
+          "from": "auto",
+          "to": "auto"
+        }
+      },
+      "original_metrics": {
+        "train": {
+          "accuracy": 0.9916666666666667,
+          "precision": 0.990990990990991,
+          "recall": 0.9916666666666667,
+          "f1": 0.9912143806716375,
+          "roc_auc": 0.9976416446208113,
+          "loss": 0.022799497470259666
+        },
+        "val": {
+          "accuracy": 0.9,
+          "precision": 0.9411764705882352,
+          "recall": 0.9,
+          "f1": 0.9089184060721062,
+          "roc_auc": 0.992202380952381,
+          "loss": 0.05590679869055748
+        },
+        "epoch": 7
+      },
+      "optimized_metrics": {
+        "train": {
+          "accuracy": 0.95,
+          "precision": 0.9486461251167132,
+          "recall": 0.9462962962962962,
+          "f1": 0.9470383275261324,
+          "roc_auc": 0.9949829144620811,
+          "loss": 0.03394420840777457
+        },
+        "val": {
+          "accuracy": 0.9,
+          "precision": 0.9411764705882352,
+          "recall": 0.9,
+          "f1": 0.9089184060721062,
+          "roc_auc": 0.9858928571428572,
+          "loss": 0.06374112516641617
+        },
+        "epoch": 7
+      }
+    }
+  ],
+  "prev_metrics_used": {
+    "train": {
+      "accuracy": 0.9583333333333334,
+      "precision": 0.9588319088319088,
+      "recall": 0.9581649831649832,
+      "f1": 0.9584077392710588,
+      "roc_auc": 0.9976991167945114,
+      "loss": 0.029389861854724586
+    },
+    "val": {
+      "accuracy": 0.9,
+      "precision": 0.9411764705882352,
+      "recall": 0.9,
+      "f1": 0.9089184060721062,
+      "roc_auc": 0.9905357142857144,
+      "loss": 0.06391604244709015
+    },
+    "epoch": 6
+  },
+  "prev_config_used": {
+    "augmentation": {
+      "enabled": true,
+      "policy": "rotation"
+    },
+    "dataset": {
+      "input_dim": 4,
+      "name": "Iris",
+      "type": "image",
+      "num_classes": 3,
+      "path": "sklearn",
+      "validation_split": 0.2
+    },
+    "llm": {
+      "api_key": "sk-b295897df8d7404a87a1ae9565e33bab",
+      "max_tokens": 4096,
+      "model": "deepseek-chat",
+      "temperature": 0.2
+    },
+    "logging": {
+      "log_dir": "logs\\history_20251028_184225",
+      "metrics": [
+        "loss",
+        "accuracy",
+        "precision",
+        "recall",
+        "f1",
+        "roc_auc"
+      ],
+      "plot_metrics": true,
+      "save_interval": 1,
+      "save_plots": true,
+      "disable_trainer_subdir": true
+    },
+    "model": {
+      "architecture": {
+        "dropout": 0.3,
+        "hidden_dims": [
+          64,
+          32
+        ]
+      },
+      "name": "CustomModel"
+    },
+    "training": {
+      "batch_size": 32,
+      "class_weights": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0
+      },
+      "device": "auto",
+      "early_stopping_patience": 10,
+      "epochs": 10,
+      "learning_rate": 0.001,
+      "loss_function": "focal_loss",
+      "optimizer": "adam",
+      "seed": 42,
+      "tunable_params": [
+        "learning_rate"
+      ]
+    }
+  }
+}

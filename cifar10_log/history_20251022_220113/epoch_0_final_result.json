@@ -1,0 +1,122 @@
+{
+  "epoch": 0,
+  "flags": {
+    "use_adaptive_agent": false,
+    "use_aug_agent": false,
+    "use_hpo_agent": true
+  },
+  "use_optimized": false,
+  "judger_reason": "Epoch 0: direct training without optimization",
+  "final_metrics": {
+    "train": {
+      "accuracy": 0.30134,
+      "precision": 0.30044138608529,
+      "recall": 0.30134,
+      "roc_auc": 0.7281234246666667,
+      "loss": 5.142210662212518
+    },
+    "val": {
+      "accuracy": 0.4536,
+      "precision": 0.4675616498497111,
+      "recall": 0.45360000000000006,
+      "roc_auc": 0.8578607055555555,
+      "loss": 1.4130540407156642
+    },
+    "epoch": 0
+  },
+  "final_config": {
+    "augmentation": {
+      "enabled": true
+    },
+    "dataset": {
+      "input_shape": [
+        3,
+        32,
+        32
+      ],
+      "name": "CIFAR10",
+      "num_classes": 10,
+      "path": "data/cifar-10",
+      "test_transform": [
+        "normalize"
+      ],
+      "train_transform": [
+        "random_crop",
+        "random_flip",
+        "normalize"
+      ]
+    },
+    "llm": {
+      "api_key": "sk-b295897df8d7404a87a1ae9565e33bab",
+      "max_tokens": 4096,
+      "model": "deepseek-chat",
+      "temperature": 0.2
+    },
+    "logging": {
+      "log_dir": "cifar10_log\\history_20251022_220113",
+      "metrics": [
+        "loss",
+        "accuracy",
+        "precision",
+        "recall"
+      ],
+      "plot_metrics": true,
+      "save_interval": 1,
+      "save_plots": true,
+      "disable_trainer_subdir": true
+    },
+    "model": {
+      "architecture": {
+        "conv_layers": [
+          {
+            "filters": 32,
+            "kernel_size": 3,
+            "padding": 1,
+            "stride": 1
+          },
+          {
+            "filters": 64,
+            "kernel_size": 3,
+            "padding": 1,
+            "stride": 1
+          },
+          {
+            "filters": 128,
+            "kernel_size": 3,
+            "padding": 1,
+            "stride": 1
+          }
+        ],
+        "dropout": 0.3,
+        "fc_layers": [
+          256
+        ],
+        "pool_size": 2
+      },
+      "name": "SimpleCNN"
+    },
+    "training": {
+      "batch_size": 128,
+      "device": "auto",
+      "early_stopping_patience": 5,
+      "epochs": 10,
+      "learning_rate": 0.001,
+      "loss_function": "focal",
+      "optimizer": "adamw",
+      "tunable_params": [
+        "learning_rate",
+        "weight_class_0",
+        "weight_class_1",
+        "weight_class_2",
+        "weight_class_3",
+        "weight_class_4",
+        "weight_class_5",
+        "weight_class_6",
+        "weight_class_7",
+        "weight_class_8",
+        "weight_class_9"
+      ],
+      "validation_split": 0.1
+    }
+  }
+}

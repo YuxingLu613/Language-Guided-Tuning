@@ -1,0 +1,92 @@
+{
+  "enabled_agents": [
+    "adaptive"
+  ],
+  "logs": [
+    {
+      "agent": "strategy",
+      "suggestion": "error: 401 Client Error: Unauthorized for url: https://api.deepseek.com/v1/chat/completions",
+      "params": {},
+      "previous_context": ""
+    }
+  ],
+  "previous_changes": [],
+  "judger_rounds": [
+    {
+      "attempt": 0,
+      "use_optimized": false,
+      "reason": "调用LLM API时发生错误: 401 Client Error: Unauthorized for url: https://api.deepseek.com/v1/chat/completions",
+      "agent_suggestions": null
+    }
+  ],
+  "prev_metrics_used": {
+    "train": {
+      "mse": 3.076103925704956,
+      "mae": 1.6078882217407227,
+      "loss": 3.074930125740683
+    },
+    "val": {
+      "mse": 2.62412166595459,
+      "mae": 1.5169886350631714,
+      "loss": 2.6090157508850096
+    },
+    "epoch": 2
+  },
+  "prev_config_used": {
+    "dataset": {
+      "name": "Housing",
+      "input_dim": 5,
+      "path": "data/housing/Housing.csv",
+      "validation_split": 0.2
+    },
+    "model": {
+      "name": "CustomModel",
+      "architecture": {
+        "hidden_dims": [
+          2
+        ],
+        "dropout": 0.5
+      }
+    },
+    "training": {
+      "batch_size": 256,
+      "learning_rate": 0.0005,
+      "optimizer": "adam",
+      "epochs": 10,
+      "early_stopping_patience": 5,
+      "device": "auto",
+      "loss_function": "mse",
+      "seed": 42,
+      "tunable_params": [
+        "learning_rate",
+        "dropout"
+      ]
+    },
+    "llm": {
+      "model": "deepseek-chat",
+      "api_key": "",
+      "temperature": 0.2,
+      "max_tokens": 4096
+    },
+    "logging": {
+      "log_dir": "logs\\history_20251023_163149",
+      "save_interval": 1,
+      "metrics": [
+        "loss",
+        "mse",
+        "mae"
+      ],
+      "plot_metrics": true,
+      "save_plots": true,
+      "disable_trainer_subdir": true
+    },
+    "augmentation": {
+      "enabled": true,
+      "methods": [
+        "gaussian_noise",
+        "feature_dropout",
+        "none"
+      ]
+    }
+  }
+}

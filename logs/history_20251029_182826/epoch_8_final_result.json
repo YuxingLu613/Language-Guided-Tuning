@@ -1,0 +1,452 @@
+{
+  "epoch": 8,
+  "flags": {
+    "use_adaptive_agent": false,
+    "use_aug_agent": false,
+    "use_hpo_agent": true
+  },
+  "use_optimized": false,
+  "judger_reason": "All optimization attempts rejected by Judger",
+  "final_metrics": {
+    "train": {
+      "accuracy": 0.8626833333333334,
+      "precision": 0.8876635892672601,
+      "recall": 0.8584912348527096,
+      "f1": 0.8519594796974568,
+      "roc_auc": 0.9420606073478324,
+      "loss": -2251.510628428358
+    },
+    "val": {
+      "accuracy": 0.8993,
+      "precision": 0.9131532929534831,
+      "recall": 0.8963968159040926,
+      "f1": 0.8931607755267645,
+      "roc_auc": 0.9575947813297738,
+      "loss": -2557.223498535156
+    },
+    "epoch": 8
+  },
+  "final_config": {
+    "dataset": {
+      "input_shape": [
+        1,
+        28,
+        28
+      ],
+      "name": "MNIST",
+      "num_classes": 10,
+      "path": "data/",
+      "test_transform": [
+        "normalize"
+      ],
+      "train_transform": [
+        "normalize"
+      ]
+    },
+    "llm": {
+      "api_key": "sk-b295897df8d7404a87a1ae9565e33bab",
+      "max_tokens": 4096,
+      "model": "deepseek-chat",
+      "temperature": 0.2
+    },
+    "logging": {
+      "augmentation": null,
+      "enabled": true,
+      "log_dir": "logs\\history_20251029_182826",
+      "metrics": [
+        "loss",
+        "accuracy",
+        "precision",
+        "recall",
+        "f1",
+        "roc_auc"
+      ],
+      "plot_metrics": true,
+      "samples_per_epoch": 64,
+      "save_interval": 1,
+      "save_plots": true,
+      "disable_trainer_subdir": true
+    },
+    "model": {
+      "architecture": {
+        "conv_layers": [
+          {
+            "filters": 16,
+            "kernel_size": 3,
+            "padding": 1,
+            "stride": 1
+          },
+          {
+            "filters": 32,
+            "kernel_size": 3,
+            "padding": 1,
+            "stride": 1
+          }
+        ],
+        "dropout": 0.3,
+        "fc_layers": [
+          128
+        ],
+        "pool_size": 2
+      },
+      "name": "SimpleCNN"
+    },
+    "training": {
+      "batch_size": 256,
+      "class_weights": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0,
+        "4": 1.0,
+        "5": 1.0,
+        "6": 1.0,
+        "7": 1.0,
+        "8": 1.0,
+        "9": 1.0
+      },
+      "device": "auto",
+      "early_stopping_patience": 5,
+      "epochs": 10,
+      "learning_rate": 0.0012,
+      "loss_function": "nll",
+      "optimizer": "sgd",
+      "tunable_params": [
+        "learning_rate",
+        "weight_class_0",
+        "weight_class_1",
+        "weight_class_2",
+        "weight_class_3",
+        "weight_class_4",
+        "weight_class_5",
+        "weight_class_6",
+        "weight_class_7",
+        "weight_class_8",
+        "weight_class_9"
+      ],
+      "validation_split": 0.2,
+      "weight_class_0": 1.0,
+      "weight_class_1": 1.0,
+      "weight_class_2": 1.0,
+      "weight_class_3": 1.0,
+      "weight_class_4": 1.0,
+      "weight_class_5": 1.0,
+      "weight_class_6": 1.0,
+      "weight_class_7": 1.0,
+      "weight_class_8": 1.0,
+      "weight_class_9": 1.0,
+      "accuracy": 0.8978
+    },
+    "augmentation": {
+      "enabled": true
+    }
+  },
+  "optimization_history": [
+    {
+      "param_changes": {
+        "weight_class_8": {
+          "from": 1.0,
+          "to": 1.1
+        },
+        "weight_class_2": {
+          "from": 1.0,
+          "to": 1.1
+        },
+        "tunable_params": {
+          "from": [
+            "learning_rate",
+            "weight_class_0",
+            "weight_class_1",
+            "weight_class_2",
+            "weight_class_3",
+            "weight_class_4",
+            "weight_class_5",
+            "weight_class_6",
+            "weight_class_7",
+            "weight_class_8",
+            "weight_class_9"
+          ],
+          "to": [
+            "learning_rate",
+            "weight_class_0",
+            "weight_class_1",
+            "weight_class_2",
+            "weight_class_3",
+            "weight_class_4",
+            "weight_class_5",
+            "weight_class_6",
+            "weight_class_7",
+            "weight_class_8",
+            "weight_class_9"
+          ]
+        },
+        "validation_split": {
+          "from": 0.2,
+          "to": 0.2
+        },
+        "weight_class_3": {
+          "from": 1.0,
+          "to": 1.0
+        },
+        "loss_function": {
+          "from": "nll",
+          "to": "nll"
+        },
+        "early_stopping_patience": {
+          "from": 5,
+          "to": 5
+        },
+        "weight_class_4": {
+          "from": 1.0,
+          "to": 1.1
+        },
+        "accuracy": {
+          "from": 0.8978,
+          "to": 0.8978
+        },
+        "batch_size": {
+          "from": 256,
+          "to": 256
+        },
+        "weight_class_1": {
+          "from": 1.0,
+          "to": 1.0
+        },
+        "class_weights": {
+          "from": {
+            "0": 1.0,
+            "1": 1.0,
+            "2": 1.0,
+            "3": 1.0,
+            "4": 1.0,
+            "5": 1.0,
+            "6": 1.0,
+            "7": 1.0,
+            "8": 1.0,
+            "9": 1.0
+          },
+          "to": {
+            "0": 1.0,
+            "1": 1.0,
+            "2": 1.0,
+            "3": 1.0,
+            "4": 1.0,
+            "5": 1.0,
+            "6": 1.0,
+            "7": 1.0,
+            "8": 1.0,
+            "9": 1.0
+          }
+        },
+        "weight_class_9": {
+          "from": 1.0,
+          "to": 1.0
+        },
+        "optimizer": {
+          "from": "sgd",
+          "to": "sgd"
+        },
+        "weight_class_0": {
+          "from": 1.0,
+          "to": 1.1
+        },
+        "learning_rate": {
+          "from": 0.0012,
+          "to": 0.0008
+        },
+        "epochs": {
+          "from": 10,
+          "to": 10
+        },
+        "weight_class_7": {
+          "from": 1.0,
+          "to": 1.0
+        },
+        "device": {
+          "from": "auto",
+          "to": "auto"
+        },
+        "weight_class_5": {
+          "from": 1.0,
+          "to": 1.0
+        },
+        "weight_class_6": {
+          "from": 1.0,
+          "to": 1.1
+        }
+      },
+      "original_metrics": {
+        "train": {
+          "accuracy": 0.8626833333333334,
+          "precision": 0.8876635892672601,
+          "recall": 0.8584912348527096,
+          "f1": 0.8519594796974568,
+          "roc_auc": 0.9420606073478324,
+          "loss": -2251.510628428358
+        },
+        "val": {
+          "accuracy": 0.8993,
+          "precision": 0.9131532929534831,
+          "recall": 0.8963968159040926,
+          "f1": 0.8931607755267645,
+          "roc_auc": 0.9575947813297738,
+          "loss": -2557.223498535156
+        },
+        "epoch": 8
+      },
+      "optimized_metrics": {
+        "train": {
+          "accuracy": 0.8620166666666667,
+          "precision": 0.8871300921290501,
+          "recall": 0.8578812010406915,
+          "f1": 0.8516815219713045,
+          "roc_auc": 0.9429301435079896,
+          "loss": -2192.6074852476727
+        },
+        "val": {
+          "accuracy": 0.9,
+          "precision": 0.9145488098778255,
+          "recall": 0.8971639747416322,
+          "f1": 0.8937728568713256,
+          "roc_auc": 0.95954969739535,
+          "loss": -2380.3508056640626
+        },
+        "epoch": 8
+      }
+    }
+  ],
+  "prev_metrics_used": {
+    "train": {
+      "accuracy": 0.8611666666666666,
+      "precision": 0.8855020293584189,
+      "recall": 0.8570220077694668,
+      "f1": 0.8505367642006686,
+      "roc_auc": 0.9436557181920879,
+      "loss": -1902.4122891040558
+    },
+    "val": {
+      "accuracy": 0.8957,
+      "precision": 0.9118574437052563,
+      "recall": 0.8926168839046221,
+      "f1": 0.888725425617179,
+      "roc_auc": 0.9594320705900268,
+      "loss": -2130.271209716797
+    },
+    "epoch": 7
+  },
+  "prev_config_used": {
+    "dataset": {
+      "input_shape": [
+        1,
+        28,
+        28
+      ],
+      "name": "MNIST",
+      "num_classes": 10,
+      "path": "data/",
+      "test_transform": [
+        "normalize"
+      ],
+      "train_transform": [
+        "normalize"
+      ]
+    },
+    "llm": {
+      "api_key": "sk-b295897df8d7404a87a1ae9565e33bab",
+      "max_tokens": 4096,
+      "model": "deepseek-chat",
+      "temperature": 0.2
+    },
+    "logging": {
+      "augmentation": null,
+      "enabled": true,
+      "log_dir": "logs\\history_20251029_182826",
+      "metrics": [
+        "loss",
+        "accuracy",
+        "precision",
+        "recall",
+        "f1",
+        "roc_auc"
+      ],
+      "plot_metrics": true,
+      "samples_per_epoch": 64,
+      "save_interval": 1,
+      "save_plots": true,
+      "disable_trainer_subdir": true
+    },
+    "model": {
+      "architecture": {
+        "conv_layers": [
+          {
+            "filters": 16,
+            "kernel_size": 3,
+            "padding": 1,
+            "stride": 1
+          },
+          {
+            "filters": 32,
+            "kernel_size": 3,
+            "padding": 1,
+            "stride": 1
+          }
+        ],
+        "dropout": 0.3,
+        "fc_layers": [
+          128
+        ],
+        "pool_size": 2
+      },
+      "name": "SimpleCNN"
+    },
+    "training": {
+      "batch_size": 256,
+      "class_weights": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0,
+        "4": 1.0,
+        "5": 1.0,
+        "6": 1.0,
+        "7": 1.0,
+        "8": 1.0,
+        "9": 1.0
+      },
+      "device": "auto",
+      "early_stopping_patience": 5,
+      "epochs": 10,
+      "learning_rate": 0.0012,
+      "loss_function": "nll",
+      "optimizer": "sgd",
+      "tunable_params": [
+        "learning_rate",
+        "weight_class_0",
+        "weight_class_1",
+        "weight_class_2",
+        "weight_class_3",
+        "weight_class_4",
+        "weight_class_5",
+        "weight_class_6",
+        "weight_class_7",
+        "weight_class_8",
+        "weight_class_9"
+      ],
+      "validation_split": 0.2,
+      "weight_class_0": 1.0,
+      "weight_class_1": 1.0,
+      "weight_class_2": 1.0,
+      "weight_class_3": 1.0,
+      "weight_class_4": 1.0,
+      "weight_class_5": 1.0,
+      "weight_class_6": 1.0,
+      "weight_class_7": 1.0,
+      "weight_class_8": 1.0,
+      "weight_class_9": 1.0,
+      "accuracy": 0.8978
+    },
+    "augmentation": {
+      "enabled": true
+    }
+  }
+}

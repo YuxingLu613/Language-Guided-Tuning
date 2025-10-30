@@ -1,0 +1,36 @@
+{
+  "enabled_agents": [
+    "aug",
+    "adaptive",
+    "hpo"
+  ],
+  "logs": [
+    {
+      "agent": "aug",
+      "suggestion": "none",
+      "params": null,
+      "should_use": false
+    },
+    {
+      "agent": "strategy",
+      "suggestion": "error: 401 Client Error: Unauthorized for url: https://api.deepseek.com/v1/chat/completions",
+      "params": {},
+      "previous_context": ""
+    },
+    {
+      "agent": "hpo",
+      "suggestion": "调用LLM API时发生错误: 401 Client Error: Unauthorized for url: https://api.deepseek.com/v1/chat/completions",
+      "params": {},
+      "previous_context": ""
+    }
+  ],
+  "previous_changes": [],
+  "judger_rounds": [
+    {
+      "attempt": 1,
+      "use_optimized": false,
+      "reason": "调用LLM API时发生错误: 401 Client Error: Unauthorized for url: https://api.deepseek.com/v1/chat/completions",
+      "agent_suggestions": null
+    }
+  ]
+}

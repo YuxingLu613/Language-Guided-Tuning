@@ -1,0 +1,228 @@
+{
+  "enabled_agents": [
+    "hpo"
+  ],
+  "logs": [
+    {
+      "agent": "hpo",
+      "suggestion": "learning_rate: 0.0005\nepochs: 25\nloss_function: huber\ndropout: 0.2",
+      "params": {
+        "learning_rate": 0.0005,
+        "epochs": 25.0,
+        "dropout": 0.2
+      },
+      "previous_context": "",
+      "full_prompt": {
+        "system_prompt": "You are a machine learning expert specializing in hyperparameter optimization.",
+        "user_prompt": "You are an expert ML trainer. Given the current parameters and metrics, evaluate the training status. Suggest precise changes in hyperparameters to improve training. Output changes in ONE of these formats:\n- ''\n- OR use multiple lines with 'param: value'\n- OR use multiple lines with 'param=value'\n- DO NOT use JSON format like {{'param': value}}\nIf no change needed, reply 'no change'.\n\n''. If no change needed, reply 'no change'.\n\n\nNOTE FROM JUDGER (refined):\n**\n- Optimization direction: Focus on learning rate scheduling and increased training duration rather than static parameter changes.\n- Reasoning: The inconsistent results suggest the current parameter combinations lack convergence stability, requiring either adaptive learning rates or more epochs to properly evaluate their effectiveness.\n\n**STRATEGY_AGENT_SUGGESTION:**\n- Optimization direction: Maintain current optimizer (Adam) but explore alternative loss functions like Huber loss.\n- Reasoning: MSE may be too sensitive to outliers given the modest metric improvements; Huber loss could provide better gradient behavior during training.\n\n**DATA_AUGMENTATION_AGENT_SUGGESTION:**\n- Optimization direction: Implement progressive data augmentation rather than relying solely on parameter tuning.\n- Reasoning: The marginal gains suggest the model may be underfitting the current data distribution, requiring more diverse training examples to improve generalization.\nCurrent parameters:\n\nDataset config:\n- input_dim: 5\n- name: Housing\n- path: data/housing/Housing.csv\n- validation_split: 0.2\n\nModel config:\n- architecture: {'dropout': 0.3, 'hidden_dims': [4]}\n- name: CustomModel\n\nTraining config (static fields):\n- batch_size: 256\n- device: auto\n- early_stopping_patience: 5\n- epochs: 10\n- learning_rate: 0.001\n- loss_function: mse\n- optimizer: adam\n- seed: 42\n- tunable_params: ['learning_rate', 'dropout']\n- dropout: 0.1\n\nTraining metrics:\nTraining:\n- mse: 0.2919\n- mae: 0.4314\n- r2: 0.4977\n- loss: 0.2918\nValidation:\n- mse: 0.2547\n- mae: 0.4021\n- r2: 0.5560\n- loss: 0.2549"
+      }
+    }
+  ],
+  "previous_changes": [
+    "HPO Agent suggested adjusting hyperparameters: learning_rate: 0.0005, epochs: 25.0, dropout: 0.2"
+  ],
+  "agent_full_prompts": {
+    "hpo": {
+      "system_prompt": "You are a machine learning expert specializing in hyperparameter optimization.",
+      "user_prompt": "You are an expert ML trainer. Given the current parameters and metrics, evaluate the training status. Suggest precise changes in hyperparameters to improve training. Output changes in ONE of these formats:\n- ''\n- OR use multiple lines with 'param: value'\n- OR use multiple lines with 'param=value'\n- DO NOT use JSON format like {{'param': value}}\nIf no change needed, reply 'no change'.\n\n''. If no change needed, reply 'no change'.\n\n\nNOTE FROM JUDGER (refined):\n**\n- Optimization direction: Focus on learning rate scheduling and increased training duration rather than static parameter changes.\n- Reasoning: The inconsistent results suggest the current parameter combinations lack convergence stability, requiring either adaptive learning rates or more epochs to properly evaluate their effectiveness.\n\n**STRATEGY_AGENT_SUGGESTION:**\n- Optimization direction: Maintain current optimizer (Adam) but explore alternative loss functions like Huber loss.\n- Reasoning: MSE may be too sensitive to outliers given the modest metric improvements; Huber loss could provide better gradient behavior during training.\n\n**DATA_AUGMENTATION_AGENT_SUGGESTION:**\n- Optimization direction: Implement progressive data augmentation rather than relying solely on parameter tuning.\n- Reasoning: The marginal gains suggest the model may be underfitting the current data distribution, requiring more diverse training examples to improve generalization.\nCurrent parameters:\n\nDataset config:\n- input_dim: 5\n- name: Housing\n- path: data/housing/Housing.csv\n- validation_split: 0.2\n\nModel config:\n- architecture: {'dropout': 0.3, 'hidden_dims': [4]}\n- name: CustomModel\n\nTraining config (static fields):\n- batch_size: 256\n- device: auto\n- early_stopping_patience: 5\n- epochs: 10\n- learning_rate: 0.001\n- loss_function: mse\n- optimizer: adam\n- seed: 42\n- tunable_params: ['learning_rate', 'dropout']\n- dropout: 0.1\n\nTraining metrics:\nTraining:\n- mse: 0.2919\n- mae: 0.4314\n- r2: 0.4977\n- loss: 0.2918\nValidation:\n- mse: 0.2547\n- mae: 0.4021\n- r2: 0.5560\n- loss: 0.2549"
+    }
+  },
+  "judger_rounds": [
+    {
+      "attempt": 0,
+      "use_optimized": false,
+      "reason": "",
+      "agent_suggestions": {
+        "hpo": "Focus on regularization techniques and learning rate scheduling to improve generalization rather than just minimizing training loss. Consider early stopping based on validation MSE."
+      },
+      "refined": {
+        "hpo": "Focus on regularization techniques and learning rate scheduling to improve generalization rather than just minimizing training loss. Consider early stopping based on validation MSE."
+      },
+      "refined_agent_logs": {
+        "enabled_agents": [
+          "hpo"
+        ],
+        "logs": [
+          {
+            "agent": "hpo",
+            "suggestion": "learning_rate: 0.0005\ndropout: 0.2",
+            "params": {
+              "learning_rate": 0.0005,
+              "dropout": 0.2
+            },
+            "previous_context": "",
+            "full_prompt": {
+              "system_prompt": "You are a machine learning expert specializing in hyperparameter optimization.",
+              "user_prompt": "You are an expert ML trainer. Given the current parameters and metrics, evaluate the training status. Suggest precise changes in hyperparameters to improve training. Output changes in ONE of these formats:\n- ''\n- OR use multiple lines with 'param: value'\n- OR use multiple lines with 'param=value'\n- DO NOT use JSON format like {{'param': value}}\nIf no change needed, reply 'no change'.\n\n''. If no change needed, reply 'no change'.\n\nCurrent parameters:\n\nDataset config:\n- input_dim: 5\n- name: Housing\n- path: data/housing/Housing.csv\n- validation_split: 0.2\n\nModel config:\n- architecture: {'dropout': 0.3, 'hidden_dims': [4]}\n- name: CustomModel\n\nTraining config (static fields):\n- batch_size: 256\n- device: auto\n- early_stopping_patience: 5\n- epochs: 10\n- learning_rate: 0.001\n- loss_function: mse\n- optimizer: adam\n- seed: 42\n- tunable_params: ['learning_rate', 'dropout']\n- dropout: 0.1\n\nTraining metrics:\nTraining:\n- mse: 0.2919\n- mae: 0.4314\n- r2: 0.4977\n- loss: 0.2918\nValidation:\n- mse: 0.2547\n- mae: 0.4021\n- r2: 0.5560\n- loss: 0.2549"
+            }
+          }
+        ],
+        "previous_changes": [
+          "HPO Agent suggested adjusting hyperparameters: learning_rate: 0.0005, dropout: 0.2"
+        ],
+        "agent_full_prompts": {
+          "hpo": {
+            "system_prompt": "You are a machine learning expert specializing in hyperparameter optimization.",
+            "user_prompt": "You are an expert ML trainer. Given the current parameters and metrics, evaluate the training status. Suggest precise changes in hyperparameters to improve training. Output changes in ONE of these formats:\n- ''\n- OR use multiple lines with 'param: value'\n- OR use multiple lines with 'param=value'\n- DO NOT use JSON format like {{'param': value}}\nIf no change needed, reply 'no change'.\n\n''. If no change needed, reply 'no change'.\n\nCurrent parameters:\n\nDataset config:\n- input_dim: 5\n- name: Housing\n- path: data/housing/Housing.csv\n- validation_split: 0.2\n\nModel config:\n- architecture: {'dropout': 0.3, 'hidden_dims': [4]}\n- name: CustomModel\n\nTraining config (static fields):\n- batch_size: 256\n- device: auto\n- early_stopping_patience: 5\n- epochs: 10\n- learning_rate: 0.001\n- loss_function: mse\n- optimizer: adam\n- seed: 42\n- tunable_params: ['learning_rate', 'dropout']\n- dropout: 0.1\n\nTraining metrics:\nTraining:\n- mse: 0.2919\n- mae: 0.4314\n- r2: 0.4977\n- loss: 0.2918\nValidation:\n- mse: 0.2547\n- mae: 0.4021\n- r2: 0.5560\n- loss: 0.2549"
+          }
+        }
+      }
+    },
+    {
+      "attempt": 1,
+      "use_optimized": false,
+      "reason": "",
+      "agent_suggestions": "### Pattern Analysis\nThe key pattern observed is that reducing learning rate (0.001→0.0005) combined with increased dropout (0.1→0.2) produced mixed results: slight training metric improvements but negligible-to-negative validation impacts. This suggests the changes may be causing mild overfitting despite dropout regularization, or the learning rate reduction wasn't substantial enough to improve generalization.\n\n### Effective Changes\n- Learning rate reduction (0.001→0.0005): Showed modest training improvements without significant validation degradation\n- Increased dropout (0.1→0.2): Provided regularization that complemented the learning rate adjustment\n\n### Ineffective Changes  \n- The specific combination used: While individually reasonable parameters, the current combination failed to deliver validation improvements, indicating suboptimal synergy between learning rate and dropout settings\n\n---\n\nHPO_AGENT_SUGGESTION:\n- Optimization direction: Systematically explore learning rate and dropout combinations while considering additional regularization parameters like weight decay.\n- Reasoning: The current approach shows potential but needs finer tuning balance; adding weight decay could provide complementary regularization to dropout, potentially unlocking better generalization while maintaining training stability.",
+      "refined": "### Pattern Analysis\nThe key pattern observed is that reducing learning rate (0.001→0.0005) combined with increased dropout (0.1→0.2) produced mixed results: slight training metric improvements but negligible-to-negative validation impacts. This suggests the changes may be causing mild overfitting despite dropout regularization, or the learning rate reduction wasn't substantial enough to improve generalization.\n\n### Effective Changes\n- Learning rate reduction (0.001→0.0005): Showed modest training improvements without significant validation degradation\n- Increased dropout (0.1→0.2): Provided regularization that complemented the learning rate adjustment\n\n### Ineffective Changes  \n- The specific combination used: While individually reasonable parameters, the current combination failed to deliver validation improvements, indicating suboptimal synergy between learning rate and dropout settings\n\n---\n\nHPO_AGENT_SUGGESTION:\n- Optimization direction: Systematically explore learning rate and dropout combinations while considering additional regularization parameters like weight decay.\n- Reasoning: The current approach shows potential but needs finer tuning balance; adding weight decay could provide complementary regularization to dropout, potentially unlocking better generalization while maintaining training stability.",
+      "refined_agent_logs": {
+        "enabled_agents": [
+          "hpo"
+        ],
+        "logs": [
+          {
+            "agent": "hpo",
+            "suggestion": "learning_rate: 0.0005\ndropout: 0.2\nweight_decay: 0.001",
+            "params": {
+              "learning_rate": 0.0005,
+              "dropout": 0.2,
+              "weight_decay": 0.001
+            },
+            "previous_context": "",
+            "full_prompt": {
+              "system_prompt": "You are a machine learning expert specializing in hyperparameter optimization.",
+              "user_prompt": "You are an expert ML trainer. Given the current parameters and metrics, evaluate the training status. Suggest precise changes in hyperparameters to improve training. Output changes in ONE of these formats:\n- ''\n- OR use multiple lines with 'param: value'\n- OR use multiple lines with 'param=value'\n- DO NOT use JSON format like {{'param': value}}\nIf no change needed, reply 'no change'.\n\n''. If no change needed, reply 'no change'.\n\n\nNOTE FROM JUDGER (refined):\n- Optimization direction: Systematically explore learning rate and dropout combinations while considering additional regularization parameters like weight decay.\n- Reasoning: The current approach shows potential but needs finer tuning balance; adding weight decay could provide complementary regularization to dropout, potentially unlocking better generalization while maintaining training stability.\nCurrent parameters:\n\nDataset config:\n- input_dim: 5\n- name: Housing\n- path: data/housing/Housing.csv\n- validation_split: 0.2\n\nModel config:\n- architecture: {'dropout': 0.3, 'hidden_dims': [4]}\n- name: CustomModel\n\nTraining config (static fields):\n- batch_size: 256\n- device: auto\n- early_stopping_patience: 5\n- epochs: 10\n- learning_rate: 0.001\n- loss_function: mse\n- optimizer: adam\n- seed: 42\n- tunable_params: ['learning_rate', 'dropout']\n- dropout: 0.1\n\nTraining metrics:\nTraining:\n- mse: 0.2919\n- mae: 0.4314\n- r2: 0.4977\n- loss: 0.2918\nValidation:\n- mse: 0.2547\n- mae: 0.4021\n- r2: 0.5560\n- loss: 0.2549"
+            }
+          }
+        ],
+        "previous_changes": [
+          "HPO Agent suggested adjusting hyperparameters: learning_rate: 0.0005, dropout: 0.2, weight_decay: 0.001"
+        ],
+        "agent_full_prompts": {
+          "hpo": {
+            "system_prompt": "You are a machine learning expert specializing in hyperparameter optimization.",
+            "user_prompt": "You are an expert ML trainer. Given the current parameters and metrics, evaluate the training status. Suggest precise changes in hyperparameters to improve training. Output changes in ONE of these formats:\n- ''\n- OR use multiple lines with 'param: value'\n- OR use multiple lines with 'param=value'\n- DO NOT use JSON format like {{'param': value}}\nIf no change needed, reply 'no change'.\n\n''. If no change needed, reply 'no change'.\n\n\nNOTE FROM JUDGER (refined):\n- Optimization direction: Systematically explore learning rate and dropout combinations while considering additional regularization parameters like weight decay.\n- Reasoning: The current approach shows potential but needs finer tuning balance; adding weight decay could provide complementary regularization to dropout, potentially unlocking better generalization while maintaining training stability.\nCurrent parameters:\n\nDataset config:\n- input_dim: 5\n- name: Housing\n- path: data/housing/Housing.csv\n- validation_split: 0.2\n\nModel config:\n- architecture: {'dropout': 0.3, 'hidden_dims': [4]}\n- name: CustomModel\n\nTraining config (static fields):\n- batch_size: 256\n- device: auto\n- early_stopping_patience: 5\n- epochs: 10\n- learning_rate: 0.001\n- loss_function: mse\n- optimizer: adam\n- seed: 42\n- tunable_params: ['learning_rate', 'dropout']\n- dropout: 0.1\n\nTraining metrics:\nTraining:\n- mse: 0.2919\n- mae: 0.4314\n- r2: 0.4977\n- loss: 0.2918\nValidation:\n- mse: 0.2547\n- mae: 0.4021\n- r2: 0.5560\n- loss: 0.2549"
+          }
+        }
+      }
+    },
+    {
+      "attempt": 2,
+      "use_optimized": false,
+      "reason": "",
+      "agent_suggestions": "### Pattern Analysis\nBoth attempts maintained identical parameter changes (dropout 0.1→0.2, learning_rate 0.001→0.0005) but showed contradictory results. Attempt 1 demonstrated slight training improvement with mixed validation results, while Attempt 2 showed degradation across all metrics. This suggests either random initialization effects or insufficient training stability with these parameter combinations. The learning rate reduction appears sensitive to initial conditions, while increased dropout shows inconsistent regularization effects.\n\n### Effective Changes\n- **Learning rate reduction (0.001→0.0005)**: When effective (Attempt 1), provided slight training metric improvements\n- **Dropout increase (0.1→0.2)**: Showed potential for regularization in Attempt 1's training metrics\n\n### Ineffective Changes\n- **The combined learning rate + dropout changes**: Produced inconsistent results and validation metric degradation\n- **Static epoch count (10)**: Insufficient for the modified parameters to stabilize\n\n---\n\n**HPO_AGENT_SUGGESTION:**\n- Optimization direction: Focus on learning rate scheduling and increased training duration rather than static parameter changes.\n- Reasoning: The inconsistent results suggest the current parameter combinations lack convergence stability, requiring either adaptive learning rates or more epochs to properly evaluate their effectiveness.\n\n**STRATEGY_AGENT_SUGGESTION:**\n- Optimization direction: Maintain current optimizer (Adam) but explore alternative loss functions like Huber loss.\n- Reasoning: MSE may be too sensitive to outliers given the modest metric improvements; Huber loss could provide better gradient behavior during training.\n\n**DATA_AUGMENTATION_AGENT_SUGGESTION:**\n- Optimization direction: Implement progressive data augmentation rather than relying solely on parameter tuning.\n- Reasoning: The marginal gains suggest the model may be underfitting the current data distribution, requiring more diverse training examples to improve generalization.",
+      "refined": "### Pattern Analysis\nBoth attempts maintained identical parameter changes (dropout 0.1→0.2, learning_rate 0.001→0.0005) but showed contradictory results. Attempt 1 demonstrated slight training improvement with mixed validation results, while Attempt 2 showed degradation across all metrics. This suggests either random initialization effects or insufficient training stability with these parameter combinations. The learning rate reduction appears sensitive to initial conditions, while increased dropout shows inconsistent regularization effects.\n\n### Effective Changes\n- **Learning rate reduction (0.001→0.0005)**: When effective (Attempt 1), provided slight training metric improvements\n- **Dropout increase (0.1→0.2)**: Showed potential for regularization in Attempt 1's training metrics\n\n### Ineffective Changes\n- **The combined learning rate + dropout changes**: Produced inconsistent results and validation metric degradation\n- **Static epoch count (10)**: Insufficient for the modified parameters to stabilize\n\n---\n\n**HPO_AGENT_SUGGESTION:**\n- Optimization direction: Focus on learning rate scheduling and increased training duration rather than static parameter changes.\n- Reasoning: The inconsistent results suggest the current parameter combinations lack convergence stability, requiring either adaptive learning rates or more epochs to properly evaluate their effectiveness.\n\n**STRATEGY_AGENT_SUGGESTION:**\n- Optimization direction: Maintain current optimizer (Adam) but explore alternative loss functions like Huber loss.\n- Reasoning: MSE may be too sensitive to outliers given the modest metric improvements; Huber loss could provide better gradient behavior during training.\n\n**DATA_AUGMENTATION_AGENT_SUGGESTION:**\n- Optimization direction: Implement progressive data augmentation rather than relying solely on parameter tuning.\n- Reasoning: The marginal gains suggest the model may be underfitting the current data distribution, requiring more diverse training examples to improve generalization.",
+      "refined_agent_logs": {
+        "enabled_agents": [
+          "hpo"
+        ],
+        "logs": [
+          {
+            "agent": "hpo",
+            "suggestion": "learning_rate: 0.0005\nepochs: 25\nloss_function: huber\ndropout: 0.2",
+            "params": {
+              "learning_rate": 0.0005,
+              "epochs": 25.0,
+              "dropout": 0.2
+            },
+            "previous_context": "",
+            "full_prompt": {
+              "system_prompt": "You are a machine learning expert specializing in hyperparameter optimization.",
+              "user_prompt": "You are an expert ML trainer. Given the current parameters and metrics, evaluate the training status. Suggest precise changes in hyperparameters to improve training. Output changes in ONE of these formats:\n- ''\n- OR use multiple lines with 'param: value'\n- OR use multiple lines with 'param=value'\n- DO NOT use JSON format like {{'param': value}}\nIf no change needed, reply 'no change'.\n\n''. If no change needed, reply 'no change'.\n\n\nNOTE FROM JUDGER (refined):\n**\n- Optimization direction: Focus on learning rate scheduling and increased training duration rather than static parameter changes.\n- Reasoning: The inconsistent results suggest the current parameter combinations lack convergence stability, requiring either adaptive learning rates or more epochs to properly evaluate their effectiveness.\n\n**STRATEGY_AGENT_SUGGESTION:**\n- Optimization direction: Maintain current optimizer (Adam) but explore alternative loss functions like Huber loss.\n- Reasoning: MSE may be too sensitive to outliers given the modest metric improvements; Huber loss could provide better gradient behavior during training.\n\n**DATA_AUGMENTATION_AGENT_SUGGESTION:**\n- Optimization direction: Implement progressive data augmentation rather than relying solely on parameter tuning.\n- Reasoning: The marginal gains suggest the model may be underfitting the current data distribution, requiring more diverse training examples to improve generalization.\nCurrent parameters:\n\nDataset config:\n- input_dim: 5\n- name: Housing\n- path: data/housing/Housing.csv\n- validation_split: 0.2\n\nModel config:\n- architecture: {'dropout': 0.3, 'hidden_dims': [4]}\n- name: CustomModel\n\nTraining config (static fields):\n- batch_size: 256\n- device: auto\n- early_stopping_patience: 5\n- epochs: 10\n- learning_rate: 0.001\n- loss_function: mse\n- optimizer: adam\n- seed: 42\n- tunable_params: ['learning_rate', 'dropout']\n- dropout: 0.1\n\nTraining metrics:\nTraining:\n- mse: 0.2919\n- mae: 0.4314\n- r2: 0.4977\n- loss: 0.2918\nValidation:\n- mse: 0.2547\n- mae: 0.4021\n- r2: 0.5560\n- loss: 0.2549"
+            }
+          }
+        ],
+        "previous_changes": [
+          "HPO Agent suggested adjusting hyperparameters: learning_rate: 0.0005, epochs: 25.0, dropout: 0.2"
+        ],
+        "agent_full_prompts": {
+          "hpo": {
+            "system_prompt": "You are a machine learning expert specializing in hyperparameter optimization.",
+            "user_prompt": "You are an expert ML trainer. Given the current parameters and metrics, evaluate the training status. Suggest precise changes in hyperparameters to improve training. Output changes in ONE of these formats:\n- ''\n- OR use multiple lines with 'param: value'\n- OR use multiple lines with 'param=value'\n- DO NOT use JSON format like {{'param': value}}\nIf no change needed, reply 'no change'.\n\n''. If no change needed, reply 'no change'.\n\n\nNOTE FROM JUDGER (refined):\n**\n- Optimization direction: Focus on learning rate scheduling and increased training duration rather than static parameter changes.\n- Reasoning: The inconsistent results suggest the current parameter combinations lack convergence stability, requiring either adaptive learning rates or more epochs to properly evaluate their effectiveness.\n\n**STRATEGY_AGENT_SUGGESTION:**\n- Optimization direction: Maintain current optimizer (Adam) but explore alternative loss functions like Huber loss.\n- Reasoning: MSE may be too sensitive to outliers given the modest metric improvements; Huber loss could provide better gradient behavior during training.\n\n**DATA_AUGMENTATION_AGENT_SUGGESTION:**\n- Optimization direction: Implement progressive data augmentation rather than relying solely on parameter tuning.\n- Reasoning: The marginal gains suggest the model may be underfitting the current data distribution, requiring more diverse training examples to improve generalization.\nCurrent parameters:\n\nDataset config:\n- input_dim: 5\n- name: Housing\n- path: data/housing/Housing.csv\n- validation_split: 0.2\n\nModel config:\n- architecture: {'dropout': 0.3, 'hidden_dims': [4]}\n- name: CustomModel\n\nTraining config (static fields):\n- batch_size: 256\n- device: auto\n- early_stopping_patience: 5\n- epochs: 10\n- learning_rate: 0.001\n- loss_function: mse\n- optimizer: adam\n- seed: 42\n- tunable_params: ['learning_rate', 'dropout']\n- dropout: 0.1\n\nTraining metrics:\nTraining:\n- mse: 0.2919\n- mae: 0.4314\n- r2: 0.4977\n- loss: 0.2918\nValidation:\n- mse: 0.2547\n- mae: 0.4021\n- r2: 0.5560\n- loss: 0.2549"
+          }
+        }
+      }
+    },
+    {
+      "attempt": 3,
+      "use_optimized": true,
+      "reason": "",
+      "agent_suggestions": {
+        "hpo": "Consider exploring different model architectures or feature engineering approaches as current hyperparameter optimization shows minimal validation performance gains"
+      }
+    }
+  ],
+  "prev_metrics_used": {
+    "train": {
+      "mse": 0.2919473648071289,
+      "mae": 0.43137598037719727,
+      "r2": 0.4977295398712158,
+      "loss": 0.29182581878771446
+    },
+    "val": {
+      "mse": 0.2547440230846405,
+      "mae": 0.4020994007587433,
+      "r2": 0.5559674501419067,
+      "loss": 0.2549000959843397
+    },
+    "epoch": 7
+  },
+  "prev_config_used": {
+    "augmentation": {
+      "enabled": true,
+      "methods": [
+        "gaussian_noise",
+        "feature_dropout",
+        "none"
+      ]
+    },
+    "dataset": {
+      "input_dim": 5,
+      "name": "Housing",
+      "path": "data/housing/Housing.csv",
+      "validation_split": 0.2
+    },
+    "llm": {
+      "api_key": "sk-b295897df8d7404a87a1ae9565e33bab",
+      "max_tokens": 4096,
+      "model": "deepseek-chat",
+      "temperature": 0.2
+    },
+    "logging": {
+      "log_dir": "logs\\history_20251029_190845",
+      "metrics": [
+        "loss",
+        "mse",
+        "mae",
+        "r2"
+      ],
+      "plot_metrics": true,
+      "save_interval": 1,
+      "save_plots": true,
+      "disable_trainer_subdir": true
+    },
+    "model": {
+      "architecture": {
+        "dropout": 0.3,
+        "hidden_dims": [
+          4
+        ]
+      },
+      "name": "CustomModel"
+    },
+    "training": {
+      "batch_size": 256,
+      "device": "auto",
+      "early_stopping_patience": 5,
+      "epochs": 10,
+      "learning_rate": 0.001,
+      "loss_function": "mse",
+      "optimizer": "adam",
+      "seed": 42,
+      "tunable_params": [
+        "learning_rate",
+        "dropout"
+      ],
+      "dropout": 0.1
+    }
+  }
+}

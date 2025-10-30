@@ -1,0 +1,34 @@
+dataset:
+  name: "ImageNet"
+  input_shape: [3, 224, 224]
+  num_classes: 1000
+  path: "your_imagenet_data_folder"
+  train_transform:
+    - "imagenet_default"
+  test_transform:
+    - "imagenet_default"
+
+model:
+  name: "ResNet18"
+  pretrained: true
+
+training:
+  batch_size: 128
+  learning_rate: 0.01
+  optimizer: "sgd"
+  epochs: 30
+  early_stopping_patience: 5
+  validation_split: 0.05
+  device: "auto"
+  loss_function: "cross_entropy"
+
+logging:
+  log_dir: "imagenet_log/"
+  save_interval: 1
+  metrics:
+    - "loss"
+    - "accuracy"
+    - "precision"
+    - "recall"
+  plot_metrics: true
+  save_plots: true

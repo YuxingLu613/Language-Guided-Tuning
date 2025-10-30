@@ -1,0 +1,234 @@
+{
+  "enabled_agents": [
+    "aug",
+    "adaptive",
+    "hpo"
+  ],
+  "logs": [
+    {
+      "agent": "aug",
+      "suggestion": "gaussian_noise",
+      "params": null,
+      "should_use": true,
+      "full_prompt": {
+        "system_prompt": "You are a deep-learning model-training expert. Given the current training/validation metrics and the augmentation currently in use, decide which *single* augmentation from the list will most likely improve performance in the *next* epoch. Unless the provided metrics already show strong improvement with the current setup, you SHOULD choose an augmentation method *different* from the current one. Reply 'none' *only* when applying another augmentation would clearly degrade performance or is redundant. Respond with the method name only, without any explanation.",
+        "user_prompt": "Data type: tabular\nDataset: Housing\nAvailable methods: shift, gaussian_noise, feature_dropout, none\n\nEpoch: None\nCurrent augmentation in use: none\nTrain dataset size: None\n\nLatest metrics (JSON):\n{\"train\": {\"mse\": 2.443171739578247, \"mae\": 1.3350976705551147, \"r2\": -3.203268051147461, \"loss\": 0.893175762360263}, \"val\": {\"mse\": 0.3911779522895813, \"mae\": 0.501740038394928, \"r2\": 0.31815576553344727, \"loss\": 0.18848469965159892}, \"epoch\": 1}\n\nChoose exactly one augmentation method (or 'none')."
+      }
+    },
+    {
+      "agent": "strategy",
+      "suggestion": "loss=smooth_l1, optimizer=adam",
+      "params": {
+        "loss_function": "smooth_l1",
+        "optimizer": "adam"
+      },
+      "previous_context": "Before you, other agents have made the following changes: Augmentation Agent suggested using data augmentation strategy: gaussian_noise. Please consider the compatibility between your decisions before making your decision.",
+      "full_prompt": {
+        "system_prompt": "You are a highly skilled ML practitioner specialising in optimising training strategies across diverse tasks.",
+        "user_prompt": "You are an expert machine-learning practitioner.\nAt the end of each epoch you will receive: (a) task type, (b) current loss\nfunction & optimizer, and (c) the latest training / validation metrics.\n\nYour job: Propose a *potentially better* pair of loss function **and** optimizer\nfor the **next** epoch. Respond with **exactly** `no change` (case-insensitive) **only** if you are absolutely certain the current combination is already optimal and cannot be improved.\nIn most cases you should suggest a new combination.\nReturn a single line in the format:\n`loss=<loss_function>, optimizer=<optimizer>` (comma-separated, no extras).\n\nDo NOT suggest learning-rate changes or any other hyper-parameters.\n\nTask type: regression\n\nPREVIOUS AGENT CHANGES:\nBefore you, other agents have made the following changes: Augmentation Agent suggested using data augmentation strategy: gaussian_noise. Please consider the compatibility between your decisions before making your decision.\n\nCurrent loss function: huber\nCurrent optimizer: adamw\n\nRecent metrics (JSON):\n{\"train\": {\"mse\": 2.443171739578247, \"mae\": 1.3350976705551147, \"r2\": -3.203268051147461, \"loss\": 0.893175762360263}, \"val\": {\"mse\": 0.3911779522895813, \"mae\": 0.501740038394928, \"r2\": 0.31815576553344727, \"loss\": 0.18848469965159892}, \"epoch\": 1}\n\nDataset config: {'input_dim': 5, 'name': 'Housing', 'path': 'data/housing/Housing.csv', 'validation_split': 0.2}\nModel config: {'architecture': {'dropout': 0.2, 'hidden_dims': [128, 64, 32]}, 'name': 'CustomModel'}\n"
+      }
+    },
+    {
+      "agent": "hpo",
+      "suggestion": "learning_rate: 0.0005\ndropout: 0.4\n\nThe validation metrics show reasonable performance (R²=0.3182, loss=0.1885), but there's a significant gap between training and validation performance, suggesting potential overfitting. The training R² is negative (-3.2033) while validation R² is positive, indicating the model is memorizing training noise rather than learning general patterns.\n\nReducing learning_rate from 0.001 to 0.0005 will provide more stable convergence and better generalization. Increasing dropout from 0.3 to 0.4 will provide stronger regularization to combat overfitting, which aligns well with the gaussian_noise augmentation and smooth_l1 loss already in place.",
+      "params": {
+        "learning_rate": 0.0005,
+        "dropout": 0.4,
+        "loss": 0.1885
+      },
+      "previous_context": "Before you, other agents have made the following changes: Augmentation Agent suggested using data augmentation strategy: gaussian_noise; Adaptive Agent suggested adjusting training strategy: loss_function: smooth_l1, optimizer: adam. Please consider the compatibility between your decisions before making your decision.",
+      "full_prompt": {
+        "system_prompt": "You are a machine learning expert specializing in hyperparameter optimization.",
+        "user_prompt": "You are an expert ML trainer. Given the current parameters and metrics, evaluate the training status. Suggest precise changes in hyperparameters to improve training. Output changes in ONE of these formats:\n- ''\n- OR use multiple lines with 'param: value'\n- OR use multiple lines with 'param=value'\n- DO NOT use JSON format like {{'param': value}}\nIf no change needed, reply 'no change'.\n\n''. If no change needed, reply 'no change'.\n\n\nPREVIOUS AGENT CHANGES:\nBefore you, other agents have made the following changes: Augmentation Agent suggested using data augmentation strategy: gaussian_noise; Adaptive Agent suggested adjusting training strategy: loss_function: smooth_l1, optimizer: adam. Please consider the compatibility between your decisions before making your decision.\nCurrent parameters:\n\nDataset config:\n- input_dim: 5\n- name: Housing\n- path: data/housing/Housing.csv\n- validation_split: 0.2\n\nModel config:\n- architecture: {'dropout': 0.2, 'hidden_dims': [128, 64, 32]}\n- name: CustomModel\n\nTraining config (static fields):\n- batch_size: 256\n- device: auto\n- early_stopping_patience: 5\n- epochs: 10\n- learning_rate: 0.001\n- loss_function: smooth_l1\n- optimizer: adam\n- seed: 42\n- tunable_params: ['learning_rate', 'dropout']\n- dropout: 0.3\n\nTraining metrics:\nTraining:\n- mse: 2.4432\n- mae: 1.3351\n- r2: -3.2033\n- loss: 0.8932\nValidation:\n- mse: 0.3912\n- mae: 0.5017\n- r2: 0.3182\n- loss: 0.1885"
+      }
+    }
+  ],
+  "previous_changes": [
+    "Augmentation Agent suggested using data augmentation strategy: gaussian_noise",
+    "Adaptive Agent suggested adjusting training strategy: loss_function: smooth_l1, optimizer: adam",
+    "HPO Agent suggested adjusting hyperparameters: learning_rate: 0.0005, dropout: 0.4, loss: 0.1885"
+  ],
+  "agent_full_prompts": {
+    "aug": {
+      "system_prompt": "You are a deep-learning model-training expert. Given the current training/validation metrics and the augmentation currently in use, decide which *single* augmentation from the list will most likely improve performance in the *next* epoch. Unless the provided metrics already show strong improvement with the current setup, you SHOULD choose an augmentation method *different* from the current one. Reply 'none' *only* when applying another augmentation would clearly degrade performance or is redundant. Respond with the method name only, without any explanation.",
+      "user_prompt": "Data type: tabular\nDataset: Housing\nAvailable methods: shift, gaussian_noise, feature_dropout, none\n\nEpoch: None\nCurrent augmentation in use: none\nTrain dataset size: None\n\nLatest metrics (JSON):\n{\"train\": {\"mse\": 2.443171739578247, \"mae\": 1.3350976705551147, \"r2\": -3.203268051147461, \"loss\": 0.893175762360263}, \"val\": {\"mse\": 0.3911779522895813, \"mae\": 0.501740038394928, \"r2\": 0.31815576553344727, \"loss\": 0.18848469965159892}, \"epoch\": 1}\n\nChoose exactly one augmentation method (or 'none')."
+    },
+    "adaptive": {
+      "system_prompt": "You are a highly skilled ML practitioner specialising in optimising training strategies across diverse tasks.",
+      "user_prompt": "You are an expert machine-learning practitioner.\nAt the end of each epoch you will receive: (a) task type, (b) current loss\nfunction & optimizer, and (c) the latest training / validation metrics.\n\nYour job: Propose a *potentially better* pair of loss function **and** optimizer\nfor the **next** epoch. Respond with **exactly** `no change` (case-insensitive) **only** if you are absolutely certain the current combination is already optimal and cannot be improved.\nIn most cases you should suggest a new combination.\nReturn a single line in the format:\n`loss=<loss_function>, optimizer=<optimizer>` (comma-separated, no extras).\n\nDo NOT suggest learning-rate changes or any other hyper-parameters.\n\nTask type: regression\n\nPREVIOUS AGENT CHANGES:\nBefore you, other agents have made the following changes: Augmentation Agent suggested using data augmentation strategy: gaussian_noise. Please consider the compatibility between your decisions before making your decision.\n\nCurrent loss function: huber\nCurrent optimizer: adamw\n\nRecent metrics (JSON):\n{\"train\": {\"mse\": 2.443171739578247, \"mae\": 1.3350976705551147, \"r2\": -3.203268051147461, \"loss\": 0.893175762360263}, \"val\": {\"mse\": 0.3911779522895813, \"mae\": 0.501740038394928, \"r2\": 0.31815576553344727, \"loss\": 0.18848469965159892}, \"epoch\": 1}\n\nDataset config: {'input_dim': 5, 'name': 'Housing', 'path': 'data/housing/Housing.csv', 'validation_split': 0.2}\nModel config: {'architecture': {'dropout': 0.2, 'hidden_dims': [128, 64, 32]}, 'name': 'CustomModel'}\n"
+    },
+    "hpo": {
+      "system_prompt": "You are a machine learning expert specializing in hyperparameter optimization.",
+      "user_prompt": "You are an expert ML trainer. Given the current parameters and metrics, evaluate the training status. Suggest precise changes in hyperparameters to improve training. Output changes in ONE of these formats:\n- ''\n- OR use multiple lines with 'param: value'\n- OR use multiple lines with 'param=value'\n- DO NOT use JSON format like {{'param': value}}\nIf no change needed, reply 'no change'.\n\n''. If no change needed, reply 'no change'.\n\n\nPREVIOUS AGENT CHANGES:\nBefore you, other agents have made the following changes: Augmentation Agent suggested using data augmentation strategy: gaussian_noise; Adaptive Agent suggested adjusting training strategy: loss_function: smooth_l1, optimizer: adam. Please consider the compatibility between your decisions before making your decision.\nCurrent parameters:\n\nDataset config:\n- input_dim: 5\n- name: Housing\n- path: data/housing/Housing.csv\n- validation_split: 0.2\n\nModel config:\n- architecture: {'dropout': 0.2, 'hidden_dims': [128, 64, 32]}\n- name: CustomModel\n\nTraining config (static fields):\n- batch_size: 256\n- device: auto\n- early_stopping_patience: 5\n- epochs: 10\n- learning_rate: 0.001\n- loss_function: smooth_l1\n- optimizer: adam\n- seed: 42\n- tunable_params: ['learning_rate', 'dropout']\n- dropout: 0.3\n\nTraining metrics:\nTraining:\n- mse: 2.4432\n- mae: 1.3351\n- r2: -3.2033\n- loss: 0.8932\nValidation:\n- mse: 0.3912\n- mae: 0.5017\n- r2: 0.3182\n- loss: 0.1885"
+    }
+  },
+  "judger_rounds": [
+    {
+      "attempt": 0,
+      "use_optimized": false,
+      "reason": "",
+      "agent_suggestions": {
+        "aug": "Implement data augmentation to increase dataset diversity and reduce overfitting",
+        "adaptive": "Experiment with different loss functions or regularization methods to improve validation performance",
+        "hpo": "Tune hyperparameters focusing on reducing validation MSE and MAE while maintaining R² performance"
+      },
+      "refined": {
+        "aug": "Implement data augmentation to increase dataset diversity and reduce overfitting",
+        "adaptive": "Experiment with different loss functions or regularization methods to improve validation performance",
+        "hpo": "Tune hyperparameters focusing on reducing validation MSE and MAE while maintaining R² performance"
+      },
+      "refined_agent_logs": {
+        "enabled_agents": [
+          "aug",
+          "adaptive",
+          "hpo"
+        ],
+        "logs": [
+          {
+            "agent": "aug",
+            "suggestion": "gaussian_noise",
+            "params": null,
+            "should_use": true,
+            "full_prompt": {
+              "system_prompt": "You are a deep-learning model-training expert. Given the current training/validation metrics and the augmentation currently in use, decide which *single* augmentation from the list will most likely improve performance in the *next* epoch. Unless the provided metrics already show strong improvement with the current setup, you SHOULD choose an augmentation method *different* from the current one. Reply 'none' *only* when applying another augmentation would clearly degrade performance or is redundant. Respond with the method name only, without any explanation.",
+              "user_prompt": "Data type: tabular\nDataset: Housing\nAvailable methods: shift, gaussian_noise, feature_dropout, none\n\nEpoch: None\nCurrent augmentation in use: none\nTrain dataset size: None\n\nLatest metrics (JSON):\n{\"train\": {\"mse\": 2.443171739578247, \"mae\": 1.3350976705551147, \"r2\": -3.203268051147461, \"loss\": 0.893175762360263}, \"val\": {\"mse\": 0.3911779522895813, \"mae\": 0.501740038394928, \"r2\": 0.31815576553344727, \"loss\": 0.18848469965159892}, \"epoch\": 1}\n\nChoose exactly one augmentation method (or 'none')."
+            }
+          },
+          {
+            "agent": "strategy",
+            "suggestion": "loss=smooth_l1, optimizer=adam",
+            "params": {
+              "loss_function": "smooth_l1",
+              "optimizer": "adam"
+            },
+            "previous_context": "Before you, other agents have made the following changes: Augmentation Agent suggested using data augmentation strategy: gaussian_noise. Please consider the compatibility between your decisions before making your decision.",
+            "full_prompt": {
+              "system_prompt": "You are a highly skilled ML practitioner specialising in optimising training strategies across diverse tasks.",
+              "user_prompt": "You are an expert machine-learning practitioner.\nAt the end of each epoch you will receive: (a) task type, (b) current loss\nfunction & optimizer, and (c) the latest training / validation metrics.\n\nYour job: Propose a *potentially better* pair of loss function **and** optimizer\nfor the **next** epoch. Respond with **exactly** `no change` (case-insensitive) **only** if you are absolutely certain the current combination is already optimal and cannot be improved.\nIn most cases you should suggest a new combination.\nReturn a single line in the format:\n`loss=<loss_function>, optimizer=<optimizer>` (comma-separated, no extras).\n\nDo NOT suggest learning-rate changes or any other hyper-parameters.\n\nTask type: regression\n\nPREVIOUS AGENT CHANGES:\nBefore you, other agents have made the following changes: Augmentation Agent suggested using data augmentation strategy: gaussian_noise. Please consider the compatibility between your decisions before making your decision.\n\nCurrent loss function: huber\nCurrent optimizer: adamw\n\nRecent metrics (JSON):\n{\"train\": {\"mse\": 2.443171739578247, \"mae\": 1.3350976705551147, \"r2\": -3.203268051147461, \"loss\": 0.893175762360263}, \"val\": {\"mse\": 0.3911779522895813, \"mae\": 0.501740038394928, \"r2\": 0.31815576553344727, \"loss\": 0.18848469965159892}, \"epoch\": 1}\n\nDataset config: {'input_dim': 5, 'name': 'Housing', 'path': 'data/housing/Housing.csv', 'validation_split': 0.2}\nModel config: {'architecture': {'dropout': 0.2, 'hidden_dims': [128, 64, 32]}, 'name': 'CustomModel'}\n"
+            }
+          },
+          {
+            "agent": "hpo",
+            "suggestion": "learning_rate: 0.0005\ndropout: 0.4\n\nThe validation metrics show reasonable performance (R²=0.3182, loss=0.1885), but there's a significant gap between training and validation performance, suggesting potential overfitting. The training R² is negative (-3.2033) while validation R² is positive, indicating the model is memorizing training noise rather than learning general patterns.\n\nReducing learning_rate from 0.001 to 0.0005 will provide more stable convergence and better generalization. Increasing dropout from 0.3 to 0.4 will provide stronger regularization to combat overfitting, which aligns well with the gaussian_noise augmentation and smooth_l1 loss already in place.",
+            "params": {
+              "learning_rate": 0.0005,
+              "dropout": 0.4,
+              "loss": 0.1885
+            },
+            "previous_context": "Before you, other agents have made the following changes: Augmentation Agent suggested using data augmentation strategy: gaussian_noise; Adaptive Agent suggested adjusting training strategy: loss_function: smooth_l1, optimizer: adam. Please consider the compatibility between your decisions before making your decision.",
+            "full_prompt": {
+              "system_prompt": "You are a machine learning expert specializing in hyperparameter optimization.",
+              "user_prompt": "You are an expert ML trainer. Given the current parameters and metrics, evaluate the training status. Suggest precise changes in hyperparameters to improve training. Output changes in ONE of these formats:\n- ''\n- OR use multiple lines with 'param: value'\n- OR use multiple lines with 'param=value'\n- DO NOT use JSON format like {{'param': value}}\nIf no change needed, reply 'no change'.\n\n''. If no change needed, reply 'no change'.\n\n\nPREVIOUS AGENT CHANGES:\nBefore you, other agents have made the following changes: Augmentation Agent suggested using data augmentation strategy: gaussian_noise; Adaptive Agent suggested adjusting training strategy: loss_function: smooth_l1, optimizer: adam. Please consider the compatibility between your decisions before making your decision.\nCurrent parameters:\n\nDataset config:\n- input_dim: 5\n- name: Housing\n- path: data/housing/Housing.csv\n- validation_split: 0.2\n\nModel config:\n- architecture: {'dropout': 0.2, 'hidden_dims': [128, 64, 32]}\n- name: CustomModel\n\nTraining config (static fields):\n- batch_size: 256\n- device: auto\n- early_stopping_patience: 5\n- epochs: 10\n- learning_rate: 0.001\n- loss_function: smooth_l1\n- optimizer: adam\n- seed: 42\n- tunable_params: ['learning_rate', 'dropout']\n- dropout: 0.3\n\nTraining metrics:\nTraining:\n- mse: 2.4432\n- mae: 1.3351\n- r2: -3.2033\n- loss: 0.8932\nValidation:\n- mse: 0.3912\n- mae: 0.5017\n- r2: 0.3182\n- loss: 0.1885"
+            }
+          }
+        ],
+        "previous_changes": [
+          "Augmentation Agent suggested using data augmentation strategy: gaussian_noise",
+          "Adaptive Agent suggested adjusting training strategy: loss_function: smooth_l1, optimizer: adam",
+          "HPO Agent suggested adjusting hyperparameters: learning_rate: 0.0005, dropout: 0.4, loss: 0.1885"
+        ],
+        "agent_full_prompts": {
+          "aug": {
+            "system_prompt": "You are a deep-learning model-training expert. Given the current training/validation metrics and the augmentation currently in use, decide which *single* augmentation from the list will most likely improve performance in the *next* epoch. Unless the provided metrics already show strong improvement with the current setup, you SHOULD choose an augmentation method *different* from the current one. Reply 'none' *only* when applying another augmentation would clearly degrade performance or is redundant. Respond with the method name only, without any explanation.",
+            "user_prompt": "Data type: tabular\nDataset: Housing\nAvailable methods: shift, gaussian_noise, feature_dropout, none\n\nEpoch: None\nCurrent augmentation in use: none\nTrain dataset size: None\n\nLatest metrics (JSON):\n{\"train\": {\"mse\": 2.443171739578247, \"mae\": 1.3350976705551147, \"r2\": -3.203268051147461, \"loss\": 0.893175762360263}, \"val\": {\"mse\": 0.3911779522895813, \"mae\": 0.501740038394928, \"r2\": 0.31815576553344727, \"loss\": 0.18848469965159892}, \"epoch\": 1}\n\nChoose exactly one augmentation method (or 'none')."
+          },
+          "adaptive": {
+            "system_prompt": "You are a highly skilled ML practitioner specialising in optimising training strategies across diverse tasks.",
+            "user_prompt": "You are an expert machine-learning practitioner.\nAt the end of each epoch you will receive: (a) task type, (b) current loss\nfunction & optimizer, and (c) the latest training / validation metrics.\n\nYour job: Propose a *potentially better* pair of loss function **and** optimizer\nfor the **next** epoch. Respond with **exactly** `no change` (case-insensitive) **only** if you are absolutely certain the current combination is already optimal and cannot be improved.\nIn most cases you should suggest a new combination.\nReturn a single line in the format:\n`loss=<loss_function>, optimizer=<optimizer>` (comma-separated, no extras).\n\nDo NOT suggest learning-rate changes or any other hyper-parameters.\n\nTask type: regression\n\nPREVIOUS AGENT CHANGES:\nBefore you, other agents have made the following changes: Augmentation Agent suggested using data augmentation strategy: gaussian_noise. Please consider the compatibility between your decisions before making your decision.\n\nCurrent loss function: huber\nCurrent optimizer: adamw\n\nRecent metrics (JSON):\n{\"train\": {\"mse\": 2.443171739578247, \"mae\": 1.3350976705551147, \"r2\": -3.203268051147461, \"loss\": 0.893175762360263}, \"val\": {\"mse\": 0.3911779522895813, \"mae\": 0.501740038394928, \"r2\": 0.31815576553344727, \"loss\": 0.18848469965159892}, \"epoch\": 1}\n\nDataset config: {'input_dim': 5, 'name': 'Housing', 'path': 'data/housing/Housing.csv', 'validation_split': 0.2}\nModel config: {'architecture': {'dropout': 0.2, 'hidden_dims': [128, 64, 32]}, 'name': 'CustomModel'}\n"
+          },
+          "hpo": {
+            "system_prompt": "You are a machine learning expert specializing in hyperparameter optimization.",
+            "user_prompt": "You are an expert ML trainer. Given the current parameters and metrics, evaluate the training status. Suggest precise changes in hyperparameters to improve training. Output changes in ONE of these formats:\n- ''\n- OR use multiple lines with 'param: value'\n- OR use multiple lines with 'param=value'\n- DO NOT use JSON format like {{'param': value}}\nIf no change needed, reply 'no change'.\n\n''. If no change needed, reply 'no change'.\n\n\nPREVIOUS AGENT CHANGES:\nBefore you, other agents have made the following changes: Augmentation Agent suggested using data augmentation strategy: gaussian_noise; Adaptive Agent suggested adjusting training strategy: loss_function: smooth_l1, optimizer: adam. Please consider the compatibility between your decisions before making your decision.\nCurrent parameters:\n\nDataset config:\n- input_dim: 5\n- name: Housing\n- path: data/housing/Housing.csv\n- validation_split: 0.2\n\nModel config:\n- architecture: {'dropout': 0.2, 'hidden_dims': [128, 64, 32]}\n- name: CustomModel\n\nTraining config (static fields):\n- batch_size: 256\n- device: auto\n- early_stopping_patience: 5\n- epochs: 10\n- learning_rate: 0.001\n- loss_function: smooth_l1\n- optimizer: adam\n- seed: 42\n- tunable_params: ['learning_rate', 'dropout']\n- dropout: 0.3\n\nTraining metrics:\nTraining:\n- mse: 2.4432\n- mae: 1.3351\n- r2: -3.2033\n- loss: 0.8932\nValidation:\n- mse: 0.3912\n- mae: 0.5017\n- r2: 0.3182\n- loss: 0.1885"
+          }
+        }
+      }
+    },
+    {
+      "attempt": 1,
+      "use_optimized": true,
+      "reason": "",
+      "agent_suggestions": {
+        "aug": "Consider adding noise injection or synthetic data generation to improve generalization given minimal validation improvement",
+        "adaptive": "Experiment with alternative loss functions like Huber loss to balance mse and mae performance",
+        "hpo": "Focus tuning on regularization parameters and learning rate scheduling to close training-validation gap"
+      }
+    }
+  ],
+  "prev_metrics_used": {
+    "train": {
+      "mse": 2.443171739578247,
+      "mae": 1.3350976705551147,
+      "r2": -3.203268051147461,
+      "loss": 0.893175762360263
+    },
+    "val": {
+      "mse": 0.3911779522895813,
+      "mae": 0.501740038394928,
+      "r2": 0.31815576553344727,
+      "loss": 0.18848469965159892
+    },
+    "epoch": 1
+  },
+  "prev_config_used": {
+    "augmentation": {
+      "enabled": true,
+      "methods": [
+        "gaussian_noise",
+        "feature_dropout",
+        "none"
+      ],
+      "policy": "gaussian_noise"
+    },
+    "dataset": {
+      "input_dim": 5,
+      "name": "Housing",
+      "path": "data/housing/Housing.csv",
+      "validation_split": 0.2
+    },
+    "llm": {
+      "api_key": "sk-b295897df8d7404a87a1ae9565e33bab",
+      "max_tokens": 4096,
+      "model": "deepseek-chat",
+      "temperature": 0.2
+    },
+    "logging": {
+      "log_dir": "logs\\history_20251028_201001",
+      "metrics": [
+        "loss",
+        "mse",
+        "mae",
+        "r2"
+      ],
+      "plot_metrics": true,
+      "save_interval": 1,
+      "save_plots": true,
+      "disable_trainer_subdir": true
+    },
+    "model": {
+      "architecture": {
+        "dropout": 0.2,
+        "hidden_dims": [
+          128,
+          64,
+          32
+        ]
+      },
+      "name": "CustomModel"
+    },
+    "training": {
+      "batch_size": 256,
+      "device": "auto",
+      "early_stopping_patience": 5,
+      "epochs": 10,
+      "learning_rate": 0.001,
+      "loss_function": "huber",
+      "optimizer": "adamw",
+      "seed": 42,
+      "tunable_params": [
+        "learning_rate",
+        "dropout"
+      ],
+      "dropout": 0.3
+    }
+  }
+}

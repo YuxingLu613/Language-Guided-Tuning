@@ -1,0 +1,588 @@
+{
+  "epoch": 6,
+  "flags": {
+    "use_adaptive_agent": true,
+    "use_aug_agent": true,
+    "use_hpo_agent": true
+  },
+  "use_optimized": false,
+  "judger_reason": "All optimization attempts rejected by Judger",
+  "final_metrics": {
+    "train": {
+      "mse": 0.47779038548469543,
+      "mae": 0.5413789749145508,
+      "r2": 0.1780024766921997,
+      "loss": 0.22183969322663205
+    },
+    "val": {
+      "mse": 0.2556503415107727,
+      "mae": 0.40269020199775696,
+      "r2": 0.5543876886367798,
+      "loss": 0.1261270225048065
+    },
+    "epoch": 6
+  },
+  "final_config": {
+    "augmentation": {
+      "enabled": true,
+      "methods": [
+        "gaussian_noise",
+        "feature_dropout",
+        "none"
+      ],
+      "policy": "gaussian_noise"
+    },
+    "dataset": {
+      "input_dim": 5,
+      "name": "Housing",
+      "path": "data/housing/Housing.csv",
+      "validation_split": 0.2
+    },
+    "llm": {
+      "api_key": "sk-b295897df8d7404a87a1ae9565e33bab",
+      "max_tokens": 4096,
+      "model": "deepseek-chat",
+      "temperature": 0.2
+    },
+    "logging": {
+      "log_dir": "logs\\history_20251028_201001",
+      "metrics": [
+        "loss",
+        "mse",
+        "mae",
+        "r2"
+      ],
+      "plot_metrics": true,
+      "save_interval": 1,
+      "save_plots": true,
+      "disable_trainer_subdir": true
+    },
+    "model": {
+      "architecture": {
+        "dropout": 0.2,
+        "hidden_dims": [
+          128,
+          64,
+          32
+        ]
+      },
+      "name": "CustomModel"
+    },
+    "training": {
+      "batch_size": 256,
+      "device": "auto",
+      "early_stopping_patience": 5,
+      "epochs": 10,
+      "learning_rate": 0.00015,
+      "loss_function": "huber",
+      "optimizer": "adamw",
+      "seed": 42,
+      "tunable_params": [
+        "learning_rate",
+        "dropout"
+      ],
+      "dropout": 0.3,
+      "loss": 0.1885
+    }
+  },
+  "optimization_history": [
+    {
+      "param_changes": {
+        "batch_size": {
+          "from": 256,
+          "to": 256
+        },
+        "loss": {
+          "from": 0.1885,
+          "to": 0.1885
+        },
+        "epochs": {
+          "from": 10,
+          "to": 10
+        },
+        "optimizer": {
+          "from": "adamw",
+          "to": "adam"
+        },
+        "dropout": {
+          "from": 0.3,
+          "to": 0.25
+        },
+        "seed": {
+          "from": 42,
+          "to": 42
+        },
+        "learning_rate": {
+          "from": 0.00015,
+          "to": 0.0001
+        },
+        "loss_function": {
+          "from": "huber",
+          "to": "smooth_l1"
+        },
+        "early_stopping_patience": {
+          "from": 5,
+          "to": 5
+        },
+        "device": {
+          "from": "auto",
+          "to": "auto"
+        },
+        "tunable_params": {
+          "from": [
+            "learning_rate",
+            "dropout"
+          ],
+          "to": [
+            "learning_rate",
+            "dropout"
+          ]
+        }
+      },
+      "original_metrics": {
+        "train": {
+          "mse": 0.47779038548469543,
+          "mae": 0.5413789749145508,
+          "r2": 0.1780024766921997,
+          "loss": 0.22183969322663205
+        },
+        "val": {
+          "mse": 0.2556503415107727,
+          "mae": 0.40269020199775696,
+          "r2": 0.5543876886367798,
+          "loss": 0.1261270225048065
+        },
+        "epoch": 6
+      },
+      "optimized_metrics": {
+        "train": {
+          "mse": 0.4750649333000183,
+          "mae": 0.5411942005157471,
+          "r2": 0.18269139528274536,
+          "loss": 0.22188288675751655
+        },
+        "val": {
+          "mse": 0.2567337453365326,
+          "mae": 0.4037320613861084,
+          "r2": 0.5524992942810059,
+          "loss": 0.12663456592708827
+        },
+        "epoch": 6
+      }
+    },
+    {
+      "param_changes": {
+        "batch_size": {
+          "from": 256,
+          "to": 256
+        },
+        "loss": {
+          "from": 0.1885,
+          "to": 0.1885
+        },
+        "epochs": {
+          "from": 10,
+          "to": 10
+        },
+        "optimizer": {
+          "from": "adamw",
+          "to": "adam"
+        },
+        "dropout": {
+          "from": 0.3,
+          "to": 0.25
+        },
+        "seed": {
+          "from": 42,
+          "to": 42
+        },
+        "learning_rate": {
+          "from": 0.00015,
+          "to": 0.0001
+        },
+        "loss_function": {
+          "from": "huber",
+          "to": "smooth_l1"
+        },
+        "early_stopping_patience": {
+          "from": 5,
+          "to": 5
+        },
+        "device": {
+          "from": "auto",
+          "to": "auto"
+        },
+        "tunable_params": {
+          "from": [
+            "learning_rate",
+            "dropout"
+          ],
+          "to": [
+            "learning_rate",
+            "dropout"
+          ]
+        }
+      },
+      "original_metrics": {
+        "train": {
+          "mse": 0.47779038548469543,
+          "mae": 0.5413789749145508,
+          "r2": 0.1780024766921997,
+          "loss": 0.22183969322663205
+        },
+        "val": {
+          "mse": 0.2556503415107727,
+          "mae": 0.40269020199775696,
+          "r2": 0.5543876886367798,
+          "loss": 0.1261270225048065
+        },
+        "epoch": 6
+      },
+      "optimized_metrics": {
+        "train": {
+          "mse": 0.4829913079738617,
+          "mae": 0.5436042547225952,
+          "r2": 0.16905474662780762,
+          "loss": 0.22435163274692121
+        },
+        "val": {
+          "mse": 0.25725236535072327,
+          "mae": 0.404201477766037,
+          "r2": 0.5515953302383423,
+          "loss": 0.12678144089877605
+        },
+        "epoch": 6
+      }
+    },
+    {
+      "param_changes": {
+        "batch_size": {
+          "from": 256,
+          "to": 256
+        },
+        "loss": {
+          "from": 0.1885,
+          "to": 0.1885
+        },
+        "epochs": {
+          "from": 10,
+          "to": 10
+        },
+        "optimizer": {
+          "from": "adamw",
+          "to": "adamw"
+        },
+        "dropout": {
+          "from": 0.3,
+          "to": 0.35
+        },
+        "seed": {
+          "from": 42,
+          "to": 42
+        },
+        "learning_rate": {
+          "from": 0.00015,
+          "to": 0.00012
+        },
+        "loss_function": {
+          "from": "huber",
+          "to": "smooth_l1"
+        },
+        "early_stopping_patience": {
+          "from": 5,
+          "to": 5
+        },
+        "device": {
+          "from": "auto",
+          "to": "auto"
+        },
+        "tunable_params": {
+          "from": [
+            "learning_rate",
+            "dropout"
+          ],
+          "to": [
+            "learning_rate",
+            "dropout"
+          ]
+        }
+      },
+      "original_metrics": {
+        "train": {
+          "mse": 0.47779038548469543,
+          "mae": 0.5413789749145508,
+          "r2": 0.1780024766921997,
+          "loss": 0.22183969322663205
+        },
+        "val": {
+          "mse": 0.2556503415107727,
+          "mae": 0.40269020199775696,
+          "r2": 0.5543876886367798,
+          "loss": 0.1261270225048065
+        },
+        "epoch": 6
+      },
+      "optimized_metrics": {
+        "train": {
+          "mse": 0.4747558534145355,
+          "mae": 0.5416864156723022,
+          "r2": 0.18322312831878662,
+          "loss": 0.22176155789642576
+        },
+        "val": {
+          "mse": 0.25590795278549194,
+          "mae": 0.4032445549964905,
+          "r2": 0.553938627243042,
+          "loss": 0.12617576010525228
+        },
+        "epoch": 6
+      }
+    },
+    {
+      "param_changes": {
+        "batch_size": {
+          "from": 256,
+          "to": 256
+        },
+        "loss": {
+          "from": 0.1885,
+          "to": 0.1885
+        },
+        "epochs": {
+          "from": 10,
+          "to": 10
+        },
+        "optimizer": {
+          "from": "adamw",
+          "to": "adamw"
+        },
+        "dropout": {
+          "from": 0.3,
+          "to": 0.25
+        },
+        "seed": {
+          "from": 42,
+          "to": 42
+        },
+        "learning_rate": {
+          "from": 0.00015,
+          "to": 0.0003
+        },
+        "loss_function": {
+          "from": "huber",
+          "to": "mse"
+        },
+        "early_stopping_patience": {
+          "from": 5,
+          "to": 5
+        },
+        "device": {
+          "from": "auto",
+          "to": "auto"
+        },
+        "tunable_params": {
+          "from": [
+            "learning_rate",
+            "dropout"
+          ],
+          "to": [
+            "learning_rate",
+            "dropout"
+          ]
+        }
+      },
+      "original_metrics": {
+        "train": {
+          "mse": 0.47779038548469543,
+          "mae": 0.5413789749145508,
+          "r2": 0.1780024766921997,
+          "loss": 0.22183969322663205
+        },
+        "val": {
+          "mse": 0.2556503415107727,
+          "mae": 0.40269020199775696,
+          "r2": 0.5543876886367798,
+          "loss": 0.1261270225048065
+        },
+        "epoch": 6
+      },
+      "optimized_metrics": {
+        "train": {
+          "mse": 0.467929869890213,
+          "mae": 0.5366029143333435,
+          "r2": 0.19496667385101318,
+          "loss": 0.4678537441287071
+        },
+        "val": {
+          "mse": 0.25587308406829834,
+          "mae": 0.4028564393520355,
+          "r2": 0.5539994835853577,
+          "loss": 0.25595143884420396
+        },
+        "epoch": 6
+      }
+    },
+    {
+      "param_changes": {
+        "batch_size": {
+          "from": 256,
+          "to": 256
+        },
+        "loss": {
+          "from": 0.1885,
+          "to": 0.1885
+        },
+        "epochs": {
+          "from": 10,
+          "to": 10
+        },
+        "optimizer": {
+          "from": "adamw",
+          "to": "adamw"
+        },
+        "dropout": {
+          "from": 0.3,
+          "to": 0.35
+        },
+        "seed": {
+          "from": 42,
+          "to": 42
+        },
+        "learning_rate": {
+          "from": 0.00015,
+          "to": 0.00018
+        },
+        "loss_function": {
+          "from": "huber",
+          "to": "log_cosh"
+        },
+        "early_stopping_patience": {
+          "from": 5,
+          "to": 5
+        },
+        "device": {
+          "from": "auto",
+          "to": "auto"
+        },
+        "tunable_params": {
+          "from": [
+            "learning_rate",
+            "dropout"
+          ],
+          "to": [
+            "learning_rate",
+            "dropout"
+          ]
+        }
+      },
+      "original_metrics": {
+        "train": {
+          "mse": 0.47779038548469543,
+          "mae": 0.5413789749145508,
+          "r2": 0.1780024766921997,
+          "loss": 0.22183969322663205
+        },
+        "val": {
+          "mse": 0.2556503415107727,
+          "mae": 0.40269020199775696,
+          "r2": 0.5543876886367798,
+          "loss": 0.1261270225048065
+        },
+        "epoch": 6
+      },
+      "optimized_metrics": {
+        "train": {
+          "mse": 0.46788719296455383,
+          "mae": 0.5361896753311157,
+          "r2": 0.1950400471687317,
+          "loss": 0.1947743334587972
+        },
+        "val": {
+          "mse": 0.25674793124198914,
+          "mae": 0.40408915281295776,
+          "r2": 0.5524745583534241,
+          "loss": 0.11536745559424162
+        },
+        "epoch": 6
+      }
+    }
+  ],
+  "prev_metrics_used": {
+    "train": {
+      "mse": 0.5085460543632507,
+      "mae": 0.5572475790977478,
+      "r2": 0.12509000301361084,
+      "loss": 0.23411567091562185
+    },
+    "val": {
+      "mse": 0.2574847936630249,
+      "mae": 0.4042908549308777,
+      "r2": 0.5511901378631592,
+      "loss": 0.12704090513288974
+    },
+    "epoch": 5
+  },
+  "prev_config_used": {
+    "augmentation": {
+      "enabled": true,
+      "methods": [
+        "gaussian_noise",
+        "feature_dropout",
+        "none"
+      ],
+      "policy": "gaussian_noise"
+    },
+    "dataset": {
+      "input_dim": 5,
+      "name": "Housing",
+      "path": "data/housing/Housing.csv",
+      "validation_split": 0.2
+    },
+    "llm": {
+      "api_key": "sk-b295897df8d7404a87a1ae9565e33bab",
+      "max_tokens": 4096,
+      "model": "deepseek-chat",
+      "temperature": 0.2
+    },
+    "logging": {
+      "log_dir": "logs\\history_20251028_201001",
+      "metrics": [
+        "loss",
+        "mse",
+        "mae",
+        "r2"
+      ],
+      "plot_metrics": true,
+      "save_interval": 1,
+      "save_plots": true,
+      "disable_trainer_subdir": true
+    },
+    "model": {
+      "architecture": {
+        "dropout": 0.2,
+        "hidden_dims": [
+          128,
+          64,
+          32
+        ]
+      },
+      "name": "CustomModel"
+    },
+    "training": {
+      "batch_size": 256,
+      "device": "auto",
+      "early_stopping_patience": 5,
+      "epochs": 10,
+      "learning_rate": 0.00015,
+      "loss_function": "huber",
+      "optimizer": "adamw",
+      "seed": 42,
+      "tunable_params": [
+        "learning_rate",
+        "dropout"
+      ],
+      "dropout": 0.3,
+      "loss": 0.1885
+    }
+  }
+}

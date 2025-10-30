@@ -1,0 +1,28 @@
+{
+  "enabled_agents": [
+    "aug",
+    "adaptive",
+    "hpo"
+  ],
+  "logs": [
+    {
+      "agent": "aug",
+      "suggestion": "none",
+      "params": null,
+      "should_use": false
+    },
+    {
+      "agent": "strategy",
+      "suggestion": "error: HTTPSConnectionPool(host='api.deepseek.com', port=443): Max retries exceeded with url: /v1/chat/completions (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x000001AA23348DC0>: Failed to resolve 'api.deepseek.com' ([Errno 11001] getaddrinfo failed)\"))",
+      "params": {},
+      "previous_context": ""
+    },
+    {
+      "agent": "hpo",
+      "suggestion": "调用LLM API时发生错误: HTTPSConnectionPool(host='api.deepseek.com', port=443): Max retries exceeded with url: /v1/chat/completions (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x000001AA233498D0>: Failed to resolve 'api.deepseek.com' ([Errno 11001] getaddrinfo failed)\"))",
+      "params": {},
+      "previous_context": ""
+    }
+  ],
+  "previous_changes": []
+}

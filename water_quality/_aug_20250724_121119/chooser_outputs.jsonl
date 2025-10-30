@@ -1,0 +1,6 @@
+{"attempt": 0, "choice": "shift"}
+{"attempt": 0, "choice": "feature_dropout"}
+{"attempt": 1, "choice": "none"}
+{"attempt": 0, "choice": "feature_dropout"}
+{"attempt": 1, "choice": "feature_dropout"}
+{"attempt": 2, "choice": "none"}

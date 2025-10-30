@@ -1,0 +1,99 @@
+{
+  "enabled_agents": [
+    "adaptive"
+  ],
+  "logs": [
+    {
+      "agent": "strategy",
+      "suggestion": "loss=huber, optimizer=adam",
+      "params": {
+        "loss_function": "huber",
+        "optimizer": "adam"
+      },
+      "previous_context": ""
+    }
+  ],
+  "previous_changes": [
+    "Adaptive Agent suggested adjusting training strategy: loss_function: huber, optimizer: adam"
+  ],
+  "judger_rounds": [
+    {
+      "attempt": 0,
+      "use_optimized": true,
+      "reason": "",
+      "agent_suggestions": {
+        "adaptive": "Consider experimenting with different loss functions (e.g., Huber loss) and optimizers (e.g., AdamW) to further improve generalization while maintaining the current performance gains."
+      }
+    }
+  ],
+  "prev_metrics_used": {
+    "train": {
+      "mse": 2.5810604095458984,
+      "mae": 1.4324308633804321,
+      "loss": 0.9698913044230953
+    },
+    "val": {
+      "mse": 2.017953634262085,
+      "mae": 1.3088586330413818,
+      "loss": 0.8308860197663307
+    },
+    "epoch": 3
+  },
+  "prev_config_used": {
+    "dataset": {
+      "name": "Housing",
+      "input_dim": 5,
+      "path": "data/housing/Housing.csv",
+      "validation_split": 0.2
+    },
+    "model": {
+      "name": "CustomModel",
+      "architecture": {
+        "hidden_dims": [
+          2
+        ],
+        "dropout": 0.5
+      }
+    },
+    "training": {
+      "batch_size": 256,
+      "learning_rate": 0.0005,
+      "optimizer": "adam",
+      "epochs": 10,
+      "early_stopping_patience": 5,
+      "device": "auto",
+      "loss_function": "huber",
+      "seed": 42,
+      "tunable_params": [
+        "learning_rate",
+        "dropout"
+      ]
+    },
+    "llm": {
+      "model": "deepseek-chat",
+      "api_key": "sk-b295897df8d7404a87a1ae9565e33bab",
+      "temperature": 0.2,
+      "max_tokens": 4096
+    },
+    "logging": {
+      "log_dir": "logs\\history_20251023_163337",
+      "save_interval": 1,
+      "metrics": [
+        "loss",
+        "mse",
+        "mae"
+      ],
+      "plot_metrics": true,
+      "save_plots": true,
+      "disable_trainer_subdir": true
+    },
+    "augmentation": {
+      "enabled": true,
+      "methods": [
+        "gaussian_noise",
+        "feature_dropout",
+        "none"
+      ]
+    }
+  }
+}

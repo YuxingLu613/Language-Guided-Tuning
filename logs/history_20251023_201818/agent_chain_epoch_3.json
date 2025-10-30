@@ -1,0 +1,110 @@
+{
+  "enabled_agents": [
+    "aug",
+    "adaptive",
+    "hpo"
+  ],
+  "logs": [
+    {
+      "agent": "aug",
+      "suggestion": "none",
+      "params": null,
+      "should_use": false
+    },
+    {
+      "agent": "strategy",
+      "suggestion": "error: 401 Client Error: Unauthorized for url: https://api.deepseek.com/v1/chat/completions",
+      "params": {},
+      "previous_context": ""
+    },
+    {
+      "agent": "hpo",
+      "suggestion": "调用LLM API时发生错误: 401 Client Error: Unauthorized for url: https://api.deepseek.com/v1/chat/completions",
+      "params": {},
+      "previous_context": ""
+    }
+  ],
+  "previous_changes": [],
+  "judger_rounds": [
+    {
+      "attempt": 0,
+      "use_optimized": false,
+      "reason": "调用LLM API时发生错误: 401 Client Error: Unauthorized for url: https://api.deepseek.com/v1/chat/completions",
+      "agent_suggestions": null
+    }
+  ],
+  "prev_metrics_used": {
+    "train": {
+      "mse": 0.5948280096054077,
+      "mae": 0.6521208882331848,
+      "r2": -90.37342834472656,
+      "loss": 0.6521209001541137
+    },
+    "val": {
+      "mse": 0.38273996114730835,
+      "mae": 0.6041505336761475,
+      "r2": -57.575462341308594,
+      "loss": 0.6066555678844452
+    },
+    "epoch": 3
+  },
+  "prev_config_used": {
+    "augmentation": {
+      "enabled": true,
+      "methods": [
+        "gaussian_noise",
+        "feature_dropout",
+        "none"
+      ]
+    },
+    "dataset": {
+      "input_dim": 11,
+      "name": "WineQuality",
+      "path": "data/winequality/winequality-red.csv",
+      "target_scale": 10.0,
+      "validation_split": 0.2
+    },
+    "llm": {
+      "api_key": null,
+      "max_tokens": 4096,
+      "model": "deepseek-chat",
+      "temperature": 0.2
+    },
+    "logging": {
+      "log_dir": "logs\\history_20251023_201818",
+      "metrics": [
+        "loss",
+        "mse",
+        "mae"
+      ],
+      "plot_metrics": true,
+      "save_interval": 1,
+      "save_plots": true,
+      "disable_trainer_subdir": true
+    },
+    "model": {
+      "architecture": {
+        "dropout": 0.3,
+        "hidden_dims": [
+          32,
+          16
+        ]
+      },
+      "name": "CustomModel"
+    },
+    "training": {
+      "batch_size": 256,
+      "device": "auto",
+      "early_stopping_patience": 5,
+      "epochs": 10,
+      "learning_rate": 0.001,
+      "loss_function": "mae",
+      "optimizer": "adam",
+      "seed": 42,
+      "tunable_params": [
+        "learning_rate",
+        "dropout"
+      ]
+    }
+  }
+}

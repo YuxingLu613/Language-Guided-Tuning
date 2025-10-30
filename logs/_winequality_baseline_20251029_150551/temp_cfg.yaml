@@ -1,0 +1,48 @@
+augmentation:
+  enabled: true
+  methods:
+  - gaussian_noise
+  - feature_dropout
+  - none
+dataset:
+  input_dim: 11
+  name: WineQuality
+  path: data/winequality/winequality-red.csv
+  target_scale: 10.0
+  type: tabular
+  validation_split: 0.2
+llm:
+  api_key: sk-b295897df8d7404a87a1ae9565e33bab
+  max_tokens: 4096
+  model: deepseek-chat
+  temperature: 0.2
+logging:
+  log_dir: logs/_winequality_baseline_20251029_150551
+  metrics:
+  - loss
+  - mse
+  - mae
+  - r2
+  plot_metrics: true
+  save_interval: 1
+  save_plots: true
+model:
+  architecture:
+    dropout: 0.2
+    hidden_dims:
+    - 256
+    - 128
+    - 64
+  name: CustomModel
+training:
+  batch_size: 64
+  device: auto
+  early_stopping_patience: 5
+  epochs: 20
+  learning_rate: 0.002
+  loss_function: mse
+  optimizer: adam
+  seed: 42
+  tunable_params:
+  - learning_rate
+  - dropout

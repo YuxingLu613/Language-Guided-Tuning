@@ -1,0 +1,155 @@
+{
+  "enabled_agents": [
+    "adaptive"
+  ],
+  "logs": [
+    {
+      "agent": "strategy",
+      "suggestion": "error: 401 Client Error: Unauthorized for url: https://api.deepseek.com/v1/chat/completions",
+      "params": {},
+      "previous_context": "",
+      "full_prompt": {
+        "system_prompt": "You are a highly skilled ML practitioner specialising in optimising training strategies across diverse tasks.",
+        "user_prompt": "You are an expert machine-learning practitioner.\nAt the end of each epoch you will receive: (a) task type, (b) current loss\nfunction & optimizer, and (c) the latest training / validation metrics.\n\nYour job: Propose a *potentially better* pair of loss function **and** optimizer\nfor the **next** epoch. Respond with **exactly** `no change` (case-insensitive) **only** if you are absolutely certain the current combination is already optimal and cannot be improved.\nIn most cases you should suggest a new combination.\nReturn a single line in the format:\n`loss=<loss_function>, optimizer=<optimizer>` (comma-separated, no extras).\n\nDo NOT suggest learning-rate changes or any other hyper-parameters.\n\nTask type: classification\nCurrent loss function: nll\nCurrent optimizer: sgd\n\nRecent metrics (JSON):\n{\"train\": {\"accuracy\": 0.2913, \"precision\": 0.2719918447748675, \"recall\": 0.287546581901751, \"f1\": 0.2706493431645257, \"roc_auc\": 0.7154137371353381, \"loss\": -3.727431448469771}, \"val\": {\"accuracy\": 0.4819, \"precision\": 0.5376976858512814, \"recall\": 0.4760895502138583, \"f1\": 0.4420287651324043, \"roc_auc\": 0.8760485292251611, \"loss\": -5.025367271900177}, \"epoch\": 1}\n\nDataset config: {'name': 'MNIST', 'input_shape': [1, 28, 28], 'num_classes': 10, 'path': 'data/', 'train_transform': ['normalize'], 'test_transform': ['normalize']}\nModel config: {'name': 'SimpleCNN', 'architecture': {'conv_layers': [{'filters': 8, 'kernel_size': 3, 'stride': 1, 'padding': 1}, {'filters': 8, 'kernel_size': 3, 'stride': 1, 'padding': 1}], 'pool_size': 2, 'fc_layers': [64], 'dropout': 0.25}}\n"
+      }
+    }
+  ],
+  "previous_changes": [],
+  "agent_full_prompts": {
+    "adaptive": {
+      "system_prompt": "You are a highly skilled ML practitioner specialising in optimising training strategies across diverse tasks.",
+      "user_prompt": "You are an expert machine-learning practitioner.\nAt the end of each epoch you will receive: (a) task type, (b) current loss\nfunction & optimizer, and (c) the latest training / validation metrics.\n\nYour job: Propose a *potentially better* pair of loss function **and** optimizer\nfor the **next** epoch. Respond with **exactly** `no change` (case-insensitive) **only** if you are absolutely certain the current combination is already optimal and cannot be improved.\nIn most cases you should suggest a new combination.\nReturn a single line in the format:\n`loss=<loss_function>, optimizer=<optimizer>` (comma-separated, no extras).\n\nDo NOT suggest learning-rate changes or any other hyper-parameters.\n\nTask type: classification\nCurrent loss function: nll\nCurrent optimizer: sgd\n\nRecent metrics (JSON):\n{\"train\": {\"accuracy\": 0.2913, \"precision\": 0.2719918447748675, \"recall\": 0.287546581901751, \"f1\": 0.2706493431645257, \"roc_auc\": 0.7154137371353381, \"loss\": -3.727431448469771}, \"val\": {\"accuracy\": 0.4819, \"precision\": 0.5376976858512814, \"recall\": 0.4760895502138583, \"f1\": 0.4420287651324043, \"roc_auc\": 0.8760485292251611, \"loss\": -5.025367271900177}, \"epoch\": 1}\n\nDataset config: {'name': 'MNIST', 'input_shape': [1, 28, 28], 'num_classes': 10, 'path': 'data/', 'train_transform': ['normalize'], 'test_transform': ['normalize']}\nModel config: {'name': 'SimpleCNN', 'architecture': {'conv_layers': [{'filters': 8, 'kernel_size': 3, 'stride': 1, 'padding': 1}, {'filters': 8, 'kernel_size': 3, 'stride': 1, 'padding': 1}], 'pool_size': 2, 'fc_layers': [64], 'dropout': 0.25}}\n"
+    }
+  },
+  "judger_rounds": [
+    {
+      "attempt": 0,
+      "use_optimized": false,
+      "reason": "调用LLM API时发生错误: 401 Client Error: Unauthorized for url: https://api.deepseek.com/v1/chat/completions",
+      "agent_suggestions": null
+    }
+  ],
+  "prev_metrics_used": {
+    "train": {
+      "accuracy": 0.2913,
+      "precision": 0.2719918447748675,
+      "recall": 0.287546581901751,
+      "f1": 0.2706493431645257,
+      "roc_auc": 0.7154137371353381,
+      "loss": -3.727431448469771
+    },
+    "val": {
+      "accuracy": 0.4819,
+      "precision": 0.5376976858512814,
+      "recall": 0.4760895502138583,
+      "f1": 0.4420287651324043,
+      "roc_auc": 0.8760485292251611,
+      "loss": -5.025367271900177
+    },
+    "epoch": 1
+  },
+  "prev_config_used": {
+    "dataset": {
+      "name": "MNIST",
+      "input_shape": [
+        1,
+        28,
+        28
+      ],
+      "num_classes": 10,
+      "path": "data/",
+      "train_transform": [
+        "normalize"
+      ],
+      "test_transform": [
+        "normalize"
+      ]
+    },
+    "model": {
+      "name": "SimpleCNN",
+      "architecture": {
+        "conv_layers": [
+          {
+            "filters": 8,
+            "kernel_size": 3,
+            "stride": 1,
+            "padding": 1
+          },
+          {
+            "filters": 8,
+            "kernel_size": 3,
+            "stride": 1,
+            "padding": 1
+          }
+        ],
+        "pool_size": 2,
+        "fc_layers": [
+          64
+        ],
+        "dropout": 0.25
+      }
+    },
+    "training": {
+      "batch_size": 256,
+      "learning_rate": 0.001,
+      "optimizer": "sgd",
+      "epochs": 10,
+      "early_stopping_patience": 5,
+      "validation_split": 0.2,
+      "device": "auto",
+      "loss_function": "nll",
+      "tunable_params": [
+        "learning_rate",
+        "weight_class_0",
+        "weight_class_1",
+        "weight_class_2",
+        "weight_class_3",
+        "weight_class_4",
+        "weight_class_5",
+        "weight_class_6",
+        "weight_class_7",
+        "weight_class_8",
+        "weight_class_9",
+        "dropout",
+        "weight_decay"
+      ],
+      "class_weights": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0,
+        "4": 1.0,
+        "5": 1.0,
+        "6": 1.0,
+        "7": 1.0,
+        "8": 1.0,
+        "9": 1.0
+      }
+    },
+    "llm": {
+      "model": "deepseek-chat",
+      "api_key": "",
+      "temperature": 0.2,
+      "max_tokens": 4096
+    },
+    "logging": {
+      "log_dir": "logs\\history_20251029_162139",
+      "save_interval": 1,
+      "metrics": [
+        "loss",
+        "accuracy",
+        "precision",
+        "recall",
+        "f1",
+        "roc_auc"
+      ],
+      "plot_metrics": true,
+      "save_plots": true,
+      "disable_trainer_subdir": true
+    },
+    "augmentation": {
+      "enabled": true,
+      "samples_per_epoch": 64
+    }
+  }
+}

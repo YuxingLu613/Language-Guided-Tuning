@@ -1,0 +1,1094 @@
+{
+  "epoch": 4,
+  "flags": {
+    "use_adaptive_agent": true,
+    "use_aug_agent": true,
+    "use_hpo_agent": true
+  },
+  "use_optimized": false,
+  "judger_reason": "All optimization attempts rejected by Judger",
+  "final_metrics": {
+    "train": {
+      "accuracy": 0.9765,
+      "precision": 0.976357063865034,
+      "recall": 0.976352662531713,
+      "f1": 0.9763521633296556,
+      "loss": 0.07606915064314579
+    },
+    "val": {
+      "accuracy": 0.9896,
+      "precision": 0.989531142599203,
+      "recall": 0.9895618238673516,
+      "f1": 0.9895302210445959,
+      "loss": 0.031017495863488877
+    },
+    "epoch": 4
+  },
+  "final_config": {
+    "dataset": {
+      "input_shape": [
+        1,
+        28,
+        28
+      ],
+      "name": "MNIST",
+      "num_classes": 10,
+      "path": "data/",
+      "test_transform": [
+        "normalize"
+      ],
+      "train_transform": [
+        "normalize"
+      ]
+    },
+    "llm": {
+      "api_key": "sk-b295897df8d7404a87a1ae9565e33bab",
+      "max_tokens": 4096,
+      "model": "deepseek-chat",
+      "temperature": 0.2
+    },
+    "logging": {
+      "augmentation": null,
+      "enabled": true,
+      "log_dir": "logs\\history_20251028_102343",
+      "metrics": [
+        "loss",
+        "accuracy",
+        "precision",
+        "recall",
+        "f1"
+      ],
+      "plot_metrics": true,
+      "samples_per_epoch": 64,
+      "save_interval": 1,
+      "save_plots": true,
+      "disable_trainer_subdir": true
+    },
+    "model": {
+      "architecture": {
+        "conv_layers": [
+          {
+            "filters": 16,
+            "kernel_size": 3,
+            "padding": 1,
+            "stride": 1
+          },
+          {
+            "filters": 32,
+            "kernel_size": 3,
+            "padding": 1,
+            "stride": 1
+          }
+        ],
+        "dropout": 0.3,
+        "fc_layers": [
+          128
+        ],
+        "pool_size": 2
+      },
+      "name": "SimpleCNN"
+    },
+    "training": {
+      "batch_size": 256,
+      "class_weights": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0,
+        "4": 1.0,
+        "5": 1.0,
+        "6": 1.0,
+        "7": 1.0,
+        "8": 1.0,
+        "9": 1.0
+      },
+      "device": "auto",
+      "early_stopping_patience": 5,
+      "epochs": 10,
+      "learning_rate": 0.001,
+      "loss_function": "cross_entropy",
+      "optimizer": "adam",
+      "tunable_params": [
+        "learning_rate",
+        "weight_class_0",
+        "weight_class_1",
+        "weight_class_2",
+        "weight_class_3",
+        "weight_class_4",
+        "weight_class_5",
+        "weight_class_6",
+        "weight_class_7",
+        "weight_class_8",
+        "weight_class_9"
+      ],
+      "validation_split": 0.2,
+      "weight_class_0": 1.0,
+      "weight_class_1": 1.0,
+      "weight_class_2": 1.0,
+      "weight_class_3": 1.0,
+      "weight_class_4": 1.0,
+      "weight_class_5": 1.0,
+      "weight_class_6": 1.0,
+      "weight_class_7": 1.0,
+      "weight_class_8": 1.0,
+      "weight_class_9": 1.0
+    },
+    "augmentation": {
+      "enabled": true,
+      "policy": "noise"
+    }
+  },
+  "optimization_history": [
+    {
+      "param_changes": {
+        "optimizer": {
+          "from": "adam",
+          "to": "adamw"
+        },
+        "weight_class_5": {
+          "from": 1.0,
+          "to": 1.0
+        },
+        "learning_rate": {
+          "from": 0.001,
+          "to": 0.001
+        },
+        "weight_class_2": {
+          "from": 1.0,
+          "to": 1.0
+        },
+        "batch_size": {
+          "from": 256,
+          "to": 256
+        },
+        "early_stopping_patience": {
+          "from": 5,
+          "to": 5
+        },
+        "weight_class_8": {
+          "from": 1.0,
+          "to": 1.0
+        },
+        "class_weights": {
+          "from": {
+            "0": 1.0,
+            "1": 1.0,
+            "2": 1.0,
+            "3": 1.0,
+            "4": 1.0,
+            "5": 1.0,
+            "6": 1.0,
+            "7": 1.0,
+            "8": 1.0,
+            "9": 1.0
+          },
+          "to": {
+            "0": 1.0,
+            "1": 1.0,
+            "2": 1.0,
+            "3": 1.0,
+            "4": 1.0,
+            "5": 1.0,
+            "6": 1.0,
+            "7": 1.0,
+            "8": 1.0,
+            "9": 1.0
+          }
+        },
+        "device": {
+          "from": "auto",
+          "to": "auto"
+        },
+        "loss_function": {
+          "from": "cross_entropy",
+          "to": "focal_loss"
+        },
+        "epochs": {
+          "from": 10,
+          "to": 10
+        },
+        "validation_split": {
+          "from": 0.2,
+          "to": 0.2
+        },
+        "weight_class_9": {
+          "from": 1.0,
+          "to": 1.0
+        },
+        "tunable_params": {
+          "from": [
+            "learning_rate",
+            "weight_class_0",
+            "weight_class_1",
+            "weight_class_2",
+            "weight_class_3",
+            "weight_class_4",
+            "weight_class_5",
+            "weight_class_6",
+            "weight_class_7",
+            "weight_class_8",
+            "weight_class_9"
+          ],
+          "to": [
+            "learning_rate",
+            "weight_class_0",
+            "weight_class_1",
+            "weight_class_2",
+            "weight_class_3",
+            "weight_class_4",
+            "weight_class_5",
+            "weight_class_6",
+            "weight_class_7",
+            "weight_class_8",
+            "weight_class_9"
+          ]
+        },
+        "weight_class_0": {
+          "from": 1.0,
+          "to": 1.0
+        },
+        "weight_class_6": {
+          "from": 1.0,
+          "to": 1.0
+        },
+        "weight_class_1": {
+          "from": 1.0,
+          "to": 1.0
+        },
+        "weight_class_7": {
+          "from": 1.0,
+          "to": 1.0
+        },
+        "weight_class_4": {
+          "from": 1.0,
+          "to": 1.0
+        },
+        "weight_class_3": {
+          "from": 1.0,
+          "to": 1.0
+        }
+      },
+      "original_metrics": {
+        "train": {
+          "accuracy": 0.9765,
+          "precision": 0.976357063865034,
+          "recall": 0.976352662531713,
+          "f1": 0.9763521633296556,
+          "loss": 0.07606915064314579
+        },
+        "val": {
+          "accuracy": 0.9896,
+          "precision": 0.989531142599203,
+          "recall": 0.9895618238673516,
+          "f1": 0.9895302210445959,
+          "loss": 0.031017495863488877
+        },
+        "epoch": 4
+      },
+      "optimized_metrics": {
+        "train": {
+          "accuracy": 0.9740666666666666,
+          "precision": 0.9739209390760925,
+          "recall": 0.9739190060599363,
+          "f1": 0.9739192486087258,
+          "loss": 0.04805067673949723
+        },
+        "val": {
+          "accuracy": 0.9886,
+          "precision": 0.9885604373512772,
+          "recall": 0.9885340451844279,
+          "f1": 0.9885076993456385,
+          "loss": 0.01782058968277147
+        },
+        "epoch": 4
+      }
+    },
+    {
+      "param_changes": {
+        "optimizer": {
+          "from": "adam",
+          "to": "adamw"
+        },
+        "weight_class_5": {
+          "from": 1.0,
+          "to": 1.0
+        },
+        "learning_rate": {
+          "from": 0.001,
+          "to": 0.001
+        },
+        "weight_class_2": {
+          "from": 1.0,
+          "to": 1.0
+        },
+        "batch_size": {
+          "from": 256,
+          "to": 256
+        },
+        "early_stopping_patience": {
+          "from": 5,
+          "to": 5
+        },
+        "weight_class_8": {
+          "from": 1.0,
+          "to": 1.0
+        },
+        "class_weights": {
+          "from": {
+            "0": 1.0,
+            "1": 1.0,
+            "2": 1.0,
+            "3": 1.0,
+            "4": 1.0,
+            "5": 1.0,
+            "6": 1.0,
+            "7": 1.0,
+            "8": 1.0,
+            "9": 1.0
+          },
+          "to": {
+            "0": 1.0,
+            "1": 1.0,
+            "2": 1.0,
+            "3": 1.0,
+            "4": 1.0,
+            "5": 1.0,
+            "6": 1.0,
+            "7": 1.0,
+            "8": 1.0,
+            "9": 1.0
+          }
+        },
+        "device": {
+          "from": "auto",
+          "to": "auto"
+        },
+        "loss_function": {
+          "from": "cross_entropy",
+          "to": "focal_loss"
+        },
+        "epochs": {
+          "from": 10,
+          "to": 10
+        },
+        "validation_split": {
+          "from": 0.2,
+          "to": 0.2
+        },
+        "weight_class_9": {
+          "from": 1.0,
+          "to": 1.0
+        },
+        "tunable_params": {
+          "from": [
+            "learning_rate",
+            "weight_class_0",
+            "weight_class_1",
+            "weight_class_2",
+            "weight_class_3",
+            "weight_class_4",
+            "weight_class_5",
+            "weight_class_6",
+            "weight_class_7",
+            "weight_class_8",
+            "weight_class_9"
+          ],
+          "to": [
+            "learning_rate",
+            "weight_class_0",
+            "weight_class_1",
+            "weight_class_2",
+            "weight_class_3",
+            "weight_class_4",
+            "weight_class_5",
+            "weight_class_6",
+            "weight_class_7",
+            "weight_class_8",
+            "weight_class_9"
+          ]
+        },
+        "weight_class_0": {
+          "from": 1.0,
+          "to": 1.0
+        },
+        "weight_class_6": {
+          "from": 1.0,
+          "to": 1.0
+        },
+        "weight_class_1": {
+          "from": 1.0,
+          "to": 1.0
+        },
+        "weight_class_7": {
+          "from": 1.0,
+          "to": 1.0
+        },
+        "weight_class_4": {
+          "from": 1.0,
+          "to": 1.0
+        },
+        "weight_class_3": {
+          "from": 1.0,
+          "to": 1.0
+        }
+      },
+      "original_metrics": {
+        "train": {
+          "accuracy": 0.9765,
+          "precision": 0.976357063865034,
+          "recall": 0.976352662531713,
+          "f1": 0.9763521633296556,
+          "loss": 0.07606915064314579
+        },
+        "val": {
+          "accuracy": 0.9896,
+          "precision": 0.989531142599203,
+          "recall": 0.9895618238673516,
+          "f1": 0.9895302210445959,
+          "loss": 0.031017495863488877
+        },
+        "epoch": 4
+      },
+      "optimized_metrics": {
+        "train": {
+          "accuracy": 0.9746333333333334,
+          "precision": 0.9744437735897712,
+          "recall": 0.9744686975756245,
+          "f1": 0.9744558426245504,
+          "loss": 0.04766318714840615
+        },
+        "val": {
+          "accuracy": 0.9887,
+          "precision": 0.9886667725380314,
+          "recall": 0.9886045818183982,
+          "f1": 0.9886158471546255,
+          "loss": 0.016318872603708703
+        },
+        "epoch": 4
+      }
+    },
+    {
+      "param_changes": {
+        "optimizer": {
+          "from": "adam",
+          "to": "adam"
+        },
+        "weight_class_5": {
+          "from": 1.0,
+          "to": 1.0
+        },
+        "learning_rate": {
+          "from": 0.001,
+          "to": 0.0005
+        },
+        "weight_class_2": {
+          "from": 1.0,
+          "to": 1.0
+        },
+        "batch_size": {
+          "from": 256,
+          "to": 256
+        },
+        "early_stopping_patience": {
+          "from": 5,
+          "to": 5
+        },
+        "weight_class_8": {
+          "from": 1.0,
+          "to": 1.1
+        },
+        "class_weights": {
+          "from": {
+            "0": 1.0,
+            "1": 1.0,
+            "2": 1.0,
+            "3": 1.0,
+            "4": 1.0,
+            "5": 1.0,
+            "6": 1.0,
+            "7": 1.0,
+            "8": 1.0,
+            "9": 1.0
+          },
+          "to": {
+            "0": 1.0,
+            "1": 1.0,
+            "2": 1.0,
+            "3": 1.0,
+            "4": 1.0,
+            "5": 1.0,
+            "6": 1.0,
+            "7": 1.0,
+            "8": 1.0,
+            "9": 1.0
+          }
+        },
+        "device": {
+          "from": "auto",
+          "to": "auto"
+        },
+        "loss_function": {
+          "from": "cross_entropy",
+          "to": "focal_loss"
+        },
+        "epochs": {
+          "from": 10,
+          "to": 10
+        },
+        "validation_split": {
+          "from": 0.2,
+          "to": 0.2
+        },
+        "weight_class_9": {
+          "from": 1.0,
+          "to": 1.0
+        },
+        "tunable_params": {
+          "from": [
+            "learning_rate",
+            "weight_class_0",
+            "weight_class_1",
+            "weight_class_2",
+            "weight_class_3",
+            "weight_class_4",
+            "weight_class_5",
+            "weight_class_6",
+            "weight_class_7",
+            "weight_class_8",
+            "weight_class_9"
+          ],
+          "to": [
+            "learning_rate",
+            "weight_class_0",
+            "weight_class_1",
+            "weight_class_2",
+            "weight_class_3",
+            "weight_class_4",
+            "weight_class_5",
+            "weight_class_6",
+            "weight_class_7",
+            "weight_class_8",
+            "weight_class_9"
+          ]
+        },
+        "weight_class_0": {
+          "from": 1.0,
+          "to": 1.2
+        },
+        "weight_class_6": {
+          "from": 1.0,
+          "to": 1.2
+        },
+        "weight_class_1": {
+          "from": 1.0,
+          "to": 1.1
+        },
+        "weight_class_7": {
+          "from": 1.0,
+          "to": 1.0
+        },
+        "weight_class_4": {
+          "from": 1.0,
+          "to": 1.1
+        },
+        "weight_class_3": {
+          "from": 1.0,
+          "to": 1.0
+        }
+      },
+      "original_metrics": {
+        "train": {
+          "accuracy": 0.9765,
+          "precision": 0.976357063865034,
+          "recall": 0.976352662531713,
+          "f1": 0.9763521633296556,
+          "loss": 0.07606915064314579
+        },
+        "val": {
+          "accuracy": 0.9896,
+          "precision": 0.989531142599203,
+          "recall": 0.9895618238673516,
+          "f1": 0.9895302210445959,
+          "loss": 0.031017495863488877
+        },
+        "epoch": 4
+      },
+      "optimized_metrics": {
+        "train": {
+          "accuracy": 0.97505,
+          "precision": 0.9748929039412344,
+          "recall": 0.9749214871666299,
+          "f1": 0.9749058765045584,
+          "loss": 0.04844051593756105
+        },
+        "val": {
+          "accuracy": 0.9883,
+          "precision": 0.9882526566056592,
+          "recall": 0.988202859366849,
+          "f1": 0.9882069009891659,
+          "loss": 0.017723971218800972
+        },
+        "epoch": 4
+      }
+    },
+    {
+      "param_changes": {
+        "optimizer": {
+          "from": "adam",
+          "to": "adam"
+        },
+        "weight_class_5": {
+          "from": 1.0,
+          "to": 1.2
+        },
+        "learning_rate": {
+          "from": 0.001,
+          "to": 0.0005
+        },
+        "weight_class_2": {
+          "from": 1.0,
+          "to": 1.0
+        },
+        "batch_size": {
+          "from": 256,
+          "to": 256
+        },
+        "early_stopping_patience": {
+          "from": 5,
+          "to": 5
+        },
+        "weight_class_8": {
+          "from": 1.0,
+          "to": 1.0
+        },
+        "class_weights": {
+          "from": {
+            "0": 1.0,
+            "1": 1.0,
+            "2": 1.0,
+            "3": 1.0,
+            "4": 1.0,
+            "5": 1.0,
+            "6": 1.0,
+            "7": 1.0,
+            "8": 1.0,
+            "9": 1.0
+          },
+          "to": {
+            "0": 1.0,
+            "1": 1.0,
+            "2": 1.0,
+            "3": 1.0,
+            "4": 1.0,
+            "5": 1.0,
+            "6": 1.0,
+            "7": 1.0,
+            "8": 1.0,
+            "9": 1.0
+          }
+        },
+        "device": {
+          "from": "auto",
+          "to": "auto"
+        },
+        "loss_function": {
+          "from": "cross_entropy",
+          "to": "focal_loss"
+        },
+        "epochs": {
+          "from": 10,
+          "to": 10
+        },
+        "validation_split": {
+          "from": 0.2,
+          "to": 0.2
+        },
+        "weight_class_9": {
+          "from": 1.0,
+          "to": 1.1
+        },
+        "tunable_params": {
+          "from": [
+            "learning_rate",
+            "weight_class_0",
+            "weight_class_1",
+            "weight_class_2",
+            "weight_class_3",
+            "weight_class_4",
+            "weight_class_5",
+            "weight_class_6",
+            "weight_class_7",
+            "weight_class_8",
+            "weight_class_9"
+          ],
+          "to": [
+            "learning_rate",
+            "weight_class_0",
+            "weight_class_1",
+            "weight_class_2",
+            "weight_class_3",
+            "weight_class_4",
+            "weight_class_5",
+            "weight_class_6",
+            "weight_class_7",
+            "weight_class_8",
+            "weight_class_9"
+          ]
+        },
+        "weight_class_0": {
+          "from": 1.0,
+          "to": 1.2
+        },
+        "weight_class_6": {
+          "from": 1.0,
+          "to": 1.0
+        },
+        "weight_class_1": {
+          "from": 1.0,
+          "to": 1.1
+        },
+        "weight_class_7": {
+          "from": 1.0,
+          "to": 1.1
+        },
+        "weight_class_4": {
+          "from": 1.0,
+          "to": 1.0
+        },
+        "weight_class_3": {
+          "from": 1.0,
+          "to": 1.1
+        }
+      },
+      "original_metrics": {
+        "train": {
+          "accuracy": 0.9765,
+          "precision": 0.976357063865034,
+          "recall": 0.976352662531713,
+          "f1": 0.9763521633296556,
+          "loss": 0.07606915064314579
+        },
+        "val": {
+          "accuracy": 0.9896,
+          "precision": 0.989531142599203,
+          "recall": 0.9895618238673516,
+          "f1": 0.9895302210445959,
+          "loss": 0.031017495863488877
+        },
+        "epoch": 4
+      },
+      "optimized_metrics": {
+        "train": {
+          "accuracy": 0.9765,
+          "precision": 0.9763605312550926,
+          "recall": 0.9763471689569763,
+          "f1": 0.9763532380464875,
+          "loss": 0.046103664678818684
+        },
+        "val": {
+          "accuracy": 0.9896,
+          "precision": 0.9895453317335097,
+          "recall": 0.9894919270308635,
+          "f1": 0.9895042419188614,
+          "loss": 0.016769872233821113
+        },
+        "epoch": 4
+      }
+    },
+    {
+      "param_changes": {
+        "optimizer": {
+          "from": "adam",
+          "to": "adamw"
+        },
+        "weight_class_5": {
+          "from": 1.0,
+          "to": 1.0
+        },
+        "learning_rate": {
+          "from": 0.001,
+          "to": 0.0005
+        },
+        "weight_class_2": {
+          "from": 1.0,
+          "to": 1.0
+        },
+        "batch_size": {
+          "from": 256,
+          "to": 256
+        },
+        "early_stopping_patience": {
+          "from": 5,
+          "to": 5
+        },
+        "weight_class_8": {
+          "from": 1.0,
+          "to": 1.0
+        },
+        "class_weights": {
+          "from": {
+            "0": 1.0,
+            "1": 1.0,
+            "2": 1.0,
+            "3": 1.0,
+            "4": 1.0,
+            "5": 1.0,
+            "6": 1.0,
+            "7": 1.0,
+            "8": 1.0,
+            "9": 1.0
+          },
+          "to": {
+            "0": 1.0,
+            "1": 1.0,
+            "2": 1.0,
+            "3": 1.0,
+            "4": 1.0,
+            "5": 1.0,
+            "6": 1.0,
+            "7": 1.0,
+            "8": 1.0,
+            "9": 1.0
+          }
+        },
+        "device": {
+          "from": "auto",
+          "to": "auto"
+        },
+        "loss_function": {
+          "from": "cross_entropy",
+          "to": "focal_loss"
+        },
+        "epochs": {
+          "from": 10,
+          "to": 10
+        },
+        "validation_split": {
+          "from": 0.2,
+          "to": 0.2
+        },
+        "weight_class_9": {
+          "from": 1.0,
+          "to": 1.0
+        },
+        "tunable_params": {
+          "from": [
+            "learning_rate",
+            "weight_class_0",
+            "weight_class_1",
+            "weight_class_2",
+            "weight_class_3",
+            "weight_class_4",
+            "weight_class_5",
+            "weight_class_6",
+            "weight_class_7",
+            "weight_class_8",
+            "weight_class_9"
+          ],
+          "to": [
+            "learning_rate",
+            "weight_class_0",
+            "weight_class_1",
+            "weight_class_2",
+            "weight_class_3",
+            "weight_class_4",
+            "weight_class_5",
+            "weight_class_6",
+            "weight_class_7",
+            "weight_class_8",
+            "weight_class_9"
+          ]
+        },
+        "weight_class_0": {
+          "from": 1.0,
+          "to": 1.2
+        },
+        "weight_class_6": {
+          "from": 1.0,
+          "to": 1.0
+        },
+        "weight_class_1": {
+          "from": 1.0,
+          "to": 1.1
+        },
+        "weight_class_7": {
+          "from": 1.0,
+          "to": 1.0
+        },
+        "weight_class_4": {
+          "from": 1.0,
+          "to": 1.0
+        },
+        "weight_class_3": {
+          "from": 1.0,
+          "to": 1.0
+        }
+      },
+      "original_metrics": {
+        "train": {
+          "accuracy": 0.9765,
+          "precision": 0.976357063865034,
+          "recall": 0.976352662531713,
+          "f1": 0.9763521633296556,
+          "loss": 0.07606915064314579
+        },
+        "val": {
+          "accuracy": 0.9896,
+          "precision": 0.989531142599203,
+          "recall": 0.9895618238673516,
+          "f1": 0.9895302210445959,
+          "loss": 0.031017495863488877
+        },
+        "epoch": 4
+      },
+      "optimized_metrics": {
+        "train": {
+          "accuracy": 0.9753,
+          "precision": 0.9751377495799316,
+          "recall": 0.9751454957087203,
+          "f1": 0.9751407474505172,
+          "loss": 0.04727626158112779
+        },
+        "val": {
+          "accuracy": 0.9887,
+          "precision": 0.9886693677775595,
+          "recall": 0.9885994729796291,
+          "f1": 0.9886196479611629,
+          "loss": 0.017367343045379142
+        },
+        "epoch": 4
+      }
+    }
+  ],
+  "prev_metrics_used": {
+    "train": {
+      "accuracy": 0.9693833333333334,
+      "precision": 0.9692029640566036,
+      "recall": 0.9691270886454285,
+      "f1": 0.9691600929452495,
+      "loss": 0.09814957706852162
+    },
+    "val": {
+      "accuracy": 0.9862,
+      "precision": 0.9861727972827481,
+      "recall": 0.9860812739267144,
+      "f1": 0.986100597162961,
+      "loss": 0.040569798834621904
+    },
+    "epoch": 3
+  },
+  "prev_config_used": {
+    "dataset": {
+      "input_shape": [
+        1,
+        28,
+        28
+      ],
+      "name": "MNIST",
+      "num_classes": 10,
+      "path": "data/",
+      "test_transform": [
+        "normalize"
+      ],
+      "train_transform": [
+        "normalize"
+      ]
+    },
+    "llm": {
+      "api_key": "sk-b295897df8d7404a87a1ae9565e33bab",
+      "max_tokens": 4096,
+      "model": "deepseek-chat",
+      "temperature": 0.2
+    },
+    "logging": {
+      "augmentation": null,
+      "enabled": true,
+      "log_dir": "logs\\history_20251028_102343",
+      "metrics": [
+        "loss",
+        "accuracy",
+        "precision",
+        "recall",
+        "f1"
+      ],
+      "plot_metrics": true,
+      "samples_per_epoch": 64,
+      "save_interval": 1,
+      "save_plots": true,
+      "disable_trainer_subdir": true
+    },
+    "model": {
+      "architecture": {
+        "conv_layers": [
+          {
+            "filters": 16,
+            "kernel_size": 3,
+            "padding": 1,
+            "stride": 1
+          },
+          {
+            "filters": 32,
+            "kernel_size": 3,
+            "padding": 1,
+            "stride": 1
+          }
+        ],
+        "dropout": 0.3,
+        "fc_layers": [
+          128
+        ],
+        "pool_size": 2
+      },
+      "name": "SimpleCNN"
+    },
+    "training": {
+      "batch_size": 256,
+      "class_weights": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0,
+        "4": 1.0,
+        "5": 1.0,
+        "6": 1.0,
+        "7": 1.0,
+        "8": 1.0,
+        "9": 1.0
+      },
+      "device": "auto",
+      "early_stopping_patience": 5,
+      "epochs": 10,
+      "learning_rate": 0.001,
+      "loss_function": "cross_entropy",
+      "optimizer": "adam",
+      "tunable_params": [
+        "learning_rate",
+        "weight_class_0",
+        "weight_class_1",
+        "weight_class_2",
+        "weight_class_3",
+        "weight_class_4",
+        "weight_class_5",
+        "weight_class_6",
+        "weight_class_7",
+        "weight_class_8",
+        "weight_class_9"
+      ],
+      "validation_split": 0.2,
+      "weight_class_0": 1.0,
+      "weight_class_1": 1.0,
+      "weight_class_2": 1.0,
+      "weight_class_3": 1.0,
+      "weight_class_4": 1.0,
+      "weight_class_5": 1.0,
+      "weight_class_6": 1.0,
+      "weight_class_7": 1.0,
+      "weight_class_8": 1.0,
+      "weight_class_9": 1.0
+    },
+    "augmentation": {
+      "enabled": true,
+      "policy": "noise"
+    }
+  }
+}

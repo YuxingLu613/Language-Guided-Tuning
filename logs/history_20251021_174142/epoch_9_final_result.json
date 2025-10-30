@@ -1,0 +1,180 @@
+{
+  "epoch": 9,
+  "flags": {
+    "use_adaptive_agent": true,
+    "use_aug_agent": true,
+    "use_hpo_agent": true
+  },
+  "use_optimized": true,
+  "judger_reason": "",
+  "prompt_suggestion": null,
+  "final_metrics": {
+    "train": {
+      "accuracy": 0.95,
+      "precision": 0.9485449735449736,
+      "recall": 0.9472222222222223,
+      "roc_auc": 0.9965878527336861,
+      "loss": 0.11476147174835205
+    },
+    "val": {
+      "accuracy": 0.9333333333333333,
+      "precision": 0.9583333333333334,
+      "recall": 0.9333333333333332,
+      "roc_auc": 0.9922023809523809,
+      "loss": 0.18753723800182343
+    },
+    "epoch": 9
+  },
+  "final_config": {
+    "augmentation": {
+      "enabled": true,
+      "policy": "shift"
+    },
+    "dataset": {
+      "input_dim": 4,
+      "name": "Iris",
+      "num_classes": 3,
+      "path": "sklearn",
+      "validation_split": 0.2
+    },
+    "llm": {
+      "api_key": "sk-b295897df8d7404a87a1ae9565e33bab",
+      "max_tokens": 4096,
+      "model": "deepseek-chat",
+      "temperature": 0.2
+    },
+    "logging": {
+      "log_dir": "logs\\history_20251021_174142",
+      "metrics": [
+        "loss",
+        "accuracy",
+        "precision",
+        "recall"
+      ],
+      "plot_metrics": true,
+      "save_interval": 1,
+      "save_plots": true,
+      "disable_trainer_subdir": true
+    },
+    "model": {
+      "architecture": {
+        "dropout": 0.3,
+        "hidden_dims": [
+          64,
+          32
+        ]
+      },
+      "name": "CustomModel"
+    },
+    "training": {
+      "batch_size": 32,
+      "class_weights": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0
+      },
+      "device": "auto",
+      "early_stopping_patience": 10,
+      "epochs": 10,
+      "learning_rate": 0.001,
+      "loss_function": "cross_entropy",
+      "optimizer": "adam",
+      "seed": 42,
+      "tunable_params": [
+        "learning_rate"
+      ]
+    }
+  },
+  "optimization_history": [
+    {
+      "param_changes": {
+        "epochs": {
+          "from": 10,
+          "to": 10
+        },
+        "tunable_params": {
+          "from": [
+            "learning_rate"
+          ],
+          "to": [
+            "learning_rate"
+          ]
+        },
+        "loss_function": {
+          "from": "cross_entropy",
+          "to": "cross_entropy"
+        },
+        "class_weights": {
+          "from": {
+            "0": 1.0,
+            "1": 1.0,
+            "2": 1.0
+          },
+          "to": {
+            "0": 1.0,
+            "1": 1.0,
+            "2": 1.0
+          }
+        },
+        "learning_rate": {
+          "from": 0.001,
+          "to": 0.001
+        },
+        "batch_size": {
+          "from": 32,
+          "to": 32
+        },
+        "seed": {
+          "from": 42,
+          "to": 42
+        },
+        "early_stopping_patience": {
+          "from": 10,
+          "to": 10
+        },
+        "optimizer": {
+          "from": "adam",
+          "to": "adam"
+        },
+        "device": {
+          "from": "auto",
+          "to": "auto"
+        }
+      },
+      "original_metrics": {
+        "train": {
+          "accuracy": 0.9916666666666667,
+          "precision": 0.991869918699187,
+          "recall": 0.9907407407407408,
+          "roc_auc": 1.0,
+          "loss": 0.07913756370544434
+        },
+        "val": {
+          "accuracy": 0.9333333333333333,
+          "precision": 0.9583333333333334,
+          "recall": 0.9333333333333332,
+          "roc_auc": 0.9905357142857142,
+          "loss": 0.174147829413414
+        },
+        "epoch": 9
+      },
+      "optimized_metrics": {
+        "train": {
+          "accuracy": 0.95,
+          "precision": 0.9485449735449736,
+          "recall": 0.9472222222222223,
+          "roc_auc": 0.9965878527336861,
+          "loss": 0.11476147174835205
+        },
+        "val": {
+          "accuracy": 0.9333333333333333,
+          "precision": 0.9583333333333334,
+          "recall": 0.9333333333333332,
+          "roc_auc": 0.9922023809523809,
+          "loss": 0.18753723800182343
+        },
+        "epoch": 9
+      }
+    }
+  ]
+}

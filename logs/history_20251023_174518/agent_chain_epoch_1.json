@@ -1,0 +1,100 @@
+{
+  "enabled_agents": [
+    "hpo"
+  ],
+  "logs": [
+    {
+      "agent": "hpo",
+      "suggestion": "learning_rate: 0.0005\ndropout: 0.2",
+      "params": {
+        "learning_rate": 0.0005,
+        "dropout": 0.2
+      },
+      "previous_context": ""
+    }
+  ],
+  "previous_changes": [
+    "HPO Agent suggested adjusting hyperparameters: learning_rate: 0.0005, dropout: 0.2"
+  ],
+  "judger_rounds": [
+    {
+      "attempt": 0,
+      "use_optimized": true,
+      "reason": "",
+      "agent_suggestions": {
+        "hpo": "Continue hyperparameter optimization focusing on regularization parameters to further reduce validation mse and mae while monitoring for potential overfitting."
+      }
+    }
+  ],
+  "prev_metrics_used": {
+    "train": {
+      "mse": 3.3348214626312256,
+      "mae": 1.676425576210022,
+      "loss": 3.3315634135228054
+    },
+    "val": {
+      "mse": 2.639042854309082,
+      "mae": 1.5201743841171265,
+      "loss": 2.6231907695531844
+    },
+    "epoch": 1
+  },
+  "prev_config_used": {
+    "dataset": {
+      "name": "Housing",
+      "input_dim": 5,
+      "path": "data/housing/Housing.csv",
+      "validation_split": 0.2
+    },
+    "model": {
+      "name": "CustomModel",
+      "architecture": {
+        "hidden_dims": [
+          2
+        ],
+        "dropout": 0.5
+      }
+    },
+    "training": {
+      "batch_size": 256,
+      "learning_rate": 0.001,
+      "optimizer": "adam",
+      "epochs": 10,
+      "early_stopping_patience": 5,
+      "device": "auto",
+      "loss_function": "mse",
+      "seed": 42,
+      "tunable_params": [
+        "learning_rate",
+        "dropout"
+      ],
+      "dropout": 0.3
+    },
+    "llm": {
+      "model": "deepseek-chat",
+      "api_key": "sk-b295897df8d7404a87a1ae9565e33bab",
+      "temperature": 0.2,
+      "max_tokens": 4096
+    },
+    "logging": {
+      "log_dir": "logs\\history_20251023_174518",
+      "save_interval": 1,
+      "metrics": [
+        "loss",
+        "mse",
+        "mae"
+      ],
+      "plot_metrics": true,
+      "save_plots": true,
+      "disable_trainer_subdir": true
+    },
+    "augmentation": {
+      "enabled": true,
+      "methods": [
+        "gaussian_noise",
+        "feature_dropout",
+        "none"
+      ]
+    }
+  }
+}

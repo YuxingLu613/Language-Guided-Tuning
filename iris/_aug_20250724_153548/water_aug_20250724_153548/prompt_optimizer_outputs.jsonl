@@ -1,0 +1,1 @@
+{"attempt": 0, "guidance": "- Baseline has higher roc_auc (0.9889 vs 0.9874)\n- Roc_auc is a key validation metric\n- Other metrics are identical\n- Prioritize the model with better roc_auc"}

@@ -1,0 +1,425 @@
+{
+  "epoch": 2,
+  "flags": {
+    "use_adaptive_agent": true,
+    "use_aug_agent": true,
+    "use_hpo_agent": true
+  },
+  "use_optimized": true,
+  "judger_reason": "",
+  "final_metrics": {
+    "train": {
+      "accuracy": 0.9497666666666666,
+      "precision": 0.9493587279960781,
+      "recall": 0.9494069621627457,
+      "roc_auc": 0.9978219576656565,
+      "loss": 0.20187377577766458
+    },
+    "val": {
+      "accuracy": 0.9817,
+      "precision": 0.9817796541248734,
+      "recall": 0.981569685160812,
+      "roc_auc": 0.999759269284812,
+      "loss": 0.06261068330659328
+    },
+    "epoch": 2
+  },
+  "final_config": {
+    "dataset": {
+      "input_shape": [
+        1,
+        28,
+        28
+      ],
+      "name": "MNIST",
+      "num_classes": 10,
+      "path": "data/",
+      "test_transform": [
+        "normalize"
+      ],
+      "train_transform": [
+        "normalize"
+      ]
+    },
+    "llm": {
+      "api_key": "sk-b295897df8d7404a87a1ae9565e33bab",
+      "max_tokens": 4096,
+      "model": "deepseek-chat",
+      "temperature": 0.2
+    },
+    "logging": {
+      "augmentation": null,
+      "enabled": true,
+      "log_dir": "logs\\history_20251022_163539",
+      "metrics": [
+        "loss",
+        "accuracy",
+        "precision",
+        "recall"
+      ],
+      "plot_metrics": true,
+      "samples_per_epoch": 64,
+      "save_interval": 1,
+      "save_plots": true,
+      "disable_trainer_subdir": true
+    },
+    "model": {
+      "architecture": {
+        "conv_layers": [
+          {
+            "filters": 16,
+            "kernel_size": 3,
+            "padding": 1,
+            "stride": 1
+          },
+          {
+            "filters": 32,
+            "kernel_size": 3,
+            "padding": 1,
+            "stride": 1
+          }
+        ],
+        "dropout": 0.3,
+        "fc_layers": [
+          128
+        ],
+        "pool_size": 2
+      },
+      "name": "SimpleCNN"
+    },
+    "training": {
+      "batch_size": 256,
+      "class_weights": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0,
+        "4": 1.0,
+        "5": 1.0,
+        "6": 1.0,
+        "7": 1.0,
+        "8": 1.0,
+        "9": 1.0
+      },
+      "device": "auto",
+      "early_stopping_patience": 5,
+      "epochs": 10,
+      "learning_rate": 0.0005,
+      "loss_function": "crossentropyloss",
+      "optimizer": "adam",
+      "tunable_params": [
+        "learning_rate",
+        "weight_class_0",
+        "weight_class_1",
+        "weight_class_2",
+        "weight_class_3",
+        "weight_class_4",
+        "weight_class_5",
+        "weight_class_6",
+        "weight_class_7",
+        "weight_class_8",
+        "weight_class_9"
+      ],
+      "validation_split": 0.2,
+      "weight_class_0": 1.2,
+      "weight_class_1": 1.1,
+      "weight_class_2": 1.1,
+      "weight_class_3": 1.2,
+      "weight_class_4": 1.1,
+      "weight_class_5": 1.2,
+      "weight_class_6": 1.1,
+      "weight_class_7": 1.2,
+      "weight_class_8": 1.1,
+      "weight_class_9": 1.2
+    },
+    "augmentation": {
+      "enabled": true,
+      "policy": "rotation"
+    }
+  },
+  "optimization_history": [
+    {
+      "param_changes": {
+        "weight_class_1": {
+          "from": null,
+          "to": 1.1
+        },
+        "weight_class_3": {
+          "from": null,
+          "to": 1.2
+        },
+        "weight_class_5": {
+          "from": null,
+          "to": 1.2
+        },
+        "loss_function": {
+          "from": "cross_entropy",
+          "to": "crossentropyloss"
+        },
+        "validation_split": {
+          "from": 0.2,
+          "to": 0.2
+        },
+        "weight_class_8": {
+          "from": null,
+          "to": 1.1
+        },
+        "optimizer": {
+          "from": "adam",
+          "to": "adam"
+        },
+        "weight_class_7": {
+          "from": null,
+          "to": 1.2
+        },
+        "epochs": {
+          "from": 10,
+          "to": 10
+        },
+        "weight_class_0": {
+          "from": null,
+          "to": 1.2
+        },
+        "weight_class_2": {
+          "from": null,
+          "to": 1.1
+        },
+        "weight_class_6": {
+          "from": null,
+          "to": 1.1
+        },
+        "learning_rate": {
+          "from": 0.001,
+          "to": 0.0005
+        },
+        "early_stopping_patience": {
+          "from": 5,
+          "to": 5
+        },
+        "device": {
+          "from": "auto",
+          "to": "auto"
+        },
+        "weight_class_4": {
+          "from": null,
+          "to": 1.1
+        },
+        "tunable_params": {
+          "from": [
+            "learning_rate",
+            "weight_class_0",
+            "weight_class_1",
+            "weight_class_2",
+            "weight_class_3",
+            "weight_class_4",
+            "weight_class_5",
+            "weight_class_6",
+            "weight_class_7",
+            "weight_class_8",
+            "weight_class_9"
+          ],
+          "to": [
+            "learning_rate",
+            "weight_class_0",
+            "weight_class_1",
+            "weight_class_2",
+            "weight_class_3",
+            "weight_class_4",
+            "weight_class_5",
+            "weight_class_6",
+            "weight_class_7",
+            "weight_class_8",
+            "weight_class_9"
+          ]
+        },
+        "class_weights": {
+          "from": {
+            "0": 1.0,
+            "1": 1.0,
+            "2": 1.0,
+            "3": 1.0,
+            "4": 1.0,
+            "5": 1.0,
+            "6": 1.0,
+            "7": 1.0,
+            "8": 1.0,
+            "9": 1.0
+          },
+          "to": {
+            "0": 1.0,
+            "1": 1.0,
+            "2": 1.0,
+            "3": 1.0,
+            "4": 1.0,
+            "5": 1.0,
+            "6": 1.0,
+            "7": 1.0,
+            "8": 1.0,
+            "9": 1.0
+          }
+        },
+        "weight_class_9": {
+          "from": null,
+          "to": 1.2
+        },
+        "batch_size": {
+          "from": 256,
+          "to": 256
+        }
+      },
+      "original_metrics": {
+        "train": {
+          "accuracy": 0.9507166666666667,
+          "precision": 0.9503647963891069,
+          "recall": 0.950360660047787,
+          "roc_auc": 0.9978664888528208,
+          "loss": 0.19929508132503387
+        },
+        "val": {
+          "accuracy": 0.9837,
+          "precision": 0.9836326905970688,
+          "recall": 0.9836110971669527,
+          "roc_auc": 0.9998120200512514,
+          "loss": 0.05317872614323278
+        },
+        "epoch": 2
+      },
+      "optimized_metrics": {
+        "train": {
+          "accuracy": 0.9497666666666666,
+          "precision": 0.9493587279960781,
+          "recall": 0.9494069621627457,
+          "roc_auc": 0.9978219576656565,
+          "loss": 0.20187377577766458
+        },
+        "val": {
+          "accuracy": 0.9817,
+          "precision": 0.9817796541248734,
+          "recall": 0.981569685160812,
+          "roc_auc": 0.999759269284812,
+          "loss": 0.06261068330659328
+        },
+        "epoch": 2
+      }
+    }
+  ],
+  "prev_metrics_used": {
+    "train": {
+      "accuracy": 0.9240666666666667,
+      "precision": 0.9234104190535639,
+      "recall": 0.9234523194334047,
+      "roc_auc": 0.9956032697708561,
+      "loss": 0.32855286870865114
+    },
+    "val": {
+      "accuracy": 0.9769,
+      "precision": 0.9768967544822965,
+      "recall": 0.9768358447942347,
+      "roc_auc": 0.999599625718886,
+      "loss": 0.08174676947328408
+    },
+    "epoch": 1
+  },
+  "prev_config_used": {
+    "dataset": {
+      "input_shape": [
+        1,
+        28,
+        28
+      ],
+      "name": "MNIST",
+      "num_classes": 10,
+      "path": "data/",
+      "test_transform": [
+        "normalize"
+      ],
+      "train_transform": [
+        "normalize"
+      ]
+    },
+    "llm": {
+      "api_key": "sk-b295897df8d7404a87a1ae9565e33bab",
+      "max_tokens": 4096,
+      "model": "deepseek-chat",
+      "temperature": 0.2
+    },
+    "logging": {
+      "augmentation": null,
+      "enabled": true,
+      "log_dir": "logs\\history_20251022_163539",
+      "metrics": [
+        "loss",
+        "accuracy",
+        "precision",
+        "recall"
+      ],
+      "plot_metrics": true,
+      "samples_per_epoch": 64,
+      "save_interval": 1,
+      "save_plots": true,
+      "disable_trainer_subdir": true
+    },
+    "model": {
+      "architecture": {
+        "conv_layers": [
+          {
+            "filters": 16,
+            "kernel_size": 3,
+            "padding": 1,
+            "stride": 1
+          },
+          {
+            "filters": 32,
+            "kernel_size": 3,
+            "padding": 1,
+            "stride": 1
+          }
+        ],
+        "dropout": 0.3,
+        "fc_layers": [
+          128
+        ],
+        "pool_size": 2
+      },
+      "name": "SimpleCNN"
+    },
+    "training": {
+      "batch_size": 256,
+      "class_weights": {
+        "0": 1.0,
+        "1": 1.0,
+        "2": 1.0,
+        "3": 1.0,
+        "4": 1.0,
+        "5": 1.0,
+        "6": 1.0,
+        "7": 1.0,
+        "8": 1.0,
+        "9": 1.0
+      },
+      "device": "auto",
+      "early_stopping_patience": 5,
+      "epochs": 10,
+      "learning_rate": 0.001,
+      "loss_function": "cross_entropy",
+      "optimizer": "adam",
+      "tunable_params": [
+        "learning_rate",
+        "weight_class_0",
+        "weight_class_1",
+        "weight_class_2",
+        "weight_class_3",
+        "weight_class_4",
+        "weight_class_5",
+        "weight_class_6",
+        "weight_class_7",
+        "weight_class_8",
+        "weight_class_9"
+      ],
+      "validation_split": 0.2
+    },
+    "augmentation": {
+      "enabled": true
+    }
+  }
+}

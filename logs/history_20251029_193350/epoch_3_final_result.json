@@ -1,0 +1,538 @@
+{
+  "epoch": 3,
+  "flags": {
+    "use_adaptive_agent": true,
+    "use_aug_agent": false,
+    "use_hpo_agent": false
+  },
+  "use_optimized": false,
+  "judger_reason": "All optimization attempts rejected by Judger",
+  "final_metrics": {
+    "train": {
+      "mse": 2.9076550006866455,
+      "mae": 1.4754173755645752,
+      "r2": -4.002371788024902,
+      "loss": 1.016154616881328
+    },
+    "val": {
+      "mse": 2.1588025093078613,
+      "mae": 1.303396224975586,
+      "r2": -2.762908935546875,
+      "loss": 0.8360547095537185
+    },
+    "epoch": 3
+  },
+  "final_config": {
+    "augmentation": {
+      "enabled": true,
+      "methods": [
+        "gaussian_noise",
+        "feature_dropout",
+        "none"
+      ]
+    },
+    "dataset": {
+      "input_dim": 5,
+      "name": "Housing",
+      "path": "data/housing/Housing.csv",
+      "validation_split": 0.2
+    },
+    "llm": {
+      "api_key": "sk-b295897df8d7404a87a1ae9565e33bab",
+      "max_tokens": 4096,
+      "model": "deepseek-chat",
+      "temperature": 0.2
+    },
+    "logging": {
+      "log_dir": "logs\\history_20251029_193350",
+      "metrics": [
+        "loss",
+        "mse",
+        "mae",
+        "r2"
+      ],
+      "plot_metrics": true,
+      "save_interval": 1,
+      "save_plots": true,
+      "disable_trainer_subdir": true
+    },
+    "model": {
+      "architecture": {
+        "dropout": 0.3,
+        "hidden_dims": [
+          4
+        ]
+      },
+      "name": "CustomModel"
+    },
+    "training": {
+      "batch_size": 256,
+      "device": "auto",
+      "early_stopping_patience": 5,
+      "epochs": 10,
+      "learning_rate": 0.0005,
+      "loss_function": "smooth_l1_loss",
+      "optimizer": "adamw",
+      "seed": 42,
+      "tunable_params": [
+        "learning_rate",
+        "dropout"
+      ]
+    }
+  },
+  "optimization_history": [
+    {
+      "param_changes": {
+        "learning_rate": {
+          "from": 0.0005,
+          "to": 0.0005
+        },
+        "optimizer": {
+          "from": "adamw",
+          "to": "adagrad"
+        },
+        "device": {
+          "from": "auto",
+          "to": "auto"
+        },
+        "epochs": {
+          "from": 10,
+          "to": 10
+        },
+        "tunable_params": {
+          "from": [
+            "learning_rate",
+            "dropout"
+          ],
+          "to": [
+            "learning_rate",
+            "dropout"
+          ]
+        },
+        "seed": {
+          "from": 42,
+          "to": 42
+        },
+        "loss_function": {
+          "from": "smooth_l1_loss",
+          "to": "huber_loss"
+        },
+        "batch_size": {
+          "from": 256,
+          "to": 256
+        },
+        "early_stopping_patience": {
+          "from": 5,
+          "to": 5
+        }
+      },
+      "original_metrics": {
+        "train": {
+          "mse": 2.9076550006866455,
+          "mae": 1.4754173755645752,
+          "r2": -4.002371788024902,
+          "loss": 1.016154616881328
+        },
+        "val": {
+          "mse": 2.1588025093078613,
+          "mae": 1.303396224975586,
+          "r2": -2.762908935546875,
+          "loss": 0.8360547095537185
+        },
+        "epoch": 3
+      },
+      "optimized_metrics": {
+        "train": {
+          "mse": 3.287698745727539,
+          "mae": 1.5900644063949585,
+          "r2": -4.656204700469971,
+          "loss": 1.1222452449191147
+        },
+        "val": {
+          "mse": 3.0061213970184326,
+          "mae": 1.5640789270401,
+          "r2": -4.239831447601318,
+          "loss": 1.0789759516716004
+        },
+        "epoch": 3
+      }
+    },
+    {
+      "param_changes": {
+        "learning_rate": {
+          "from": 0.0005,
+          "to": 0.0005
+        },
+        "optimizer": {
+          "from": "adamw",
+          "to": "adam"
+        },
+        "device": {
+          "from": "auto",
+          "to": "auto"
+        },
+        "epochs": {
+          "from": 10,
+          "to": 10
+        },
+        "tunable_params": {
+          "from": [
+            "learning_rate",
+            "dropout"
+          ],
+          "to": [
+            "learning_rate",
+            "dropout"
+          ]
+        },
+        "seed": {
+          "from": 42,
+          "to": 42
+        },
+        "loss_function": {
+          "from": "smooth_l1_loss",
+          "to": "huber_loss"
+        },
+        "batch_size": {
+          "from": 256,
+          "to": 256
+        },
+        "early_stopping_patience": {
+          "from": 5,
+          "to": 5
+        }
+      },
+      "original_metrics": {
+        "train": {
+          "mse": 2.9076550006866455,
+          "mae": 1.4754173755645752,
+          "r2": -4.002371788024902,
+          "loss": 1.016154616881328
+        },
+        "val": {
+          "mse": 2.1588025093078613,
+          "mae": 1.303396224975586,
+          "r2": -2.762908935546875,
+          "loss": 0.8360547095537185
+        },
+        "epoch": 3
+      },
+      "optimized_metrics": {
+        "train": {
+          "mse": 2.9073383808135986,
+          "mae": 1.4737528562545776,
+          "r2": -4.001826763153076,
+          "loss": 1.016033972904181
+        },
+        "val": {
+          "mse": 2.184297561645508,
+          "mae": 1.3154481649398804,
+          "r2": -2.8073482513427734,
+          "loss": 0.8464170530438423
+        },
+        "epoch": 3
+      }
+    },
+    {
+      "param_changes": {
+        "learning_rate": {
+          "from": 0.0005,
+          "to": 0.0005
+        },
+        "optimizer": {
+          "from": "adamw",
+          "to": "adam"
+        },
+        "device": {
+          "from": "auto",
+          "to": "auto"
+        },
+        "epochs": {
+          "from": 10,
+          "to": 10
+        },
+        "tunable_params": {
+          "from": [
+            "learning_rate",
+            "dropout"
+          ],
+          "to": [
+            "learning_rate",
+            "dropout"
+          ]
+        },
+        "seed": {
+          "from": 42,
+          "to": 42
+        },
+        "loss_function": {
+          "from": "smooth_l1_loss",
+          "to": "huber_loss"
+        },
+        "batch_size": {
+          "from": 256,
+          "to": 256
+        },
+        "early_stopping_patience": {
+          "from": 5,
+          "to": 5
+        }
+      },
+      "original_metrics": {
+        "train": {
+          "mse": 2.9076550006866455,
+          "mae": 1.4754173755645752,
+          "r2": -4.002371788024902,
+          "loss": 1.016154616881328
+        },
+        "val": {
+          "mse": 2.1588025093078613,
+          "mae": 1.303396224975586,
+          "r2": -2.762908935546875,
+          "loss": 0.8360547095537185
+        },
+        "epoch": 3
+      },
+      "optimized_metrics": {
+        "train": {
+          "mse": 2.91882586479187,
+          "mae": 1.4808449745178223,
+          "r2": -4.021589756011963,
+          "loss": 1.0213838857450304
+        },
+        "val": {
+          "mse": 2.187026023864746,
+          "mae": 1.318203330039978,
+          "r2": -2.8121039867401123,
+          "loss": 0.8488136067986488
+        },
+        "epoch": 3
+      }
+    },
+    {
+      "param_changes": {
+        "learning_rate": {
+          "from": 0.0005,
+          "to": 0.0005
+        },
+        "optimizer": {
+          "from": "adamw",
+          "to": "adam"
+        },
+        "device": {
+          "from": "auto",
+          "to": "auto"
+        },
+        "epochs": {
+          "from": 10,
+          "to": 10
+        },
+        "tunable_params": {
+          "from": [
+            "learning_rate",
+            "dropout"
+          ],
+          "to": [
+            "learning_rate",
+            "dropout"
+          ]
+        },
+        "seed": {
+          "from": 42,
+          "to": 42
+        },
+        "loss_function": {
+          "from": "smooth_l1_loss",
+          "to": "huber_loss"
+        },
+        "batch_size": {
+          "from": 256,
+          "to": 256
+        },
+        "early_stopping_patience": {
+          "from": 5,
+          "to": 5
+        }
+      },
+      "original_metrics": {
+        "train": {
+          "mse": 2.9076550006866455,
+          "mae": 1.4754173755645752,
+          "r2": -4.002371788024902,
+          "loss": 1.016154616881328
+        },
+        "val": {
+          "mse": 2.1588025093078613,
+          "mae": 1.303396224975586,
+          "r2": -2.762908935546875,
+          "loss": 0.8360547095537185
+        },
+        "epoch": 3
+      },
+      "optimized_metrics": {
+        "train": {
+          "mse": 2.903841495513916,
+          "mae": 1.4743940830230713,
+          "r2": -3.9958109855651855,
+          "loss": 1.0163505210238657
+        },
+        "val": {
+          "mse": 2.1863667964935303,
+          "mae": 1.318228006362915,
+          "r2": -2.8109548091888428,
+          "loss": 0.8490468338131905
+        },
+        "epoch": 3
+      }
+    },
+    {
+      "param_changes": {
+        "learning_rate": {
+          "from": 0.0005,
+          "to": 0.0005
+        },
+        "optimizer": {
+          "from": "adamw",
+          "to": "adam"
+        },
+        "device": {
+          "from": "auto",
+          "to": "auto"
+        },
+        "epochs": {
+          "from": 10,
+          "to": 10
+        },
+        "tunable_params": {
+          "from": [
+            "learning_rate",
+            "dropout"
+          ],
+          "to": [
+            "learning_rate",
+            "dropout"
+          ]
+        },
+        "seed": {
+          "from": 42,
+          "to": 42
+        },
+        "loss_function": {
+          "from": "smooth_l1_loss",
+          "to": "huber_loss"
+        },
+        "batch_size": {
+          "from": 256,
+          "to": 256
+        },
+        "early_stopping_patience": {
+          "from": 5,
+          "to": 5
+        }
+      },
+      "original_metrics": {
+        "train": {
+          "mse": 2.9076550006866455,
+          "mae": 1.4754173755645752,
+          "r2": -4.002371788024902,
+          "loss": 1.016154616881328
+        },
+        "val": {
+          "mse": 2.1588025093078613,
+          "mae": 1.303396224975586,
+          "r2": -2.762908935546875,
+          "loss": 0.8360547095537185
+        },
+        "epoch": 3
+      },
+      "optimized_metrics": {
+        "train": {
+          "mse": 2.914224624633789,
+          "mae": 1.4786018133163452,
+          "r2": -4.013674259185791,
+          "loss": 1.0200567086031482
+        },
+        "val": {
+          "mse": 2.191697359085083,
+          "mae": 1.3234891891479492,
+          "r2": -2.820246458053589,
+          "loss": 0.8531367987394333
+        },
+        "epoch": 3
+      }
+    }
+  ],
+  "prev_metrics_used": {
+    "train": {
+      "mse": 3.846247673034668,
+      "mae": 1.7459402084350586,
+      "r2": -5.617140293121338,
+      "loss": 1.2692244417348486
+    },
+    "val": {
+      "mse": 3.163207530975342,
+      "mae": 1.6083803176879883,
+      "r2": -4.513640880584717,
+      "loss": 1.1213076680898666
+    },
+    "epoch": 2
+  },
+  "prev_config_used": {
+    "augmentation": {
+      "enabled": true,
+      "methods": [
+        "gaussian_noise",
+        "feature_dropout",
+        "none"
+      ]
+    },
+    "dataset": {
+      "input_dim": 5,
+      "name": "Housing",
+      "path": "data/housing/Housing.csv",
+      "validation_split": 0.2
+    },
+    "llm": {
+      "api_key": "sk-b295897df8d7404a87a1ae9565e33bab",
+      "max_tokens": 4096,
+      "model": "deepseek-chat",
+      "temperature": 0.2
+    },
+    "logging": {
+      "log_dir": "logs\\history_20251029_193350",
+      "metrics": [
+        "loss",
+        "mse",
+        "mae",
+        "r2"
+      ],
+      "plot_metrics": true,
+      "save_interval": 1,
+      "save_plots": true,
+      "disable_trainer_subdir": true
+    },
+    "model": {
+      "architecture": {
+        "dropout": 0.3,
+        "hidden_dims": [
+          4
+        ]
+      },
+      "name": "CustomModel"
+    },
+    "training": {
+      "batch_size": 256,
+      "device": "auto",
+      "early_stopping_patience": 5,
+      "epochs": 10,
+      "learning_rate": 0.0005,
+      "loss_function": "smooth_l1_loss",
+      "optimizer": "adamw",
+      "seed": 42,
+      "tunable_params": [
+        "learning_rate",
+        "dropout"
+      ]
+    }
+  }
+}

@@ -1,0 +1,79 @@
+# 数据集配置
+dataset:
+  name: "TinyShakespeare"
+  path: "data/shakespeare/"
+  sequence_length: 100  # 序列长度
+  batch_size: 64
+  train_split: 0.9  # 训练集比例
+  
+# 模型配置
+model:
+  name: "ShakespeareLSTM"
+  architecture:
+    embedding_dim: 256  # 嵌入维度
+    hidden_dim: 512  # LSTM隐藏层维度
+    num_layers: 2  # LSTM层数
+    dropout: 0.5  # Dropout比例
+    bidirectional: false  # 是否使用双向LSTM
+  
+# 训练配置
+training:
+  batch_size: 64
+  learning_rate: 0.001
+  optimizer: "adam"  # 可选: adam, sgd, rmsprop
+  optimizer_params:
+    weight_decay: 0.0001
+    momentum: 0.9  # 仅用于SGD
+    beta1: 0.9  # 仅用于Adam
+    beta2: 0.999  # 仅用于Adam
+  scheduler: "cosine"  # 可选: step, cosine, none
+  scheduler_params:
+    step_size: 10  # 仅用于StepLR
+    gamma: 0.5  # 仅用于StepLR
+    T_max: 100  # 仅用于CosineAnnealingLR
+  epochs: 10
+  early_stopping_patience: 5
+  clip_grad_norm: 5.0  # 梯度裁剪阈值
+  device: "auto"  # auto, cpu, cuda
+  loss_function: "cross_entropy"  # 交叉熵损失函数
+  seed: 42  # 随机种子
+  
+  # 可调整的超参数
+  tunable_params:
+    - "learning_rate"
+    - "hidden_dim"
+    - "num_layers"
+    - "embedding_dim"
+    - "dropout"
+    - "clip_grad_norm"
+    - "weight_decay"
+
+# 生成配置
+generation:
+  temperature: 1.0  # 采样温度，越高越随机
+  max_length: 1000  # 生成文本的最大长度
+  top_k: 40  # Top-K采样
+  top_p: 0.9  # Top-P (nucleus) 采样
+  num_samples: 5  # 生成样本数量
+
+# LLM配置
+llm:
+  model: "deepseek-chat"
+  api_key: "sk-b295897df8d7404a87a1ae9565e33bab"
+  temperature: 0.2
+  max_tokens: 4096
+  
+# 日志配置
+logging:
+  log_dir: "logs/"
+  save_interval: 1
+  metrics:
+    - "loss"
+    - "perplexity"
+    - "accuracy"
+    - "bleu"
+    - "character_error_rate"
+  plot_metrics: true
+  save_plots: true
+  save_samples: true  # 是否保存生成的样本
+  sample_interval: 5  # 每隔多少个epoch保存一次样本

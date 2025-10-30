@@ -1,0 +1,56 @@
+# 数据集配置
+dataset:
+  name: "WineQuality"
+  input_dim: 11               # 11 physicochemical features
+  path: "data/winequality/winequality-red.csv"
+  validation_split: 0.2       # 80/20 split
+  target_scale: 10.0         # 缩放因子，使质量分数归一化到 0-1
+
+# 模型配置
+model:
+  name: "CustomModel"
+  architecture:
+    hidden_dims: [16]
+    dropout: 0.5
+
+# 训练配置
+training:
+  batch_size: 256
+  learning_rate: 0.001
+  optimizer: "adam"
+  epochs: 10
+  early_stopping_patience: 5
+  device: "auto"
+  loss_function: "mae"       # Regression loss
+  seed: 42
+
+  # 可调整的超参数
+  tunable_params:
+    - "learning_rate"
+    - "dropout"
+
+# LLM 配置（Baseline 中不会真正调用）
+llm:
+  model: "deepseek-chat"
+  api_key: ""
+  temperature: 0.2
+  max_tokens: 4096
+
+# 日志配置
+logging:
+  log_dir: "logs/"
+  save_interval: 1
+  metrics:
+    - "loss"
+    - "mse"
+    - "mae"
+  plot_metrics: true
+  save_plots: true
+
+# 数据增强配置（回归）
+augmentation:
+  enabled: true
+  methods:
+    - "gaussian_noise"
+    - "feature_dropout"
+    - "none" 

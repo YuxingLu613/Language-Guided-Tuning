@@ -1,0 +1,112 @@
+{
+  "enabled_agents": [
+    "adaptive"
+  ],
+  "logs": [
+    {
+      "agent": "strategy",
+      "suggestion": "loss=huber, optimizer=adamw",
+      "params": {
+        "loss_function": "huber",
+        "optimizer": "adamw"
+      },
+      "previous_context": "",
+      "full_prompt": {
+        "system_prompt": "You are a highly skilled ML practitioner specialising in optimising training strategies across diverse tasks.",
+        "user_prompt": "You are an expert machine-learning practitioner.\nAt the end of each epoch you will receive: (a) task type, (b) current loss\nfunction & optimizer, and (c) the latest training / validation metrics.\n\nYour job: Propose a *potentially better* pair of loss function **and** optimizer\nfor the **next** epoch. Respond with **exactly** `no change` (case-insensitive) **only** if you are absolutely certain the current combination is already optimal and cannot be improved.\nIn most cases you should suggest a new combination.\nReturn a single line in the format:\n`loss=<loss_function>, optimizer=<optimizer>` (comma-separated, no extras).\n\nDo NOT suggest learning-rate changes or any other hyper-parameters.\n\nTask type: regression\nCurrent loss function: smooth_l1\nCurrent optimizer: adam\n\nRecent metrics (JSON):\n{\"train\": {\"mse\": 0.6973405480384827, \"mae\": 0.6521355509757996, \"r2\": -0.1997147798538208, \"loss\": 0.30916550148064925}, \"val\": {\"mse\": 0.3311672508716583, \"mae\": 0.45807525515556335, \"r2\": 0.422757625579834, \"loss\": 0.16068533081561326}, \"epoch\": 8}\n\nDataset config: {'input_dim': 5, 'name': 'Housing', 'path': 'data/housing/Housing.csv', 'validation_split': 0.2}\nModel config: {'architecture': {'dropout': 0.3, 'hidden_dims': [4]}, 'name': 'CustomModel'}\n"
+      }
+    }
+  ],
+  "previous_changes": [
+    "Adaptive Agent suggested adjusting training strategy: loss_function: huber, optimizer: adamw"
+  ],
+  "agent_full_prompts": {
+    "adaptive": {
+      "system_prompt": "You are a highly skilled ML practitioner specialising in optimising training strategies across diverse tasks.",
+      "user_prompt": "You are an expert machine-learning practitioner.\nAt the end of each epoch you will receive: (a) task type, (b) current loss\nfunction & optimizer, and (c) the latest training / validation metrics.\n\nYour job: Propose a *potentially better* pair of loss function **and** optimizer\nfor the **next** epoch. Respond with **exactly** `no change` (case-insensitive) **only** if you are absolutely certain the current combination is already optimal and cannot be improved.\nIn most cases you should suggest a new combination.\nReturn a single line in the format:\n`loss=<loss_function>, optimizer=<optimizer>` (comma-separated, no extras).\n\nDo NOT suggest learning-rate changes or any other hyper-parameters.\n\nTask type: regression\nCurrent loss function: smooth_l1\nCurrent optimizer: adam\n\nRecent metrics (JSON):\n{\"train\": {\"mse\": 0.6973405480384827, \"mae\": 0.6521355509757996, \"r2\": -0.1997147798538208, \"loss\": 0.30916550148064925}, \"val\": {\"mse\": 0.3311672508716583, \"mae\": 0.45807525515556335, \"r2\": 0.422757625579834, \"loss\": 0.16068533081561326}, \"epoch\": 8}\n\nDataset config: {'input_dim': 5, 'name': 'Housing', 'path': 'data/housing/Housing.csv', 'validation_split': 0.2}\nModel config: {'architecture': {'dropout': 0.3, 'hidden_dims': [4]}, 'name': 'CustomModel'}\n"
+    }
+  },
+  "judger_rounds": [
+    {
+      "attempt": 0,
+      "use_optimized": true,
+      "reason": "",
+      "agent_suggestions": {
+        "adaptive": "Consider experimenting with different loss functions like Huber loss for potentially better robustness, or adjusting learning rate schedules for improved convergence"
+      }
+    }
+  ],
+  "prev_metrics_used": {
+    "train": {
+      "mse": 0.6973405480384827,
+      "mae": 0.6521355509757996,
+      "r2": -0.1997147798538208,
+      "loss": 0.30916550148064925
+    },
+    "val": {
+      "mse": 0.3311672508716583,
+      "mae": 0.45807525515556335,
+      "r2": 0.422757625579834,
+      "loss": 0.16068533081561326
+    },
+    "epoch": 8
+  },
+  "prev_config_used": {
+    "augmentation": {
+      "enabled": true,
+      "methods": [
+        "gaussian_noise",
+        "feature_dropout",
+        "none"
+      ]
+    },
+    "dataset": {
+      "input_dim": 5,
+      "name": "Housing",
+      "path": "data/housing/Housing.csv",
+      "validation_split": 0.2
+    },
+    "llm": {
+      "api_key": "sk-b295897df8d7404a87a1ae9565e33bab",
+      "max_tokens": 4096,
+      "model": "deepseek-chat",
+      "temperature": 0.2
+    },
+    "logging": {
+      "log_dir": "logs\\history_20251029_193350",
+      "metrics": [
+        "loss",
+        "mse",
+        "mae",
+        "r2"
+      ],
+      "plot_metrics": true,
+      "save_interval": 1,
+      "save_plots": true,
+      "disable_trainer_subdir": true
+    },
+    "model": {
+      "architecture": {
+        "dropout": 0.3,
+        "hidden_dims": [
+          4
+        ]
+      },
+      "name": "CustomModel"
+    },
+    "training": {
+      "batch_size": 256,
+      "device": "auto",
+      "early_stopping_patience": 5,
+      "epochs": 10,
+      "learning_rate": 0.0005,
+      "loss_function": "smooth_l1",
+      "optimizer": "adam",
+      "seed": 42,
+      "tunable_params": [
+        "learning_rate",
+        "dropout"
+      ]
+    }
+  }
+}

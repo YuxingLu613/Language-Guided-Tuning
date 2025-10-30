@@ -1,0 +1,298 @@
+{
+  "epoch": 4,
+  "flags": {
+    "use_adaptive_agent": true,
+    "use_aug_agent": true,
+    "use_hpo_agent": true
+  },
+  "use_optimized": true,
+  "judger_reason": "",
+  "final_metrics": {
+    "train": {
+      "accuracy": 0.6699813548788067,
+      "precision": 0.6543895080535514,
+      "recall": 0.6502733692029791,
+      "f1": 0.651765243898711,
+      "roc_auc": 0.7156445105596502,
+      "loss": 0.5901951789855957
+    },
+    "val": {
+      "accuracy": 0.664179104477612,
+      "precision": 0.6661990873753592,
+      "recall": 0.6250763125763126,
+      "f1": 0.6200511079217279,
+      "roc_auc": 0.666539479039479,
+      "loss": 0.6202225089073181
+    },
+    "epoch": 4
+  },
+  "final_config": {
+    "augmentation": {
+      "enabled": true,
+      "methods": [
+        "gaussian_noise",
+        "feature_dropout",
+        "shift",
+        "none"
+      ],
+      "policy": "gaussian_noise"
+    },
+    "dataset": {
+      "input_dim": 9,
+      "name": "WaterQuality",
+      "num_classes": 2,
+      "path": "data/water_quality/water_potability.csv",
+      "validation_split": 0.2
+    },
+    "llm": {
+      "api_key": "sk-b295897df8d7404a87a1ae9565e33bab",
+      "max_tokens": 4096,
+      "model": "deepseek-chat",
+      "request_timeout": 60,
+      "temperature": 0.2
+    },
+    "logging": {
+      "log_dir": "logs\\history_20251028_190749",
+      "metrics": [
+        "loss",
+        "accuracy",
+        "precision",
+        "recall",
+        "f1",
+        "roc_auc"
+      ],
+      "plot_metrics": true,
+      "save_interval": 1,
+      "save_plots": true,
+      "disable_trainer_subdir": true
+    },
+    "model": {
+      "architecture": {
+        "dropout": 0.3,
+        "hidden_dims": [
+          384,
+          768
+        ]
+      },
+      "name": "CustomModel"
+    },
+    "training": {
+      "batch_size": 256,
+      "class_weights": {
+        "0": 1.0,
+        "1": 1.0
+      },
+      "device": "auto",
+      "early_stopping_patience": 5,
+      "epochs": 10,
+      "learning_rate": 0.0003,
+      "loss_function": "cross_entropy",
+      "optimizer": "adamw",
+      "seed": 42,
+      "tunable_params": [
+        "learning_rate",
+        "weight_class_0",
+        "weight_class_1"
+      ],
+      "weight_class_0": 0.7,
+      "weight_class_1": 1.3
+    }
+  },
+  "optimization_history": [
+    {
+      "param_changes": {
+        "epochs": {
+          "from": 10,
+          "to": 10
+        },
+        "weight_class_1": {
+          "from": 1.2,
+          "to": 1.3
+        },
+        "class_weights": {
+          "from": {
+            "0": 1.0,
+            "1": 1.0
+          },
+          "to": {
+            "0": 1.0,
+            "1": 1.0
+          }
+        },
+        "loss_function": {
+          "from": "focal_loss",
+          "to": "cross_entropy"
+        },
+        "learning_rate": {
+          "from": 0.0005,
+          "to": 0.0003
+        },
+        "tunable_params": {
+          "from": [
+            "learning_rate",
+            "weight_class_0",
+            "weight_class_1"
+          ],
+          "to": [
+            "learning_rate",
+            "weight_class_0",
+            "weight_class_1"
+          ]
+        },
+        "weight_class_0": {
+          "from": 0.8,
+          "to": 0.7
+        },
+        "seed": {
+          "from": 42,
+          "to": 42
+        },
+        "early_stopping_patience": {
+          "from": 5,
+          "to": 5
+        },
+        "batch_size": {
+          "from": 256,
+          "to": 256
+        },
+        "device": {
+          "from": "auto",
+          "to": "auto"
+        },
+        "optimizer": {
+          "from": "adam",
+          "to": "adamw"
+        }
+      },
+      "original_metrics": {
+        "train": {
+          "accuracy": 0.673088875077688,
+          "precision": 0.6580927813072954,
+          "recall": 0.6552014206182846,
+          "f1": 0.6563607454110187,
+          "roc_auc": 0.7134324417440246,
+          "loss": 0.1878908681018012
+        },
+        "val": {
+          "accuracy": 0.6393034825870647,
+          "precision": 0.633001885822047,
+          "recall": 0.5986721611721612,
+          "f1": 0.5903235101874433,
+          "roc_auc": 0.6469017094017094,
+          "loss": 0.178912453353405
+        },
+        "epoch": 4
+      },
+      "optimized_metrics": {
+        "train": {
+          "accuracy": 0.6699813548788067,
+          "precision": 0.6543895080535514,
+          "recall": 0.6502733692029791,
+          "f1": 0.651765243898711,
+          "roc_auc": 0.7156445105596502,
+          "loss": 0.5901951789855957
+        },
+        "val": {
+          "accuracy": 0.664179104477612,
+          "precision": 0.6661990873753592,
+          "recall": 0.6250763125763126,
+          "f1": 0.6200511079217279,
+          "roc_auc": 0.666539479039479,
+          "loss": 0.6202225089073181
+        },
+        "epoch": 4
+      }
+    }
+  ],
+  "prev_metrics_used": {
+    "train": {
+      "accuracy": 0.6681168427594779,
+      "precision": 0.6536148678210649,
+      "recall": 0.6526206736667214,
+      "f1": 0.6530781828400876,
+      "roc_auc": 0.7156734896271038,
+      "loss": 0.2019955004964556
+    },
+    "val": {
+      "accuracy": 0.6716417910447762,
+      "precision": 0.6785368886432717,
+      "recall": 0.631486568986569,
+      "f1": 0.626320385341258,
+      "roc_auc": 0.6606888481888482,
+      "loss": 0.17450053244829178
+    },
+    "epoch": 3
+  },
+  "prev_config_used": {
+    "augmentation": {
+      "enabled": true,
+      "methods": [
+        "gaussian_noise",
+        "feature_dropout",
+        "shift",
+        "none"
+      ],
+      "policy": "gaussian_noise"
+    },
+    "dataset": {
+      "input_dim": 9,
+      "name": "WaterQuality",
+      "num_classes": 2,
+      "path": "data/water_quality/water_potability.csv",
+      "validation_split": 0.2
+    },
+    "llm": {
+      "api_key": "sk-b295897df8d7404a87a1ae9565e33bab",
+      "max_tokens": 4096,
+      "model": "deepseek-chat",
+      "request_timeout": 60,
+      "temperature": 0.2
+    },
+    "logging": {
+      "log_dir": "logs\\history_20251028_190749",
+      "metrics": [
+        "loss",
+        "accuracy",
+        "precision",
+        "recall",
+        "f1",
+        "roc_auc"
+      ],
+      "plot_metrics": true,
+      "save_interval": 1,
+      "save_plots": true,
+      "disable_trainer_subdir": true
+    },
+    "model": {
+      "architecture": {
+        "dropout": 0.3,
+        "hidden_dims": [
+          384,
+          768
+        ]
+      },
+      "name": "CustomModel"
+    },
+    "training": {
+      "batch_size": 256,
+      "class_weights": {
+        "0": 1.0,
+        "1": 1.0
+      },
+      "device": "auto",
+      "early_stopping_patience": 5,
+      "epochs": 10,
+      "learning_rate": 0.0005,
+      "loss_function": "focal_loss",
+      "optimizer": "adam",
+      "seed": 42,
+      "tunable_params": [
+        "learning_rate",
+        "weight_class_0",
+        "weight_class_1"
+      ],
+      "weight_class_0": 0.8,
+      "weight_class_1": 1.2
+    }
+  }
+}

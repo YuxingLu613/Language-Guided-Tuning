@@ -1,0 +1,60 @@
+# Iris 数据集配置
+
+# 数据集配置
+dataset:
+  name: "Iris"
+  input_dim: 4                # 特征数目
+  num_classes: 3              # 三分类
+  path: "sklearn"            # 仅作占位，无实际读取文件
+  validation_split: 0.2
+
+# 模型配置
+model:
+  name: "CustomModel"
+  architecture:
+    hidden_dims: [16, 16]
+    dropout: 0.3
+
+# 训练配置
+training:
+  batch_size: 32
+  learning_rate: 0.005
+  optimizer: "sgd"
+  epochs: 10
+  early_stopping_patience: 10
+  device: "auto"
+  loss_function: "cross_entropy"
+  seed: 42
+
+  # 可调整超参数
+  tunable_params:
+    - "learning_rate"
+
+  # 类别权重（默认均为 1）
+  class_weights:
+    0: 1.0
+    1: 1.0
+    2: 1.0
+
+# LLM 配置（Baseline 中不会真正调用）
+llm:
+  model: "deepseek-chat"
+  api_key: ""
+  temperature: 0.2
+  max_tokens: 4096
+
+# 日志配置
+logging:
+  log_dir: "logs/"
+  save_interval: 1
+  metrics:
+    - "loss"
+    - "accuracy"
+    - "precision"
+    - "recall"
+  plot_metrics: true
+  save_plots: true
+
+# 数据增强（默认关闭）
+augmentation:
+  enabled: true 

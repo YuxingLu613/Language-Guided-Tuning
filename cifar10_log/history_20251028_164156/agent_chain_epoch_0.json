@@ -1,0 +1,73 @@
+{
+  "enabled_agents": [
+    "aug",
+    "adaptive",
+    "hpo"
+  ],
+  "logs": [
+    {
+      "agent": "aug",
+      "suggestion": "flip",
+      "params": null,
+      "should_use": true,
+      "full_prompt": {
+        "system_prompt": "You are a deep-learning model-training expert. Given the current training/validation metrics and the augmentation currently in use, decide which *single* augmentation from the list will most likely improve performance in the *next* epoch. Unless the provided metrics already show strong improvement with the current setup, you SHOULD choose an augmentation method *different* from the current one. Reply 'none' *only* when applying another augmentation would clearly degrade performance or is redundant. Respond with the method name only, without any explanation.",
+        "user_prompt": "Data type: image\nDataset: CIFAR10\nAvailable methods: rotation, shift, flip, scale, noise, contrast, none\n\nEpoch: None\nCurrent augmentation in use: none\nTrain dataset size: None\n\nLatest metrics (JSON):\n{\"train\": {\"accuracy\": 0.30134, \"precision\": 0.30044138608529, \"recall\": 0.30134, \"f1\": 0.30084185881638265, \"roc_auc\": 0.7281234246666667, \"loss\": 5.142210662212518}, \"val\": {\"accuracy\": 0.4536, \"precision\": 0.4675616498497111, \"recall\": 0.45360000000000006, \"f1\": 0.45260561780872954, \"roc_auc\": 0.8578607055555555, \"loss\": 1.4130540407156642}, \"epoch\": 0}\n\nChoose exactly one augmentation method (or 'none')."
+      }
+    },
+    {
+      "agent": "strategy",
+      "suggestion": "loss=label_smoothing_cross_entropy, optimizer=sgd",
+      "params": {
+        "loss_function": "label_smoothing_cross_entropy",
+        "optimizer": "sgd"
+      },
+      "previous_context": "Before you, other agents have made the following changes: Augmentation Agent suggested using data augmentation strategy: flip. Please consider the compatibility between your decisions before making your decision.",
+      "full_prompt": {
+        "system_prompt": "You are a highly skilled ML practitioner specialising in optimising training strategies across diverse tasks.",
+        "user_prompt": "You are an expert machine-learning practitioner.\nAt the end of each epoch you will receive: (a) task type, (b) current loss\nfunction & optimizer, and (c) the latest training / validation metrics.\n\nYour job: Propose a *potentially better* pair of loss function **and** optimizer\nfor the **next** epoch. Respond with **exactly** `no change` (case-insensitive) **only** if you are absolutely certain the current combination is already optimal and cannot be improved.\nIn most cases you should suggest a new combination.\nReturn a single line in the format:\n`loss=<loss_function>, optimizer=<optimizer>` (comma-separated, no extras).\n\nDo NOT suggest learning-rate changes or any other hyper-parameters.\n\nTask type: classification\n\nPREVIOUS AGENT CHANGES:\nBefore you, other agents have made the following changes: Augmentation Agent suggested using data augmentation strategy: flip. Please consider the compatibility between your decisions before making your decision.\n\nCurrent loss function: focal\nCurrent optimizer: adamw\n\nRecent metrics (JSON):\n{\"train\": {\"accuracy\": 0.30134, \"precision\": 0.30044138608529, \"recall\": 0.30134, \"f1\": 0.30084185881638265, \"roc_auc\": 0.7281234246666667, \"loss\": 5.142210662212518}, \"val\": {\"accuracy\": 0.4536, \"precision\": 0.4675616498497111, \"recall\": 0.45360000000000006, \"f1\": 0.45260561780872954, \"roc_auc\": 0.8578607055555555, \"loss\": 1.4130540407156642}, \"epoch\": 0}\n\nDataset config: {'input_shape': [3, 32, 32], 'name': 'CIFAR10', 'num_classes': 10, 'path': 'data/cifar-10', 'test_transform': ['normalize'], 'train_transform': ['random_crop', 'random_flip', 'normalize']}\nModel config: {'architecture': {'conv_layers': [{'filters': 32, 'kernel_size': 3, 'padding': 1, 'stride': 1}, {'filters': 64, 'kernel_size': 3, 'padding': 1, 'stride': 1}, {'filters': 128, 'kernel_size': 3, 'padding': 1, 'stride': 1}], 'dropout': 0.3, 'fc_layers': [256], 'pool_size': 2}, 'name': 'SimpleCNN'}\n"
+      }
+    },
+    {
+      "agent": "hpo",
+      "suggestion": "learning_rate: 0.01\nweight_class_0: 1.2\nweight_class_1: 1.1\nweight_class_2: 1.0\nweight_class_3: 1.0\nweight_class_4: 1.1\nweight_class_5: 1.0\nweight_class_6: 1.2\nweight_class_7: 1.0\nweight_class_8: 1.1\nweight_class_9: 1.0\n\n**Rationale:** The current learning rate (0.001) is too low for SGD, causing slow convergence (training accuracy only 30% after multiple epochs). Increasing to 0.01 will accelerate learning. The validation metrics significantly outperform training metrics, suggesting potential class imbalance - applying moderate class weights (1.0-1.2) will help balance learning across classes while maintaining compatibility with the existing label smoothing and augmentation strategies.",
+      "params": {
+        "learning_rate": 0.01,
+        "weight_class_0": 1.2,
+        "weight_class_1": 1.1,
+        "weight_class_2": 1.0,
+        "weight_class_3": 1.0,
+        "weight_class_4": 1.1,
+        "weight_class_5": 1.0,
+        "weight_class_6": 1.2,
+        "weight_class_7": 1.0,
+        "weight_class_8": 1.1,
+        "weight_class_9": 1.0
+      },
+      "previous_context": "Before you, other agents have made the following changes: Augmentation Agent suggested using data augmentation strategy: flip; Adaptive Agent suggested adjusting training strategy: loss_function: label_smoothing_cross_entropy, optimizer: sgd. Please consider the compatibility between your decisions before making your decision.",
+      "full_prompt": {
+        "system_prompt": "You are a machine learning expert specializing in hyperparameter optimization.",
+        "user_prompt": "You are an expert ML trainer. Given the current parameters and metrics, evaluate the training status. Suggest precise changes in hyperparameters to improve training. Output changes in ONE of these formats:\n- ''\n- OR use multiple lines with 'param: value'\n- OR use multiple lines with 'param=value'\n- DO NOT use JSON format like {{'param': value}}\nIf no change needed, reply 'no change'.\n\n''. If no change needed, reply 'no change'.\n\n\nPREVIOUS AGENT CHANGES:\nBefore you, other agents have made the following changes: Augmentation Agent suggested using data augmentation strategy: flip; Adaptive Agent suggested adjusting training strategy: loss_function: label_smoothing_cross_entropy, optimizer: sgd. Please consider the compatibility between your decisions before making your decision.\nCurrent parameters:\n\nDataset config:\n- input_shape: [3, 32, 32]\n- name: CIFAR10\n- num_classes: 10\n- path: data/cifar-10\n- test_transform: ['normalize']\n- train_transform: ['random_crop', 'random_flip', 'normalize']\n\nModel config:\n- architecture: {'conv_layers': [{'filters': 32, 'kernel_size': 3, 'padding': 1, 'stride': 1}, {'filters': 64, 'kernel_size': 3, 'padding': 1, 'stride': 1}, {'filters': 128, 'kernel_size': 3, 'padding': 1, 'stride': 1}], 'dropout': 0.3, 'fc_layers': [256], 'pool_size': 2}\n- name: SimpleCNN\n\nTraining config (static fields):\n- batch_size: 128\n- device: auto\n- early_stopping_patience: 5\n- epochs: 10\n- learning_rate: 0.001\n- loss_function: label_smoothing_cross_entropy\n- optimizer: sgd\n- tunable_params: ['learning_rate', 'weight_class_0', 'weight_class_1', 'weight_class_2', 'weight_class_3', 'weight_class_4', 'weight_class_5', 'weight_class_6', 'weight_class_7', 'weight_class_8', 'weight_class_9']\n- validation_split: 0.1\n\nTraining metrics:\nTraining:\n- accuracy: 0.3013\n- precision: 0.3004\n- recall: 0.3013\n- f1: 0.3008\n- roc_auc: 0.7281\n- loss: 5.1422\nValidation:\n- accuracy: 0.4536\n- precision: 0.4676\n- recall: 0.4536\n- f1: 0.4526\n- roc_auc: 0.8579\n- loss: 1.4131"
+      }
+    }
+  ],
+  "previous_changes": [
+    "Augmentation Agent suggested using data augmentation strategy: flip",
+    "Adaptive Agent suggested adjusting training strategy: loss_function: label_smoothing_cross_entropy, optimizer: sgd",
+    "HPO Agent suggested adjusting hyperparameters: learning_rate: 0.01, weight_class_0: 1.2, weight_class_1: 1.1, weight_class_2: 1.0, weight_class_3: 1.0, weight_class_4: 1.1, weight_class_5: 1.0, weight_class_6: 1.2, weight_class_7: 1.0, weight_class_8: 1.1, weight_class_9: 1.0"
+  ],
+  "agent_full_prompts": {
+    "aug": {
+      "system_prompt": "You are a deep-learning model-training expert. Given the current training/validation metrics and the augmentation currently in use, decide which *single* augmentation from the list will most likely improve performance in the *next* epoch. Unless the provided metrics already show strong improvement with the current setup, you SHOULD choose an augmentation method *different* from the current one. Reply 'none' *only* when applying another augmentation would clearly degrade performance or is redundant. Respond with the method name only, without any explanation.",
+      "user_prompt": "Data type: image\nDataset: CIFAR10\nAvailable methods: rotation, shift, flip, scale, noise, contrast, none\n\nEpoch: None\nCurrent augmentation in use: none\nTrain dataset size: None\n\nLatest metrics (JSON):\n{\"train\": {\"accuracy\": 0.30134, \"precision\": 0.30044138608529, \"recall\": 0.30134, \"f1\": 0.30084185881638265, \"roc_auc\": 0.7281234246666667, \"loss\": 5.142210662212518}, \"val\": {\"accuracy\": 0.4536, \"precision\": 0.4675616498497111, \"recall\": 0.45360000000000006, \"f1\": 0.45260561780872954, \"roc_auc\": 0.8578607055555555, \"loss\": 1.4130540407156642}, \"epoch\": 0}\n\nChoose exactly one augmentation method (or 'none')."
+    },
+    "adaptive": {
+      "system_prompt": "You are a highly skilled ML practitioner specialising in optimising training strategies across diverse tasks.",
+      "user_prompt": "You are an expert machine-learning practitioner.\nAt the end of each epoch you will receive: (a) task type, (b) current loss\nfunction & optimizer, and (c) the latest training / validation metrics.\n\nYour job: Propose a *potentially better* pair of loss function **and** optimizer\nfor the **next** epoch. Respond with **exactly** `no change` (case-insensitive) **only** if you are absolutely certain the current combination is already optimal and cannot be improved.\nIn most cases you should suggest a new combination.\nReturn a single line in the format:\n`loss=<loss_function>, optimizer=<optimizer>` (comma-separated, no extras).\n\nDo NOT suggest learning-rate changes or any other hyper-parameters.\n\nTask type: classification\n\nPREVIOUS AGENT CHANGES:\nBefore you, other agents have made the following changes: Augmentation Agent suggested using data augmentation strategy: flip. Please consider the compatibility between your decisions before making your decision.\n\nCurrent loss function: focal\nCurrent optimizer: adamw\n\nRecent metrics (JSON):\n{\"train\": {\"accuracy\": 0.30134, \"precision\": 0.30044138608529, \"recall\": 0.30134, \"f1\": 0.30084185881638265, \"roc_auc\": 0.7281234246666667, \"loss\": 5.142210662212518}, \"val\": {\"accuracy\": 0.4536, \"precision\": 0.4675616498497111, \"recall\": 0.45360000000000006, \"f1\": 0.45260561780872954, \"roc_auc\": 0.8578607055555555, \"loss\": 1.4130540407156642}, \"epoch\": 0}\n\nDataset config: {'input_shape': [3, 32, 32], 'name': 'CIFAR10', 'num_classes': 10, 'path': 'data/cifar-10', 'test_transform': ['normalize'], 'train_transform': ['random_crop', 'random_flip', 'normalize']}\nModel config: {'architecture': {'conv_layers': [{'filters': 32, 'kernel_size': 3, 'padding': 1, 'stride': 1}, {'filters': 64, 'kernel_size': 3, 'padding': 1, 'stride': 1}, {'filters': 128, 'kernel_size': 3, 'padding': 1, 'stride': 1}], 'dropout': 0.3, 'fc_layers': [256], 'pool_size': 2}, 'name': 'SimpleCNN'}\n"
+    },
+    "hpo": {
+      "system_prompt": "You are a machine learning expert specializing in hyperparameter optimization.",
+      "user_prompt": "You are an expert ML trainer. Given the current parameters and metrics, evaluate the training status. Suggest precise changes in hyperparameters to improve training. Output changes in ONE of these formats:\n- ''\n- OR use multiple lines with 'param: value'\n- OR use multiple lines with 'param=value'\n- DO NOT use JSON format like {{'param': value}}\nIf no change needed, reply 'no change'.\n\n''. If no change needed, reply 'no change'.\n\n\nPREVIOUS AGENT CHANGES:\nBefore you, other agents have made the following changes: Augmentation Agent suggested using data augmentation strategy: flip; Adaptive Agent suggested adjusting training strategy: loss_function: label_smoothing_cross_entropy, optimizer: sgd. Please consider the compatibility between your decisions before making your decision.\nCurrent parameters:\n\nDataset config:\n- input_shape: [3, 32, 32]\n- name: CIFAR10\n- num_classes: 10\n- path: data/cifar-10\n- test_transform: ['normalize']\n- train_transform: ['random_crop', 'random_flip', 'normalize']\n\nModel config:\n- architecture: {'conv_layers': [{'filters': 32, 'kernel_size': 3, 'padding': 1, 'stride': 1}, {'filters': 64, 'kernel_size': 3, 'padding': 1, 'stride': 1}, {'filters': 128, 'kernel_size': 3, 'padding': 1, 'stride': 1}], 'dropout': 0.3, 'fc_layers': [256], 'pool_size': 2}\n- name: SimpleCNN\n\nTraining config (static fields):\n- batch_size: 128\n- device: auto\n- early_stopping_patience: 5\n- epochs: 10\n- learning_rate: 0.001\n- loss_function: label_smoothing_cross_entropy\n- optimizer: sgd\n- tunable_params: ['learning_rate', 'weight_class_0', 'weight_class_1', 'weight_class_2', 'weight_class_3', 'weight_class_4', 'weight_class_5', 'weight_class_6', 'weight_class_7', 'weight_class_8', 'weight_class_9']\n- validation_split: 0.1\n\nTraining metrics:\nTraining:\n- accuracy: 0.3013\n- precision: 0.3004\n- recall: 0.3013\n- f1: 0.3008\n- roc_auc: 0.7281\n- loss: 5.1422\nValidation:\n- accuracy: 0.4536\n- precision: 0.4676\n- recall: 0.4536\n- f1: 0.4526\n- roc_auc: 0.8579\n- loss: 1.4131"
+    }
+  }
+}
