@@ -1,0 +1,66 @@
+dataset:
+  batch_size: 64
+  name: TinyShakespeare
+  path: data/shakespeare/
+  sequence_length: 100
+  train_split: 0.9
+generation:
+  max_length: 1000
+  num_samples: 5
+  temperature: 1.0
+  top_k: 40
+  top_p: 0.9
+llm:
+  api_key: sk-b295897df8d7404a87a1ae9565e33bab
+  max_tokens: 4096
+  model: deepseek-chat
+  temperature: 0.2
+logging:
+  log_dir: shakespeare_log/baseline_20251030_183054
+  metrics:
+  - loss
+  - perplexity
+  - accuracy
+  - bleu
+  - character_error_rate
+  plot_metrics: true
+  sample_interval: 5
+  save_interval: 1
+  save_plots: true
+  save_samples: true
+model:
+  architecture:
+    bidirectional: false
+    dropout: 0.5
+    embedding_dim: 128
+    hidden_dim: 256
+    num_layers: 2
+  name: ShakespeareLSTM
+training:
+  batch_size: 64
+  clip_grad_norm: 5.0
+  device: auto
+  early_stopping_patience: 5
+  epochs: 10
+  learning_rate: 0.001
+  loss_function: cross_entropy
+  optimizer: adam
+  optimizer_params:
+    beta1: 0.9
+    beta2: 0.999
+    momentum: 0.9
+    weight_decay: 0.001
+  scheduler: cosine
+  scheduler_params:
+    T_max: 100
+    gamma: 0.5
+    step_size: 10
+  seed: 42
+  tunable_params:
+  - learning_rate
+  - hidden_dim
+  - num_layers
+  - embedding_dim
+  - dropout
+  - clip_grad_norm
+  - weight_decay

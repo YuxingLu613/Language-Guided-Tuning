@@ -13,6 +13,12 @@ AVAILABLE_AUGS = [
     # ---- Tabular specific ----
     "gaussian_noise",
     "feature_dropout",
+    # ---- Text specific ----
+    "synonym_replacement",
+    "random_deletion",
+    "random_swap",
+    "random_insertion",
+    "back_translation",
     "none",
 ]
 
@@ -71,6 +77,11 @@ class LLMAugmentationChooser:
             suitable_augs = [aug for aug in self.available_augs if aug in [
                 "gaussian_noise", "feature_dropout", "shift", "none"
             ]]
+        elif data_type == "text":
+            # 文本数据适合的增强方法
+            suitable_augs = [aug for aug in self.available_augs if aug in [
+                "synonym_replacement", "random_deletion", "random_swap", "random_insertion", "back_translation", "none"
+            ]]
         else:
             # 未知数据类型，使用所有可用的增强方法
             suitable_augs = self.available_augs
@@ -126,3 +137,4 @@ class LLMAugmentationChooser:
             return "none", False
         choice, use_aug = self._parse(reply)
         return choice, use_aug
+

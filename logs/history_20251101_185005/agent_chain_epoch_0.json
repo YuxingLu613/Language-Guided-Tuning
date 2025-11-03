@@ -1,0 +1,65 @@
+{
+  "enabled_agents": [
+    "aug",
+    "adaptive",
+    "hpo"
+  ],
+  "logs": [
+    {
+      "agent": "aug",
+      "suggestion": "synonym_replacement",
+      "params": null,
+      "should_use": true,
+      "full_prompt": {
+        "system_prompt": "You are a deep-learning model-training expert. Given the current training/validation metrics and the augmentation currently in use, decide which *single* augmentation from the list will most likely improve performance in the *next* epoch. Unless the provided metrics already show strong improvement with the current setup, you SHOULD choose an augmentation method *different* from the current one. Reply 'none' *only* when applying another augmentation would clearly degrade performance or is redundant. Respond with the method name only, without any explanation.",
+        "user_prompt": "Data type: text\nDataset: TinyShakespeare\nAvailable methods: synonym_replacement, random_deletion, random_swap, random_insertion, back_translation, none\n\nEpoch: None\nCurrent augmentation in use: none\nTrain dataset size: None\n\nLatest metrics (JSON):\n{\"train\": {\"loss\": 1.9071170216021331}, \"val\": {\"loss\": 1.4200150184333324, \"perplexity\": 4.137182573785486, \"accuracy\": 0.5768257464512971, \"bleu\": 0, \"character_error_rate\": 1}, \"epoch\": 0}\n\nChoose exactly one augmentation method (or 'none')."
+      }
+    },
+    {
+      "agent": "strategy",
+      "suggestion": "loss=label_smoothing_language, optimizer=adamw",
+      "params": {
+        "loss_function": "label_smoothing_language",
+        "optimizer": "adamw"
+      },
+      "previous_context": "Before you, other agents have made the following changes: Augmentation Agent suggested using data augmentation strategy: synonym_replacement. Please consider the compatibility between your decisions before making your decision.",
+      "full_prompt": {
+        "system_prompt": "You are a highly skilled ML practitioner specialising in optimising training strategies across diverse tasks.",
+        "user_prompt": "You are an expert machine-learning practitioner.\nAt the end of each epoch you will receive: (a) task type, (b) current loss\nfunction & optimizer, and (c) the latest training / validation metrics.\n\nYour job: Propose a *potentially better* pair of loss function **and** optimizer\nfor the **next** epoch. Respond with **exactly** `no change` (case-insensitive) **only** if you are absolutely certain the current combination is already optimal and cannot be improved.\nIn most cases you should suggest a new combination.\nReturn a single line in the format:\n`loss=<loss_function>, optimizer=<optimizer>` (comma-separated, no extras).\n\nDo NOT suggest learning-rate changes or any other hyper-parameters.\n\nTask type: language_generation\n\nFor language generation tasks, consider these specialized options:\n- Loss functions: perplexity, language_cross_entropy, label_smoothing_language\n- Optimizers: adam, adamw, adafactor (specialized for language models)\n\n\nPREVIOUS AGENT CHANGES:\nBefore you, other agents have made the following changes: Augmentation Agent suggested using data augmentation strategy: synonym_replacement. Please consider the compatibility between your decisions before making your decision.\n\nCurrent loss function: cross_entropy\nCurrent optimizer: adam\n\nRecent metrics (JSON):\n{\"train\": {\"loss\": 1.9071170216021331}, \"val\": {\"loss\": 1.4200150184333324, \"perplexity\": 4.137182573785486, \"accuracy\": 0.5768257464512971, \"bleu\": 0, \"character_error_rate\": 1}, \"epoch\": 0}\n\nDataset config: {'name': 'TinyShakespeare', 'path': 'data/shakespeare/', 'sequence_length': 100, 'batch_size': 64, 'train_split': 0.9}\nModel config: {'name': 'ShakespeareLSTM', 'architecture': {'embedding_dim': 256, 'hidden_dim': 512, 'num_layers': 2, 'dropout': 0.5, 'bidirectional': False}}\n"
+      }
+    },
+    {
+      "agent": "hpo",
+      "suggestion": "learning_rate: 0.0005\ndropout: 0.3\nclip_grad_norm: 3.0\n\nThe validation loss (1.4200) is significantly lower than training loss (1.9071), suggesting potential overfitting despite the dropout of 0.5. Reducing dropout to 0.3 and learning rate to 0.0005 will help with convergence stability. The gradient clipping at 3.0 will provide more aggressive gradient control during training. The current optimizer (adamw) and loss function (label_smoothing_language) remain appropriate given the previous agent recommendations.",
+      "params": {
+        "learning_rate": 0.0005,
+        "dropout": 0.3,
+        "clip_grad_norm": 3.0
+      },
+      "previous_context": "Before you, other agents have made the following changes: Augmentation Agent suggested using data augmentation strategy: synonym_replacement; Adaptive Agent suggested adjusting training strategy: loss_function: label_smoothing_language, optimizer: adamw. Please consider the compatibility between your decisions before making your decision.",
+      "full_prompt": {
+        "system_prompt": "You are a machine learning expert specializing in hyperparameter optimization.",
+        "user_prompt": "You are an expert ML trainer. Given the current parameters and metrics, evaluate the training status. Suggest precise changes in hyperparameters to improve training. Output changes in ONE of these formats:\n- ''\n- OR use multiple lines with 'param: value'\n- OR use multiple lines with 'param=value'\n- DO NOT use JSON format like {{'param': value}}\nIf no change needed, reply 'no change'.\n\n''. If no change needed, reply 'no change'.\n\n\nPREVIOUS AGENT CHANGES:\nBefore you, other agents have made the following changes: Augmentation Agent suggested using data augmentation strategy: synonym_replacement; Adaptive Agent suggested adjusting training strategy: loss_function: label_smoothing_language, optimizer: adamw. Please consider the compatibility between your decisions before making your decision.\nCurrent parameters:\n\nDataset config:\n- name: TinyShakespeare\n- path: data/shakespeare/\n- sequence_length: 100\n- batch_size: 64\n- train_split: 0.9\n\nModel config:\n- name: ShakespeareLSTM\n- architecture: {'embedding_dim': 256, 'hidden_dim': 512, 'num_layers': 2, 'dropout': 0.5, 'bidirectional': False}\n\nTraining config (static fields):\n- batch_size: 64\n- learning_rate: 0.001\n- optimizer: adamw\n- optimizer_params: {'weight_decay': 0.001, 'momentum': 0.9, 'beta1': 0.9, 'beta2': 0.999}\n- scheduler: cosine\n- scheduler_params: {'step_size': 10, 'gamma': 0.5, 'T_max': 100}\n- epochs: 10\n- early_stopping_patience: 5\n- clip_grad_norm: 5.0\n- device: auto\n- loss_function: label_smoothing_language\n- seed: 42\n- tunable_params: ['learning_rate', 'hidden_dim', 'num_layers', 'embedding_dim', 'dropout', 'clip_grad_norm', 'weight_decay']\n\nTraining metrics:\nTraining:\n- loss: 1.9071\nValidation:\n- loss: 1.4200\n- perplexity: 4.1372\n- accuracy: 0.5768\n- bleu: 0.0000\n- character_error_rate: 1.0000"
+      }
+    }
+  ],
+  "previous_changes": [
+    "Augmentation Agent suggested using data augmentation strategy: synonym_replacement",
+    "Adaptive Agent suggested adjusting training strategy: loss_function: label_smoothing_language, optimizer: adamw",
+    "HPO Agent suggested adjusting hyperparameters: learning_rate: 0.0005, dropout: 0.3, clip_grad_norm: 3.0"
+  ],
+  "agent_full_prompts": {
+    "aug": {
+      "system_prompt": "You are a deep-learning model-training expert. Given the current training/validation metrics and the augmentation currently in use, decide which *single* augmentation from the list will most likely improve performance in the *next* epoch. Unless the provided metrics already show strong improvement with the current setup, you SHOULD choose an augmentation method *different* from the current one. Reply 'none' *only* when applying another augmentation would clearly degrade performance or is redundant. Respond with the method name only, without any explanation.",
+      "user_prompt": "Data type: text\nDataset: TinyShakespeare\nAvailable methods: synonym_replacement, random_deletion, random_swap, random_insertion, back_translation, none\n\nEpoch: None\nCurrent augmentation in use: none\nTrain dataset size: None\n\nLatest metrics (JSON):\n{\"train\": {\"loss\": 1.9071170216021331}, \"val\": {\"loss\": 1.4200150184333324, \"perplexity\": 4.137182573785486, \"accuracy\": 0.5768257464512971, \"bleu\": 0, \"character_error_rate\": 1}, \"epoch\": 0}\n\nChoose exactly one augmentation method (or 'none')."
+    },
+    "adaptive": {
+      "system_prompt": "You are a highly skilled ML practitioner specialising in optimising training strategies across diverse tasks.",
+      "user_prompt": "You are an expert machine-learning practitioner.\nAt the end of each epoch you will receive: (a) task type, (b) current loss\nfunction & optimizer, and (c) the latest training / validation metrics.\n\nYour job: Propose a *potentially better* pair of loss function **and** optimizer\nfor the **next** epoch. Respond with **exactly** `no change` (case-insensitive) **only** if you are absolutely certain the current combination is already optimal and cannot be improved.\nIn most cases you should suggest a new combination.\nReturn a single line in the format:\n`loss=<loss_function>, optimizer=<optimizer>` (comma-separated, no extras).\n\nDo NOT suggest learning-rate changes or any other hyper-parameters.\n\nTask type: language_generation\n\nFor language generation tasks, consider these specialized options:\n- Loss functions: perplexity, language_cross_entropy, label_smoothing_language\n- Optimizers: adam, adamw, adafactor (specialized for language models)\n\n\nPREVIOUS AGENT CHANGES:\nBefore you, other agents have made the following changes: Augmentation Agent suggested using data augmentation strategy: synonym_replacement. Please consider the compatibility between your decisions before making your decision.\n\nCurrent loss function: cross_entropy\nCurrent optimizer: adam\n\nRecent metrics (JSON):\n{\"train\": {\"loss\": 1.9071170216021331}, \"val\": {\"loss\": 1.4200150184333324, \"perplexity\": 4.137182573785486, \"accuracy\": 0.5768257464512971, \"bleu\": 0, \"character_error_rate\": 1}, \"epoch\": 0}\n\nDataset config: {'name': 'TinyShakespeare', 'path': 'data/shakespeare/', 'sequence_length': 100, 'batch_size': 64, 'train_split': 0.9}\nModel config: {'name': 'ShakespeareLSTM', 'architecture': {'embedding_dim': 256, 'hidden_dim': 512, 'num_layers': 2, 'dropout': 0.5, 'bidirectional': False}}\n"
+    },
+    "hpo": {
+      "system_prompt": "You are a machine learning expert specializing in hyperparameter optimization.",
+      "user_prompt": "You are an expert ML trainer. Given the current parameters and metrics, evaluate the training status. Suggest precise changes in hyperparameters to improve training. Output changes in ONE of these formats:\n- ''\n- OR use multiple lines with 'param: value'\n- OR use multiple lines with 'param=value'\n- DO NOT use JSON format like {{'param': value}}\nIf no change needed, reply 'no change'.\n\n''. If no change needed, reply 'no change'.\n\n\nPREVIOUS AGENT CHANGES:\nBefore you, other agents have made the following changes: Augmentation Agent suggested using data augmentation strategy: synonym_replacement; Adaptive Agent suggested adjusting training strategy: loss_function: label_smoothing_language, optimizer: adamw. Please consider the compatibility between your decisions before making your decision.\nCurrent parameters:\n\nDataset config:\n- name: TinyShakespeare\n- path: data/shakespeare/\n- sequence_length: 100\n- batch_size: 64\n- train_split: 0.9\n\nModel config:\n- name: ShakespeareLSTM\n- architecture: {'embedding_dim': 256, 'hidden_dim': 512, 'num_layers': 2, 'dropout': 0.5, 'bidirectional': False}\n\nTraining config (static fields):\n- batch_size: 64\n- learning_rate: 0.001\n- optimizer: adamw\n- optimizer_params: {'weight_decay': 0.001, 'momentum': 0.9, 'beta1': 0.9, 'beta2': 0.999}\n- scheduler: cosine\n- scheduler_params: {'step_size': 10, 'gamma': 0.5, 'T_max': 100}\n- epochs: 10\n- early_stopping_patience: 5\n- clip_grad_norm: 5.0\n- device: auto\n- loss_function: label_smoothing_language\n- seed: 42\n- tunable_params: ['learning_rate', 'hidden_dim', 'num_layers', 'embedding_dim', 'dropout', 'clip_grad_norm', 'weight_decay']\n\nTraining metrics:\nTraining:\n- loss: 1.9071\nValidation:\n- loss: 1.4200\n- perplexity: 4.1372\n- accuracy: 0.5768\n- bleu: 0.0000\n- character_error_rate: 1.0000"
+    }
+  }
+}

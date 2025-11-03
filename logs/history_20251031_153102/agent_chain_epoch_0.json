@@ -1,0 +1,50 @@
+{
+  "enabled_agents": [
+    "adaptive",
+    "hpo"
+  ],
+  "logs": [
+    {
+      "agent": "strategy",
+      "suggestion": "loss=mse, optimizer=sgd",
+      "params": {
+        "loss_function": "mse",
+        "optimizer": "sgd"
+      },
+      "previous_context": "",
+      "full_prompt": {
+        "system_prompt": "You are a highly skilled ML practitioner specialising in optimising training strategies across diverse tasks.",
+        "user_prompt": "You are an expert machine-learning practitioner.\nAt the end of each epoch you will receive: (a) task type, (b) current loss\nfunction & optimizer, and (c) the latest training / validation metrics.\n\nYour job: Propose a *potentially better* pair of loss function **and** optimizer\nfor the **next** epoch. Respond with **exactly** `no change` (case-insensitive) **only** if you are absolutely certain the current combination is already optimal and cannot be improved.\nIn most cases you should suggest a new combination.\nReturn a single line in the format:\n`loss=<loss_function>, optimizer=<optimizer>` (comma-separated, no extras).\n\nDo NOT suggest learning-rate changes or any other hyper-parameters.\n\nTask type: regression\nCurrent loss function: cross_entropy\nCurrent optimizer: adam\n\nRecent metrics (JSON):\n{\"train\": {\"loss\": 1.9071170216021331, \"perplexity\": 6.733647826822385, \"accuracy\": 0.4496211997607005}, \"val\": {\"loss\": 1.4200150184333324, \"perplexity\": 4.137182573785486, \"accuracy\": 0.5768257464512971, \"bleu\": 0.8246774569056485, \"character_error_rate\": 0.20421874999999998}, \"epoch\": 0}\n\nDataset config: {'name': 'TinyShakespeare', 'path': 'data/shakespeare/', 'sequence_length': 100, 'batch_size': 64, 'train_split': 0.9}\nModel config: {'name': 'ShakespeareLSTM', 'architecture': {'embedding_dim': 256, 'hidden_dim': 512, 'num_layers': 2, 'dropout': 0.5, 'bidirectional': False}}\n"
+      }
+    },
+    {
+      "agent": "hpo",
+      "suggestion": "learning_rate: 0.01\noptimizer: adam\nmomentum: 0.0\nbeta1: 0.9\nbeta2: 0.999",
+      "params": {
+        "learning_rate": 0.01,
+        "momentum": 0.0,
+        "beta1": 0.9,
+        "beta2": 0.999
+      },
+      "previous_context": "Before you, other agents have made the following changes: Adaptive Agent suggested adjusting training strategy: loss_function: mse, optimizer: sgd. Please consider the compatibility between your decisions before making your decision.",
+      "full_prompt": {
+        "system_prompt": "You are a machine learning expert specializing in hyperparameter optimization.",
+        "user_prompt": "You are an expert ML trainer. Given the current parameters and metrics, evaluate the training status. Suggest precise changes in hyperparameters to improve training. Output changes in ONE of these formats:\n- ''\n- OR use multiple lines with 'param: value'\n- OR use multiple lines with 'param=value'\n- DO NOT use JSON format like {{'param': value}}\nIf no change needed, reply 'no change'.\n\n''. If no change needed, reply 'no change'.\n\n\nPREVIOUS AGENT CHANGES:\nBefore you, other agents have made the following changes: Adaptive Agent suggested adjusting training strategy: loss_function: mse, optimizer: sgd. Please consider the compatibility between your decisions before making your decision.\nCurrent parameters:\n\nDataset config:\n- name: TinyShakespeare\n- path: data/shakespeare/\n- sequence_length: 100\n- batch_size: 64\n- train_split: 0.9\n\nModel config:\n- name: ShakespeareLSTM\n- architecture: {'embedding_dim': 256, 'hidden_dim': 512, 'num_layers': 2, 'dropout': 0.5, 'bidirectional': False}\n\nTraining config (static fields):\n- batch_size: 64\n- learning_rate: 0.001\n- optimizer: sgd\n- optimizer_params: {'weight_decay': 0.001, 'momentum': 0.9, 'beta1': 0.9, 'beta2': 0.999}\n- scheduler: cosine\n- scheduler_params: {'step_size': 10, 'gamma': 0.5, 'T_max': 100}\n- epochs: 10\n- early_stopping_patience: 5\n- clip_grad_norm: 5.0\n- device: auto\n- loss_function: mse\n- seed: 42\n- tunable_params: ['learning_rate', 'hidden_dim', 'num_layers', 'embedding_dim', 'dropout', 'clip_grad_norm', 'weight_decay']\n\nTraining metrics:\nTraining:\n- loss: 1.9071\n- perplexity: 6.7336\n- accuracy: 0.4496\nValidation:\n- loss: 1.4200\n- perplexity: 4.1372\n- accuracy: 0.5768\n- bleu: 0.8247\n- character_error_rate: 0.2042"
+      }
+    }
+  ],
+  "previous_changes": [
+    "Adaptive Agent suggested adjusting training strategy: loss_function: mse, optimizer: sgd",
+    "HPO Agent suggested adjusting hyperparameters: learning_rate: 0.01, momentum: 0.0, beta1: 0.9, beta2: 0.999"
+  ],
+  "agent_full_prompts": {
+    "adaptive": {
+      "system_prompt": "You are a highly skilled ML practitioner specialising in optimising training strategies across diverse tasks.",
+      "user_prompt": "You are an expert machine-learning practitioner.\nAt the end of each epoch you will receive: (a) task type, (b) current loss\nfunction & optimizer, and (c) the latest training / validation metrics.\n\nYour job: Propose a *potentially better* pair of loss function **and** optimizer\nfor the **next** epoch. Respond with **exactly** `no change` (case-insensitive) **only** if you are absolutely certain the current combination is already optimal and cannot be improved.\nIn most cases you should suggest a new combination.\nReturn a single line in the format:\n`loss=<loss_function>, optimizer=<optimizer>` (comma-separated, no extras).\n\nDo NOT suggest learning-rate changes or any other hyper-parameters.\n\nTask type: regression\nCurrent loss function: cross_entropy\nCurrent optimizer: adam\n\nRecent metrics (JSON):\n{\"train\": {\"loss\": 1.9071170216021331, \"perplexity\": 6.733647826822385, \"accuracy\": 0.4496211997607005}, \"val\": {\"loss\": 1.4200150184333324, \"perplexity\": 4.137182573785486, \"accuracy\": 0.5768257464512971, \"bleu\": 0.8246774569056485, \"character_error_rate\": 0.20421874999999998}, \"epoch\": 0}\n\nDataset config: {'name': 'TinyShakespeare', 'path': 'data/shakespeare/', 'sequence_length': 100, 'batch_size': 64, 'train_split': 0.9}\nModel config: {'name': 'ShakespeareLSTM', 'architecture': {'embedding_dim': 256, 'hidden_dim': 512, 'num_layers': 2, 'dropout': 0.5, 'bidirectional': False}}\n"
+    },
+    "hpo": {
+      "system_prompt": "You are a machine learning expert specializing in hyperparameter optimization.",
+      "user_prompt": "You are an expert ML trainer. Given the current parameters and metrics, evaluate the training status. Suggest precise changes in hyperparameters to improve training. Output changes in ONE of these formats:\n- ''\n- OR use multiple lines with 'param: value'\n- OR use multiple lines with 'param=value'\n- DO NOT use JSON format like {{'param': value}}\nIf no change needed, reply 'no change'.\n\n''. If no change needed, reply 'no change'.\n\n\nPREVIOUS AGENT CHANGES:\nBefore you, other agents have made the following changes: Adaptive Agent suggested adjusting training strategy: loss_function: mse, optimizer: sgd. Please consider the compatibility between your decisions before making your decision.\nCurrent parameters:\n\nDataset config:\n- name: TinyShakespeare\n- path: data/shakespeare/\n- sequence_length: 100\n- batch_size: 64\n- train_split: 0.9\n\nModel config:\n- name: ShakespeareLSTM\n- architecture: {'embedding_dim': 256, 'hidden_dim': 512, 'num_layers': 2, 'dropout': 0.5, 'bidirectional': False}\n\nTraining config (static fields):\n- batch_size: 64\n- learning_rate: 0.001\n- optimizer: sgd\n- optimizer_params: {'weight_decay': 0.001, 'momentum': 0.9, 'beta1': 0.9, 'beta2': 0.999}\n- scheduler: cosine\n- scheduler_params: {'step_size': 10, 'gamma': 0.5, 'T_max': 100}\n- epochs: 10\n- early_stopping_patience: 5\n- clip_grad_norm: 5.0\n- device: auto\n- loss_function: mse\n- seed: 42\n- tunable_params: ['learning_rate', 'hidden_dim', 'num_layers', 'embedding_dim', 'dropout', 'clip_grad_norm', 'weight_decay']\n\nTraining metrics:\nTraining:\n- loss: 1.9071\n- perplexity: 6.7336\n- accuracy: 0.4496\nValidation:\n- loss: 1.4200\n- perplexity: 4.1372\n- accuracy: 0.5768\n- bleu: 0.8247\n- character_error_rate: 0.2042"
+    }
+  }
+}

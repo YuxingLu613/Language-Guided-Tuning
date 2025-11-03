@@ -1,0 +1,1282 @@
+{
+  "epochs": 10,
+  "flags": {
+    "use_adaptive_agent": true,
+    "use_hpo_agent": true
+  },
+  "outcomes": [
+    {
+      "epoch": 0,
+      "flags": {
+        "use_adaptive_agent": true,
+        "use_hpo_agent": true
+      },
+      "use_optimized": false,
+      "judger_reason": "Epoch 0: 直接训练，不进行优化",
+      "final_metrics": {
+        "train": {
+          "loss": 1.9071170216021331,
+          "perplexity": 6.733647826822385,
+          "accuracy": 0.4496211997607005
+        },
+        "val": {
+          "loss": 1.4200150184333324,
+          "perplexity": 4.137182573785486,
+          "accuracy": 0.5768257464512971,
+          "bleu": 0.8246774569056485,
+          "character_error_rate": 0.20421874999999998
+        },
+        "epoch": 0
+      },
+      "final_config": {
+        "dataset": {
+          "name": "TinyShakespeare",
+          "path": "data/shakespeare/",
+          "sequence_length": 100,
+          "batch_size": 64,
+          "train_split": 0.9
+        },
+        "model": {
+          "name": "ShakespeareLSTM",
+          "architecture": {
+            "embedding_dim": 256,
+            "hidden_dim": 512,
+            "num_layers": 2,
+            "dropout": 0.5,
+            "bidirectional": false
+          }
+        },
+        "training": {
+          "batch_size": 64,
+          "learning_rate": 0.001,
+          "optimizer": "adam",
+          "optimizer_params": {
+            "weight_decay": 0.001,
+            "momentum": 0.9,
+            "beta1": 0.9,
+            "beta2": 0.999
+          },
+          "scheduler": "cosine",
+          "scheduler_params": {
+            "step_size": 10,
+            "gamma": 0.5,
+            "T_max": 100
+          },
+          "epochs": 10,
+          "early_stopping_patience": 5,
+          "clip_grad_norm": 5.0,
+          "device": "auto",
+          "loss_function": "cross_entropy",
+          "seed": 42,
+          "tunable_params": [
+            "learning_rate",
+            "hidden_dim",
+            "num_layers",
+            "embedding_dim",
+            "dropout",
+            "clip_grad_norm",
+            "weight_decay"
+          ]
+        },
+        "generation": {
+          "temperature": 1.0,
+          "max_length": 1000,
+          "top_k": 40,
+          "top_p": 0.9,
+          "num_samples": 5
+        },
+        "llm": {
+          "model": "deepseek-chat",
+          "api_key": "sk-b295897df8d7404a87a1ae9565e33bab",
+          "temperature": 0.2,
+          "max_tokens": 4096
+        },
+        "logging": {
+          "log_dir": "shakespeare_log/multi_agent_20251031_135818",
+          "save_interval": 1,
+          "metrics": [
+            "loss",
+            "perplexity",
+            "accuracy",
+            "bleu",
+            "character_error_rate"
+          ],
+          "plot_metrics": true,
+          "save_plots": true,
+          "save_samples": true,
+          "sample_interval": 5
+        }
+      }
+    },
+    {
+      "epoch": 1,
+      "flags": {
+        "use_adaptive_agent": true,
+        "use_hpo_agent": true
+      },
+      "use_optimized": false,
+      "judger_reason": "优化后的配置在1/5个指标上有改进。\nLoss: 未改进 (1.4200150184333324 -> 1.4206512235105038)\nPerplexity: 未改进 (4.137182573785486 -> 4.139815507798298)\nAccuracy: 改进 (0.5768257464512971 -> 0.5867327459618209)\nBLEU: 未改进 (0.8246774569056485 -> 0.8242417654159844)\nCER: 未改进 (0.20421874999999998 -> 0.20484375)\n",
+      "judger_guidance": "\nADAPTIVE_AGENT_SUGGESTION:\n当前的训练策略效果不佳，请考虑更激进的调整。尝试调整学习率调度器、增加梯度裁剪阈值或改变优化器类型。\n\nHPO_AGENT_SUGGESTION:\n当前的超参数配置未能带来显著改进。请尝试更大范围的超参数调整，特别是学习率、隐藏层维度和dropout比例。考虑增加或减少模型复杂度。\n            ",
+      "agent_logs": [
+        {
+          "agent": "adaptive",
+          "suggestion": "调整学习率调度器和优化器参数",
+          "params": {
+            "learning_rate": 0.0008,
+            "scheduler": "cosine",
+            "scheduler_params": {
+              "T_max": 50
+            }
+          },
+          "previous_context": ""
+        },
+        {
+          "agent": "hpo",
+          "suggestion": "调整模型超参数",
+          "params": {
+            "clip_grad_norm": 1.0,
+            "optimizer_params": {
+              "weight_decay": 0.0005
+            }
+          },
+          "previous_context": "之前的agent已做出以下变更: Adaptive Agent建议调整训练策略: learning_rate: 0.0008, scheduler: cosine, scheduler_params: {'T_max': 50}。请在做决策时考虑兼容性。"
+        }
+      ],
+      "agent_log_file": "shakespeare_log/multi_agent_20251031_135818/agent_chain_epoch_0.json",
+      "final_metrics": {
+        "train": {
+          "loss": 1.4036730507145758,
+          "perplexity": 4.070122310466276,
+          "accuracy": 0.57937129493664
+        },
+        "val": {
+          "loss": 1.0186328487470746,
+          "perplexity": 2.769405977780163,
+          "accuracy": 0.6986784140969163,
+          "bleu": 0.8246167175016751,
+          "character_error_rate": 0.20409375000000002
+        },
+        "epoch": 1
+      },
+      "final_config": {
+        "dataset": {
+          "name": "TinyShakespeare",
+          "path": "data/shakespeare/",
+          "sequence_length": 100,
+          "batch_size": 64,
+          "train_split": 0.9
+        },
+        "model": {
+          "name": "ShakespeareLSTM",
+          "architecture": {
+            "embedding_dim": 256,
+            "hidden_dim": 512,
+            "num_layers": 2,
+            "dropout": 0.5,
+            "bidirectional": false
+          }
+        },
+        "training": {
+          "batch_size": 64,
+          "learning_rate": 0.001,
+          "optimizer": "adam",
+          "optimizer_params": {
+            "weight_decay": 0.001,
+            "momentum": 0.9,
+            "beta1": 0.9,
+            "beta2": 0.999
+          },
+          "scheduler": "cosine",
+          "scheduler_params": {
+            "step_size": 10,
+            "gamma": 0.5,
+            "T_max": 100
+          },
+          "epochs": 10,
+          "early_stopping_patience": 5,
+          "clip_grad_norm": 5.0,
+          "device": "auto",
+          "loss_function": "cross_entropy",
+          "seed": 42,
+          "tunable_params": [
+            "learning_rate",
+            "hidden_dim",
+            "num_layers",
+            "embedding_dim",
+            "dropout",
+            "clip_grad_norm",
+            "weight_decay"
+          ]
+        },
+        "generation": {
+          "temperature": 1.0,
+          "max_length": 1000,
+          "top_k": 40,
+          "top_p": 0.9,
+          "num_samples": 5
+        },
+        "llm": {
+          "model": "deepseek-chat",
+          "api_key": "sk-b295897df8d7404a87a1ae9565e33bab",
+          "temperature": 0.2,
+          "max_tokens": 4096
+        },
+        "logging": {
+          "log_dir": "shakespeare_log/multi_agent_20251031_135818",
+          "save_interval": 1,
+          "metrics": [
+            "loss",
+            "perplexity",
+            "accuracy",
+            "bleu",
+            "character_error_rate"
+          ],
+          "plot_metrics": true,
+          "save_plots": true,
+          "save_samples": true,
+          "sample_interval": 5
+        }
+      }
+    },
+    {
+      "epoch": 2,
+      "flags": {
+        "use_adaptive_agent": true,
+        "use_hpo_agent": true
+      },
+      "use_optimized": false,
+      "judger_reason": "优化后的配置在0/5个指标上有改进。\nLoss: 未改进 (1.0186328487470746 -> 1.5830395463854074)\nPerplexity: 未改进 (2.769405977780163 -> 4.869735124450177)\nAccuracy: 未改进 (0.6986784140969163 -> 0.551813509544787)\nBLEU: 未改进 (0.8246167175016751 -> 0.8243853906687825)\nCER: 未改进 (0.20409375000000002 -> 0.20431249999999998)\n",
+      "judger_guidance": "\nADAPTIVE_AGENT_SUGGESTION:\n当前的训练策略效果不佳，请考虑更激进的调整。尝试调整学习率调度器、增加梯度裁剪阈值或改变优化器类型。\n\nHPO_AGENT_SUGGESTION:\n当前的超参数配置未能带来显著改进。请尝试更大范围的超参数调整，特别是学习率、隐藏层维度和dropout比例。考虑增加或减少模型复杂度。\n            ",
+      "agent_logs": [
+        {
+          "agent": "adaptive",
+          "suggestion": "调整学习率调度器和优化器参数",
+          "params": {
+            "learning_rate": 0.0008,
+            "scheduler": "cosine",
+            "scheduler_params": {
+              "T_max": 50
+            }
+          },
+          "previous_context": ""
+        },
+        {
+          "agent": "hpo",
+          "suggestion": "调整模型超参数",
+          "params": {
+            "clip_grad_norm": 1.0,
+            "optimizer_params": {
+              "weight_decay": 0.0005
+            }
+          },
+          "previous_context": "之前的agent已做出以下变更: Adaptive Agent建议调整训练策略: learning_rate: 0.0008, scheduler: cosine, scheduler_params: {'T_max': 50}。请在做决策时考虑兼容性。"
+        }
+      ],
+      "agent_log_file": "shakespeare_log/multi_agent_20251031_135818/agent_chain_epoch_1.json",
+      "final_metrics": {
+        "train": {
+          "loss": 1.0860686832925548,
+          "perplexity": 2.962604213195676,
+          "accuracy": 0.6723881002882471
+        },
+        "val": {
+          "loss": 0.7093783114105463,
+          "perplexity": 2.0327271424742164,
+          "accuracy": 0.8005580029368575,
+          "bleu": 0.8248362502561136,
+          "character_error_rate": 0.20424999999999996
+        },
+        "epoch": 2
+      },
+      "final_config": {
+        "dataset": {
+          "name": "TinyShakespeare",
+          "path": "data/shakespeare/",
+          "sequence_length": 100,
+          "batch_size": 64,
+          "train_split": 0.9
+        },
+        "model": {
+          "name": "ShakespeareLSTM",
+          "architecture": {
+            "embedding_dim": 256,
+            "hidden_dim": 512,
+            "num_layers": 2,
+            "dropout": 0.5,
+            "bidirectional": false
+          }
+        },
+        "training": {
+          "batch_size": 64,
+          "learning_rate": 0.001,
+          "optimizer": "adam",
+          "optimizer_params": {
+            "weight_decay": 0.001,
+            "momentum": 0.9,
+            "beta1": 0.9,
+            "beta2": 0.999
+          },
+          "scheduler": "cosine",
+          "scheduler_params": {
+            "step_size": 10,
+            "gamma": 0.5,
+            "T_max": 100
+          },
+          "epochs": 10,
+          "early_stopping_patience": 5,
+          "clip_grad_norm": 5.0,
+          "device": "auto",
+          "loss_function": "cross_entropy",
+          "seed": 42,
+          "tunable_params": [
+            "learning_rate",
+            "hidden_dim",
+            "num_layers",
+            "embedding_dim",
+            "dropout",
+            "clip_grad_norm",
+            "weight_decay"
+          ]
+        },
+        "generation": {
+          "temperature": 1.0,
+          "max_length": 1000,
+          "top_k": 40,
+          "top_p": 0.9,
+          "num_samples": 5
+        },
+        "llm": {
+          "model": "deepseek-chat",
+          "api_key": "sk-b295897df8d7404a87a1ae9565e33bab",
+          "temperature": 0.2,
+          "max_tokens": 4096
+        },
+        "logging": {
+          "log_dir": "shakespeare_log/multi_agent_20251031_135818",
+          "save_interval": 1,
+          "metrics": [
+            "loss",
+            "perplexity",
+            "accuracy",
+            "bleu",
+            "character_error_rate"
+          ],
+          "plot_metrics": true,
+          "save_plots": true,
+          "save_samples": true,
+          "sample_interval": 5
+        }
+      }
+    },
+    {
+      "epoch": 3,
+      "flags": {
+        "use_adaptive_agent": true,
+        "use_hpo_agent": true
+      },
+      "use_optimized": false,
+      "judger_reason": "优化后的配置在1/5个指标上有改进。\nLoss: 未改进 (0.7093783114105463 -> 1.5124031621962786)\nPerplexity: 未改进 (2.0327271424742164 -> 4.537622344470948)\nAccuracy: 未改进 (0.8005580029368575 -> 0.5855090553108174)\nBLEU: 未改进 (0.8248362502561136 -> 0.8244499387778632)\nCER: 改进 (0.20424999999999996 -> 0.20393749999999997)\n",
+      "judger_guidance": "\nADAPTIVE_AGENT_SUGGESTION:\n当前的训练策略效果不佳，请考虑更激进的调整。尝试调整学习率调度器、增加梯度裁剪阈值或改变优化器类型。\n\nHPO_AGENT_SUGGESTION:\n当前的超参数配置未能带来显著改进。请尝试更大范围的超参数调整，特别是学习率、隐藏层维度和dropout比例。考虑增加或减少模型复杂度。\n            ",
+      "agent_logs": [
+        {
+          "agent": "adaptive",
+          "suggestion": "调整学习率调度器和优化器参数",
+          "params": {
+            "learning_rate": 0.0008,
+            "scheduler": "cosine",
+            "scheduler_params": {
+              "T_max": 50
+            }
+          },
+          "previous_context": ""
+        },
+        {
+          "agent": "hpo",
+          "suggestion": "调整模型超参数",
+          "params": {
+            "clip_grad_norm": 1.0,
+            "optimizer_params": {
+              "weight_decay": 0.0005
+            }
+          },
+          "previous_context": "之前的agent已做出以下变更: Adaptive Agent建议调整训练策略: learning_rate: 0.0008, scheduler: cosine, scheduler_params: {'T_max': 50}。请在做决策时考虑兼容性。"
+        }
+      ],
+      "agent_log_file": "shakespeare_log/multi_agent_20251031_135818/agent_chain_epoch_2.json",
+      "final_metrics": {
+        "train": {
+          "loss": 0.8659104424974192,
+          "perplexity": 2.3771693770760596,
+          "accuracy": 0.7386446946211997
+        },
+        "val": {
+          "loss": 0.5554795004427433,
+          "perplexity": 1.7427764465336415,
+          "accuracy": 0.8472638277043564,
+          "bleu": 0.8247563088289904,
+          "character_error_rate": 0.20421874999999998
+        },
+        "epoch": 3
+      },
+      "final_config": {
+        "dataset": {
+          "name": "TinyShakespeare",
+          "path": "data/shakespeare/",
+          "sequence_length": 100,
+          "batch_size": 64,
+          "train_split": 0.9
+        },
+        "model": {
+          "name": "ShakespeareLSTM",
+          "architecture": {
+            "embedding_dim": 256,
+            "hidden_dim": 512,
+            "num_layers": 2,
+            "dropout": 0.5,
+            "bidirectional": false
+          }
+        },
+        "training": {
+          "batch_size": 64,
+          "learning_rate": 0.001,
+          "optimizer": "adam",
+          "optimizer_params": {
+            "weight_decay": 0.001,
+            "momentum": 0.9,
+            "beta1": 0.9,
+            "beta2": 0.999
+          },
+          "scheduler": "cosine",
+          "scheduler_params": {
+            "step_size": 10,
+            "gamma": 0.5,
+            "T_max": 100
+          },
+          "epochs": 10,
+          "early_stopping_patience": 5,
+          "clip_grad_norm": 5.0,
+          "device": "auto",
+          "loss_function": "cross_entropy",
+          "seed": 42,
+          "tunable_params": [
+            "learning_rate",
+            "hidden_dim",
+            "num_layers",
+            "embedding_dim",
+            "dropout",
+            "clip_grad_norm",
+            "weight_decay"
+          ]
+        },
+        "generation": {
+          "temperature": 1.0,
+          "max_length": 1000,
+          "top_k": 40,
+          "top_p": 0.9,
+          "num_samples": 5
+        },
+        "llm": {
+          "model": "deepseek-chat",
+          "api_key": "sk-b295897df8d7404a87a1ae9565e33bab",
+          "temperature": 0.2,
+          "max_tokens": 4096
+        },
+        "logging": {
+          "log_dir": "shakespeare_log/multi_agent_20251031_135818",
+          "save_interval": 1,
+          "metrics": [
+            "loss",
+            "perplexity",
+            "accuracy",
+            "bleu",
+            "character_error_rate"
+          ],
+          "plot_metrics": true,
+          "save_plots": true,
+          "save_samples": true,
+          "sample_interval": 5
+        }
+      }
+    },
+    {
+      "epoch": 4,
+      "flags": {
+        "use_adaptive_agent": true,
+        "use_hpo_agent": true
+      },
+      "use_optimized": false,
+      "judger_reason": "优化后的配置在0/5个指标上有改进。\nLoss: 未改进 (0.5554795004427433 -> 1.3985874466598034)\nPerplexity: 未改进 (1.7427764465336415 -> 4.049475824366417)\nAccuracy: 未改进 (0.8472638277043564 -> 0.6187787567302986)\nBLEU: 未改进 (0.8247563088289904 -> 0.8244066249358996)\nCER: 未改进 (0.20421874999999998 -> 0.20453124999999997)\n",
+      "judger_guidance": "\nADAPTIVE_AGENT_SUGGESTION:\n当前的训练策略效果不佳，请考虑更激进的调整。尝试调整学习率调度器、增加梯度裁剪阈值或改变优化器类型。\n\nHPO_AGENT_SUGGESTION:\n当前的超参数配置未能带来显著改进。请尝试更大范围的超参数调整，特别是学习率、隐藏层维度和dropout比例。考虑增加或减少模型复杂度。\n            ",
+      "agent_logs": [
+        {
+          "agent": "adaptive",
+          "suggestion": "调整学习率调度器和优化器参数",
+          "params": {
+            "learning_rate": 0.0008,
+            "scheduler": "cosine",
+            "scheduler_params": {
+              "T_max": 50
+            }
+          },
+          "previous_context": ""
+        },
+        {
+          "agent": "hpo",
+          "suggestion": "调整模型超参数",
+          "params": {
+            "clip_grad_norm": 1.0,
+            "optimizer_params": {
+              "weight_decay": 0.0005
+            }
+          },
+          "previous_context": "之前的agent已做出以下变更: Adaptive Agent建议调整训练策略: learning_rate: 0.0008, scheduler: cosine, scheduler_params: {'T_max': 50}。请在做决策时考虑兼容性。"
+        }
+      ],
+      "agent_log_file": "shakespeare_log/multi_agent_20251031_135818/agent_chain_epoch_3.json",
+      "final_metrics": {
+        "train": {
+          "loss": 0.7371338381974594,
+          "perplexity": 2.089936824896172,
+          "accuracy": 0.7780948496220156
+        },
+        "val": {
+          "loss": 0.47873597079887986,
+          "perplexity": 1.6140329274709868,
+          "accuracy": 0.8709177679882526,
+          "bleu": 0.8248539934093715,
+          "character_error_rate": 0.20390625
+        },
+        "epoch": 4
+      },
+      "final_config": {
+        "dataset": {
+          "name": "TinyShakespeare",
+          "path": "data/shakespeare/",
+          "sequence_length": 100,
+          "batch_size": 64,
+          "train_split": 0.9
+        },
+        "model": {
+          "name": "ShakespeareLSTM",
+          "architecture": {
+            "embedding_dim": 256,
+            "hidden_dim": 512,
+            "num_layers": 2,
+            "dropout": 0.5,
+            "bidirectional": false
+          }
+        },
+        "training": {
+          "batch_size": 64,
+          "learning_rate": 0.001,
+          "optimizer": "adam",
+          "optimizer_params": {
+            "weight_decay": 0.001,
+            "momentum": 0.9,
+            "beta1": 0.9,
+            "beta2": 0.999
+          },
+          "scheduler": "cosine",
+          "scheduler_params": {
+            "step_size": 10,
+            "gamma": 0.5,
+            "T_max": 100
+          },
+          "epochs": 10,
+          "early_stopping_patience": 5,
+          "clip_grad_norm": 5.0,
+          "device": "auto",
+          "loss_function": "cross_entropy",
+          "seed": 42,
+          "tunable_params": [
+            "learning_rate",
+            "hidden_dim",
+            "num_layers",
+            "embedding_dim",
+            "dropout",
+            "clip_grad_norm",
+            "weight_decay"
+          ]
+        },
+        "generation": {
+          "temperature": 1.0,
+          "max_length": 1000,
+          "top_k": 40,
+          "top_p": 0.9,
+          "num_samples": 5
+        },
+        "llm": {
+          "model": "deepseek-chat",
+          "api_key": "sk-b295897df8d7404a87a1ae9565e33bab",
+          "temperature": 0.2,
+          "max_tokens": 4096
+        },
+        "logging": {
+          "log_dir": "shakespeare_log/multi_agent_20251031_135818",
+          "save_interval": 1,
+          "metrics": [
+            "loss",
+            "perplexity",
+            "accuracy",
+            "bleu",
+            "character_error_rate"
+          ],
+          "plot_metrics": true,
+          "save_plots": true,
+          "save_samples": true,
+          "sample_interval": 5
+        }
+      }
+    },
+    {
+      "epoch": 5,
+      "flags": {
+        "use_adaptive_agent": true,
+        "use_hpo_agent": true
+      },
+      "use_optimized": false,
+      "judger_reason": "优化后的配置在0/5个指标上有改进。\nLoss: 未改进 (0.47873597079887986 -> 1.2378448639065027)\nPerplexity: 未改进 (1.6140329274709868 -> 3.4481741666888723)\nAccuracy: 未改进 (0.8709177679882526 -> 0.6726774351443955)\nBLEU: 未改进 (0.8248539934093715 -> 0.8243920340752666)\nCER: 未改进 (0.20390625 -> 0.20428124999999997)\n",
+      "judger_guidance": "\nADAPTIVE_AGENT_SUGGESTION:\n当前的训练策略效果不佳，请考虑更激进的调整。尝试调整学习率调度器、增加梯度裁剪阈值或改变优化器类型。\n\nHPO_AGENT_SUGGESTION:\n当前的超参数配置未能带来显著改进。请尝试更大范围的超参数调整，特别是学习率、隐藏层维度和dropout比例。考虑增加或减少模型复杂度。\n            ",
+      "agent_logs": [
+        {
+          "agent": "adaptive",
+          "suggestion": "调整学习率调度器和优化器参数",
+          "params": {
+            "learning_rate": 0.0008,
+            "scheduler": "cosine",
+            "scheduler_params": {
+              "T_max": 50
+            }
+          },
+          "previous_context": ""
+        },
+        {
+          "agent": "hpo",
+          "suggestion": "调整模型超参数",
+          "params": {
+            "clip_grad_norm": 1.0,
+            "optimizer_params": {
+              "weight_decay": 0.0005
+            }
+          },
+          "previous_context": "之前的agent已做出以下变更: Adaptive Agent建议调整训练策略: learning_rate: 0.0008, scheduler: cosine, scheduler_params: {'T_max': 50}。请在做决策时考虑兼容性。"
+        }
+      ],
+      "agent_log_file": "shakespeare_log/multi_agent_20251031_135818/agent_chain_epoch_4.json",
+      "final_metrics": {
+        "train": {
+          "loss": 0.6640925473752229,
+          "perplexity": 1.942726788682335,
+          "accuracy": 0.8011924185565888
+        },
+        "val": {
+          "loss": 0.41881994623690844,
+          "perplexity": 1.5201666184271305,
+          "accuracy": 0.889300048947626,
+          "bleu": 0.8246368194944701,
+          "character_error_rate": 0.20409375000000002
+        },
+        "epoch": 5
+      },
+      "final_config": {
+        "dataset": {
+          "name": "TinyShakespeare",
+          "path": "data/shakespeare/",
+          "sequence_length": 100,
+          "batch_size": 64,
+          "train_split": 0.9
+        },
+        "model": {
+          "name": "ShakespeareLSTM",
+          "architecture": {
+            "embedding_dim": 256,
+            "hidden_dim": 512,
+            "num_layers": 2,
+            "dropout": 0.5,
+            "bidirectional": false
+          }
+        },
+        "training": {
+          "batch_size": 64,
+          "learning_rate": 0.001,
+          "optimizer": "adam",
+          "optimizer_params": {
+            "weight_decay": 0.001,
+            "momentum": 0.9,
+            "beta1": 0.9,
+            "beta2": 0.999
+          },
+          "scheduler": "cosine",
+          "scheduler_params": {
+            "step_size": 10,
+            "gamma": 0.5,
+            "T_max": 100
+          },
+          "epochs": 10,
+          "early_stopping_patience": 5,
+          "clip_grad_norm": 5.0,
+          "device": "auto",
+          "loss_function": "cross_entropy",
+          "seed": 42,
+          "tunable_params": [
+            "learning_rate",
+            "hidden_dim",
+            "num_layers",
+            "embedding_dim",
+            "dropout",
+            "clip_grad_norm",
+            "weight_decay"
+          ]
+        },
+        "generation": {
+          "temperature": 1.0,
+          "max_length": 1000,
+          "top_k": 40,
+          "top_p": 0.9,
+          "num_samples": 5
+        },
+        "llm": {
+          "model": "deepseek-chat",
+          "api_key": "sk-b295897df8d7404a87a1ae9565e33bab",
+          "temperature": 0.2,
+          "max_tokens": 4096
+        },
+        "logging": {
+          "log_dir": "shakespeare_log/multi_agent_20251031_135818",
+          "save_interval": 1,
+          "metrics": [
+            "loss",
+            "perplexity",
+            "accuracy",
+            "bleu",
+            "character_error_rate"
+          ],
+          "plot_metrics": true,
+          "save_plots": true,
+          "save_samples": true,
+          "sample_interval": 5
+        }
+      }
+    },
+    {
+      "epoch": 6,
+      "flags": {
+        "use_adaptive_agent": true,
+        "use_hpo_agent": true
+      },
+      "use_optimized": false,
+      "judger_reason": "优化后的配置在0/5个指标上有改进。\nLoss: 未改进 (0.41881994623690844 -> 1.1906878966838121)\nPerplexity: 未改进 (1.5201666184271305 -> 3.289343157549911)\nAccuracy: 未改进 (0.889300048947626 -> 0.6897993147332354)\nBLEU: 未改进 (0.8246368194944701 -> 0.8243595356150883)\nCER: 未改进 (0.20409375000000002 -> 0.20437500000000003)\n",
+      "judger_guidance": "\nADAPTIVE_AGENT_SUGGESTION:\n当前的训练策略效果不佳，请考虑更激进的调整。尝试调整学习率调度器、增加梯度裁剪阈值或改变优化器类型。\n\nHPO_AGENT_SUGGESTION:\n当前的超参数配置未能带来显著改进。请尝试更大范围的超参数调整，特别是学习率、隐藏层维度和dropout比例。考虑增加或减少模型复杂度。\n            ",
+      "agent_logs": [
+        {
+          "agent": "adaptive",
+          "suggestion": "调整学习率调度器和优化器参数",
+          "params": {
+            "learning_rate": 0.0008,
+            "scheduler": "cosine",
+            "scheduler_params": {
+              "T_max": 50
+            }
+          },
+          "previous_context": ""
+        },
+        {
+          "agent": "hpo",
+          "suggestion": "调整模型超参数",
+          "params": {
+            "clip_grad_norm": 1.0,
+            "optimizer_params": {
+              "weight_decay": 0.0005
+            }
+          },
+          "previous_context": "之前的agent已做出以下变更: Adaptive Agent建议调整训练策略: learning_rate: 0.0008, scheduler: cosine, scheduler_params: {'T_max': 50}。请在做决策时考虑兼容性。"
+        }
+      ],
+      "agent_log_file": "shakespeare_log/multi_agent_20251031_135818/agent_chain_epoch_5.json",
+      "final_metrics": {
+        "train": {
+          "loss": 0.6182750821113586,
+          "perplexity": 1.8557243074969594,
+          "accuracy": 0.8160678740414423
+        },
+        "val": {
+          "loss": 0.41030568024143577,
+          "perplexity": 1.5072784599432163,
+          "accuracy": 0.8895790504160548,
+          "bleu": 0.824656691622266,
+          "character_error_rate": 0.20418750000000002
+        },
+        "epoch": 6
+      },
+      "final_config": {
+        "dataset": {
+          "name": "TinyShakespeare",
+          "path": "data/shakespeare/",
+          "sequence_length": 100,
+          "batch_size": 64,
+          "train_split": 0.9
+        },
+        "model": {
+          "name": "ShakespeareLSTM",
+          "architecture": {
+            "embedding_dim": 256,
+            "hidden_dim": 512,
+            "num_layers": 2,
+            "dropout": 0.5,
+            "bidirectional": false
+          }
+        },
+        "training": {
+          "batch_size": 64,
+          "learning_rate": 0.001,
+          "optimizer": "adam",
+          "optimizer_params": {
+            "weight_decay": 0.001,
+            "momentum": 0.9,
+            "beta1": 0.9,
+            "beta2": 0.999
+          },
+          "scheduler": "cosine",
+          "scheduler_params": {
+            "step_size": 10,
+            "gamma": 0.5,
+            "T_max": 100
+          },
+          "epochs": 10,
+          "early_stopping_patience": 5,
+          "clip_grad_norm": 5.0,
+          "device": "auto",
+          "loss_function": "cross_entropy",
+          "seed": 42,
+          "tunable_params": [
+            "learning_rate",
+            "hidden_dim",
+            "num_layers",
+            "embedding_dim",
+            "dropout",
+            "clip_grad_norm",
+            "weight_decay"
+          ]
+        },
+        "generation": {
+          "temperature": 1.0,
+          "max_length": 1000,
+          "top_k": 40,
+          "top_p": 0.9,
+          "num_samples": 5
+        },
+        "llm": {
+          "model": "deepseek-chat",
+          "api_key": "sk-b295897df8d7404a87a1ae9565e33bab",
+          "temperature": 0.2,
+          "max_tokens": 4096
+        },
+        "logging": {
+          "log_dir": "shakespeare_log/multi_agent_20251031_135818",
+          "save_interval": 1,
+          "metrics": [
+            "loss",
+            "perplexity",
+            "accuracy",
+            "bleu",
+            "character_error_rate"
+          ],
+          "plot_metrics": true,
+          "save_plots": true,
+          "save_samples": true,
+          "sample_interval": 5
+        }
+      }
+    },
+    {
+      "epoch": 7,
+      "flags": {
+        "use_adaptive_agent": true,
+        "use_hpo_agent": true
+      },
+      "use_optimized": false,
+      "judger_reason": "优化后的配置在0/5个指标上有改进。\nLoss: 未改进 (0.41030568024143577 -> 1.1054144408553839)\nPerplexity: 未改进 (1.5072784599432163 -> 3.020476018106684)\nAccuracy: 未改进 (0.8895790504160548 -> 0.7209055310817425)\nBLEU: 未改进 (0.824656691622266 -> 0.8243279566429187)\nCER: 未改进 (0.20418750000000002 -> 0.20462499999999997)\n",
+      "judger_guidance": "\nADAPTIVE_AGENT_SUGGESTION:\n当前的训练策略效果不佳，请考虑更激进的调整。尝试调整学习率调度器、增加梯度裁剪阈值或改变优化器类型。\n\nHPO_AGENT_SUGGESTION:\n当前的超参数配置未能带来显著改进。请尝试更大范围的超参数调整，特别是学习率、隐藏层维度和dropout比例。考虑增加或减少模型复杂度。\n            ",
+      "agent_logs": [
+        {
+          "agent": "adaptive",
+          "suggestion": "调整学习率调度器和优化器参数",
+          "params": {
+            "learning_rate": 0.0008,
+            "scheduler": "cosine",
+            "scheduler_params": {
+              "T_max": 50
+            }
+          },
+          "previous_context": ""
+        },
+        {
+          "agent": "hpo",
+          "suggestion": "调整模型超参数",
+          "params": {
+            "clip_grad_norm": 1.0,
+            "optimizer_params": {
+              "weight_decay": 0.0005
+            }
+          },
+          "previous_context": "之前的agent已做出以下变更: Adaptive Agent建议调整训练策略: learning_rate: 0.0008, scheduler: cosine, scheduler_params: {'T_max': 50}。请在做决策时考虑兼容性。"
+        }
+      ],
+      "agent_log_file": "shakespeare_log/multi_agent_20251031_135818/agent_chain_epoch_6.json",
+      "final_metrics": {
+        "train": {
+          "loss": 0.590135222206945,
+          "perplexity": 1.8042323711864388,
+          "accuracy": 0.8253698265078588
+        },
+        "val": {
+          "loss": 0.3860940164886415,
+          "perplexity": 1.4712229835317236,
+          "accuracy": 0.8976676456191874,
+          "bleu": 0.8247424274941076,
+          "character_error_rate": 0.20396875000000003
+        },
+        "epoch": 7
+      },
+      "final_config": {
+        "dataset": {
+          "name": "TinyShakespeare",
+          "path": "data/shakespeare/",
+          "sequence_length": 100,
+          "batch_size": 64,
+          "train_split": 0.9
+        },
+        "model": {
+          "name": "ShakespeareLSTM",
+          "architecture": {
+            "embedding_dim": 256,
+            "hidden_dim": 512,
+            "num_layers": 2,
+            "dropout": 0.5,
+            "bidirectional": false
+          }
+        },
+        "training": {
+          "batch_size": 64,
+          "learning_rate": 0.001,
+          "optimizer": "adam",
+          "optimizer_params": {
+            "weight_decay": 0.001,
+            "momentum": 0.9,
+            "beta1": 0.9,
+            "beta2": 0.999
+          },
+          "scheduler": "cosine",
+          "scheduler_params": {
+            "step_size": 10,
+            "gamma": 0.5,
+            "T_max": 100
+          },
+          "epochs": 10,
+          "early_stopping_patience": 5,
+          "clip_grad_norm": 5.0,
+          "device": "auto",
+          "loss_function": "cross_entropy",
+          "seed": 42,
+          "tunable_params": [
+            "learning_rate",
+            "hidden_dim",
+            "num_layers",
+            "embedding_dim",
+            "dropout",
+            "clip_grad_norm",
+            "weight_decay"
+          ]
+        },
+        "generation": {
+          "temperature": 1.0,
+          "max_length": 1000,
+          "top_k": 40,
+          "top_p": 0.9,
+          "num_samples": 5
+        },
+        "llm": {
+          "model": "deepseek-chat",
+          "api_key": "sk-b295897df8d7404a87a1ae9565e33bab",
+          "temperature": 0.2,
+          "max_tokens": 4096
+        },
+        "logging": {
+          "log_dir": "shakespeare_log/multi_agent_20251031_135818",
+          "save_interval": 1,
+          "metrics": [
+            "loss",
+            "perplexity",
+            "accuracy",
+            "bleu",
+            "character_error_rate"
+          ],
+          "plot_metrics": true,
+          "save_plots": true,
+          "save_samples": true,
+          "sample_interval": 5
+        }
+      }
+    },
+    {
+      "epoch": 8,
+      "flags": {
+        "use_adaptive_agent": true,
+        "use_hpo_agent": true
+      },
+      "use_optimized": false,
+      "judger_reason": "优化后的配置在0/5个指标上有改进。\nLoss: 未改进 (0.3860940164886415 -> 1.0774938091635704)\nPerplexity: 未改进 (1.4712229835317236 -> 2.937308862192814)\nAccuracy: 未改进 (0.8976676456191874 -> 0.7280885952031326)\nBLEU: 未改进 (0.8247424274941076 -> 0.8244520135226537)\nCER: 未改进 (0.20396875000000003 -> 0.20415624999999998)\n",
+      "judger_guidance": "\nADAPTIVE_AGENT_SUGGESTION:\n当前的训练策略效果不佳，请考虑更激进的调整。尝试调整学习率调度器、增加梯度裁剪阈值或改变优化器类型。\n\nHPO_AGENT_SUGGESTION:\n当前的超参数配置未能带来显著改进。请尝试更大范围的超参数调整，特别是学习率、隐藏层维度和dropout比例。考虑增加或减少模型复杂度。\n            ",
+      "agent_logs": [
+        {
+          "agent": "adaptive",
+          "suggestion": "调整学习率调度器和优化器参数",
+          "params": {
+            "learning_rate": 0.0008,
+            "scheduler": "cosine",
+            "scheduler_params": {
+              "T_max": 50
+            }
+          },
+          "previous_context": ""
+        },
+        {
+          "agent": "hpo",
+          "suggestion": "调整模型超参数",
+          "params": {
+            "clip_grad_norm": 1.0,
+            "optimizer_params": {
+              "weight_decay": 0.0005
+            }
+          },
+          "previous_context": "之前的agent已做出以下变更: Adaptive Agent建议调整训练策略: learning_rate: 0.0008, scheduler: cosine, scheduler_params: {'T_max': 50}。请在做决策时考虑兼容性。"
+        }
+      ],
+      "agent_log_file": "shakespeare_log/multi_agent_20251031_135818/agent_chain_epoch_7.json",
+      "final_metrics": {
+        "train": {
+          "loss": 0.5719934541246166,
+          "perplexity": 1.7717955264388936,
+          "accuracy": 0.8318760537336162
+        },
+        "val": {
+          "loss": 0.39430577028542757,
+          "perplexity": 1.4833540449280882,
+          "accuracy": 0.8935144395496818,
+          "bleu": 0.824648823343565,
+          "character_error_rate": 0.20393749999999997
+        },
+        "epoch": 8
+      },
+      "final_config": {
+        "dataset": {
+          "name": "TinyShakespeare",
+          "path": "data/shakespeare/",
+          "sequence_length": 100,
+          "batch_size": 64,
+          "train_split": 0.9
+        },
+        "model": {
+          "name": "ShakespeareLSTM",
+          "architecture": {
+            "embedding_dim": 256,
+            "hidden_dim": 512,
+            "num_layers": 2,
+            "dropout": 0.5,
+            "bidirectional": false
+          }
+        },
+        "training": {
+          "batch_size": 64,
+          "learning_rate": 0.001,
+          "optimizer": "adam",
+          "optimizer_params": {
+            "weight_decay": 0.001,
+            "momentum": 0.9,
+            "beta1": 0.9,
+            "beta2": 0.999
+          },
+          "scheduler": "cosine",
+          "scheduler_params": {
+            "step_size": 10,
+            "gamma": 0.5,
+            "T_max": 100
+          },
+          "epochs": 10,
+          "early_stopping_patience": 5,
+          "clip_grad_norm": 5.0,
+          "device": "auto",
+          "loss_function": "cross_entropy",
+          "seed": 42,
+          "tunable_params": [
+            "learning_rate",
+            "hidden_dim",
+            "num_layers",
+            "embedding_dim",
+            "dropout",
+            "clip_grad_norm",
+            "weight_decay"
+          ]
+        },
+        "generation": {
+          "temperature": 1.0,
+          "max_length": 1000,
+          "top_k": 40,
+          "top_p": 0.9,
+          "num_samples": 5
+        },
+        "llm": {
+          "model": "deepseek-chat",
+          "api_key": "sk-b295897df8d7404a87a1ae9565e33bab",
+          "temperature": 0.2,
+          "max_tokens": 4096
+        },
+        "logging": {
+          "log_dir": "shakespeare_log/multi_agent_20251031_135818",
+          "save_interval": 1,
+          "metrics": [
+            "loss",
+            "perplexity",
+            "accuracy",
+            "bleu",
+            "character_error_rate"
+          ],
+          "plot_metrics": true,
+          "save_plots": true,
+          "save_samples": true,
+          "sample_interval": 5
+        }
+      }
+    },
+    {
+      "epoch": 9,
+      "flags": {
+        "use_adaptive_agent": true,
+        "use_hpo_agent": true
+      },
+      "use_optimized": false,
+      "judger_reason": "优化后的配置在0/5个指标上有改进。\nLoss: 未改进 (0.39430577028542757 -> 1.0395237635821104)\nPerplexity: 未改进 (1.4833540449280882 -> 2.827869958959089)\nAccuracy: 未改进 (0.8935144395496818 -> 0.7383773861967694)\nBLEU: 未改进 (0.824648823343565 -> 0.8244333432205672)\nCER: 未改进 (0.20393749999999997 -> 0.20440624999999998)\n",
+      "judger_guidance": "\nADAPTIVE_AGENT_SUGGESTION:\n当前的训练策略效果不佳，请考虑更激进的调整。尝试调整学习率调度器、增加梯度裁剪阈值或改变优化器类型。\n\nHPO_AGENT_SUGGESTION:\n当前的超参数配置未能带来显著改进。请尝试更大范围的超参数调整，特别是学习率、隐藏层维度和dropout比例。考虑增加或减少模型复杂度。\n            ",
+      "agent_logs": [
+        {
+          "agent": "adaptive",
+          "suggestion": "调整学习率调度器和优化器参数",
+          "params": {
+            "learning_rate": 0.0008,
+            "scheduler": "cosine",
+            "scheduler_params": {
+              "T_max": 50
+            }
+          },
+          "previous_context": ""
+        },
+        {
+          "agent": "hpo",
+          "suggestion": "调整模型超参数",
+          "params": {
+            "clip_grad_norm": 1.0,
+            "optimizer_params": {
+              "weight_decay": 0.0005
+            }
+          },
+          "previous_context": "之前的agent已做出以下变更: Adaptive Agent建议调整训练策略: learning_rate: 0.0008, scheduler: cosine, scheduler_params: {'T_max': 50}。请在做决策时考虑兼容性。"
+        }
+      ],
+      "agent_log_file": "shakespeare_log/multi_agent_20251031_135818/agent_chain_epoch_8.json",
+      "final_metrics": {
+        "train": {
+          "loss": 0.5557218309070753,
+          "perplexity": 1.7431988255347395,
+          "accuracy": 0.8371822483276228
+        },
+        "val": {
+          "loss": 0.3762715235352516,
+          "perplexity": 1.4568426471389189,
+          "accuracy": 0.8986319138521782,
+          "bleu": 0.8248539973358522,
+          "character_error_rate": 0.20393749999999997
+        },
+        "epoch": 9
+      },
+      "final_config": {
+        "dataset": {
+          "name": "TinyShakespeare",
+          "path": "data/shakespeare/",
+          "sequence_length": 100,
+          "batch_size": 64,
+          "train_split": 0.9
+        },
+        "model": {
+          "name": "ShakespeareLSTM",
+          "architecture": {
+            "embedding_dim": 256,
+            "hidden_dim": 512,
+            "num_layers": 2,
+            "dropout": 0.5,
+            "bidirectional": false
+          }
+        },
+        "training": {
+          "batch_size": 64,
+          "learning_rate": 0.001,
+          "optimizer": "adam",
+          "optimizer_params": {
+            "weight_decay": 0.001,
+            "momentum": 0.9,
+            "beta1": 0.9,
+            "beta2": 0.999
+          },
+          "scheduler": "cosine",
+          "scheduler_params": {
+            "step_size": 10,
+            "gamma": 0.5,
+            "T_max": 100
+          },
+          "epochs": 10,
+          "early_stopping_patience": 5,
+          "clip_grad_norm": 5.0,
+          "device": "auto",
+          "loss_function": "cross_entropy",
+          "seed": 42,
+          "tunable_params": [
+            "learning_rate",
+            "hidden_dim",
+            "num_layers",
+            "embedding_dim",
+            "dropout",
+            "clip_grad_norm",
+            "weight_decay"
+          ]
+        },
+        "generation": {
+          "temperature": 1.0,
+          "max_length": 1000,
+          "top_k": 40,
+          "top_p": 0.9,
+          "num_samples": 5
+        },
+        "llm": {
+          "model": "deepseek-chat",
+          "api_key": "sk-b295897df8d7404a87a1ae9565e33bab",
+          "temperature": 0.2,
+          "max_tokens": 4096
+        },
+        "logging": {
+          "log_dir": "shakespeare_log/multi_agent_20251031_135818",
+          "save_interval": 1,
+          "metrics": [
+            "loss",
+            "perplexity",
+            "accuracy",
+            "bleu",
+            "character_error_rate"
+          ],
+          "plot_metrics": true,
+          "save_plots": true,
+          "save_samples": true,
+          "sample_interval": 5
+        }
+      }
+    }
+  ]
+}

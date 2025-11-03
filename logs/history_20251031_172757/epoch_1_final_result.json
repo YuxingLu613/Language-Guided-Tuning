@@ -1,0 +1,327 @@
+{
+  "epoch": 1,
+  "flags": {
+    "use_adaptive_agent": true,
+    "use_aug_agent": false,
+    "use_hpo_agent": true
+  },
+  "use_optimized": true,
+  "judger_reason": "",
+  "final_metrics": {
+    "train": {
+      "loss": 1.7036324581892595,
+      "perplexity": 5.4938674342152565,
+      "accuracy": 0.6706006961440147
+    },
+    "val": {
+      "loss": 1.176030831411481,
+      "perplexity": 3.24148264433769,
+      "accuracy": 0.8777459618208517,
+      "bleu": 0.8246907029118408,
+      "character_error_rate": 0.20418750000000002
+    },
+    "epoch": 1
+  },
+  "final_config": {
+    "dataset": {
+      "name": "TinyShakespeare",
+      "path": "data/shakespeare/",
+      "sequence_length": 100,
+      "batch_size": 64,
+      "train_split": 0.9
+    },
+    "model": {
+      "name": "ShakespeareLSTM",
+      "architecture": {
+        "embedding_dim": 256,
+        "hidden_dim": 512,
+        "num_layers": 2,
+        "dropout": 0.5,
+        "bidirectional": false
+      }
+    },
+    "training": {
+      "batch_size": 64,
+      "learning_rate": 0.0005,
+      "optimizer": "adamw",
+      "optimizer_params": {
+        "weight_decay": 0.001,
+        "momentum": 0.9,
+        "beta1": 0.9,
+        "beta2": 0.999
+      },
+      "scheduler": "cosine",
+      "scheduler_params": {
+        "step_size": 10,
+        "gamma": 0.5,
+        "T_max": 100
+      },
+      "epochs": 10,
+      "early_stopping_patience": 5,
+      "clip_grad_norm": 3.0,
+      "device": "auto",
+      "loss_function": "label_smoothing_language",
+      "seed": 42,
+      "tunable_params": [
+        "learning_rate",
+        "hidden_dim",
+        "num_layers",
+        "embedding_dim",
+        "dropout",
+        "clip_grad_norm",
+        "weight_decay"
+      ],
+      "dropout": 0.3
+    },
+    "generation": {
+      "temperature": 1.0,
+      "max_length": 1000,
+      "top_k": 40,
+      "top_p": 0.9,
+      "num_samples": 5
+    },
+    "llm": {
+      "model": "deepseek-chat",
+      "api_key": "sk-b295897df8d7404a87a1ae9565e33bab",
+      "temperature": 0.2,
+      "max_tokens": 4096
+    },
+    "logging": {
+      "log_dir": "logs/history_20251031_172757",
+      "save_interval": 1,
+      "metrics": [
+        "loss",
+        "perplexity",
+        "accuracy",
+        "bleu",
+        "character_error_rate"
+      ],
+      "plot_metrics": true,
+      "save_plots": true,
+      "save_samples": true,
+      "sample_interval": 5,
+      "disable_trainer_subdir": true
+    }
+  },
+  "optimization_history": [
+    {
+      "param_changes": {
+        "dropout": {
+          "from": null,
+          "to": 0.3
+        },
+        "device": {
+          "from": "auto",
+          "to": "auto"
+        },
+        "scheduler_params": {
+          "from": {
+            "step_size": 10,
+            "gamma": 0.5,
+            "T_max": 100
+          },
+          "to": {
+            "step_size": 10,
+            "gamma": 0.5,
+            "T_max": 100
+          }
+        },
+        "early_stopping_patience": {
+          "from": 5,
+          "to": 5
+        },
+        "scheduler": {
+          "from": "cosine",
+          "to": "cosine"
+        },
+        "learning_rate": {
+          "from": 0.001,
+          "to": 0.0005
+        },
+        "optimizer": {
+          "from": "adam",
+          "to": "adamw"
+        },
+        "epochs": {
+          "from": 10,
+          "to": 10
+        },
+        "seed": {
+          "from": 42,
+          "to": 42
+        },
+        "loss_function": {
+          "from": "cross_entropy",
+          "to": "label_smoothing_language"
+        },
+        "optimizer_params": {
+          "from": {
+            "weight_decay": 0.001,
+            "momentum": 0.9,
+            "beta1": 0.9,
+            "beta2": 0.999
+          },
+          "to": {
+            "weight_decay": 0.001,
+            "momentum": 0.9,
+            "beta1": 0.9,
+            "beta2": 0.999
+          }
+        },
+        "tunable_params": {
+          "from": [
+            "learning_rate",
+            "hidden_dim",
+            "num_layers",
+            "embedding_dim",
+            "dropout",
+            "clip_grad_norm",
+            "weight_decay"
+          ],
+          "to": [
+            "learning_rate",
+            "hidden_dim",
+            "num_layers",
+            "embedding_dim",
+            "dropout",
+            "clip_grad_norm",
+            "weight_decay"
+          ]
+        },
+        "clip_grad_norm": {
+          "from": 5.0,
+          "to": 3.0
+        },
+        "batch_size": {
+          "from": 64,
+          "to": 64
+        }
+      },
+      "original_metrics": {
+        "train": {
+          "loss": 1.4036730507145758,
+          "perplexity": 4.070122310466276,
+          "accuracy": 0.57937129493664
+        },
+        "val": {
+          "loss": 1.0186328487470746,
+          "perplexity": 2.769405977780163,
+          "accuracy": 0.6986784140969163,
+          "bleu": 0.8246167175016751,
+          "character_error_rate": 0.20409375000000002
+        },
+        "epoch": 1
+      },
+      "optimized_metrics": {
+        "train": {
+          "loss": 1.7036324581892595,
+          "perplexity": 5.4938674342152565,
+          "accuracy": 0.6706006961440147
+        },
+        "val": {
+          "loss": 1.176030831411481,
+          "perplexity": 3.24148264433769,
+          "accuracy": 0.8777459618208517,
+          "bleu": 0.8246907029118408,
+          "character_error_rate": 0.20418750000000002
+        },
+        "epoch": 1
+      }
+    }
+  ],
+  "prev_metrics_used": {
+    "train": {
+      "loss": 1.9071170216021331,
+      "perplexity": 6.733647826822385,
+      "accuracy": 0.4496211997607005
+    },
+    "val": {
+      "loss": 1.4200150184333324,
+      "perplexity": 4.137182573785486,
+      "accuracy": 0.5768257464512971,
+      "bleu": 0.8246774569056485,
+      "character_error_rate": 0.20421874999999998
+    },
+    "epoch": 0
+  },
+  "prev_config_used": {
+    "dataset": {
+      "name": "TinyShakespeare",
+      "path": "data/shakespeare/",
+      "sequence_length": 100,
+      "batch_size": 64,
+      "train_split": 0.9
+    },
+    "model": {
+      "name": "ShakespeareLSTM",
+      "architecture": {
+        "embedding_dim": 256,
+        "hidden_dim": 512,
+        "num_layers": 2,
+        "dropout": 0.5,
+        "bidirectional": false
+      }
+    },
+    "training": {
+      "batch_size": 64,
+      "learning_rate": 0.001,
+      "optimizer": "adam",
+      "optimizer_params": {
+        "weight_decay": 0.001,
+        "momentum": 0.9,
+        "beta1": 0.9,
+        "beta2": 0.999
+      },
+      "scheduler": "cosine",
+      "scheduler_params": {
+        "step_size": 10,
+        "gamma": 0.5,
+        "T_max": 100
+      },
+      "epochs": 10,
+      "early_stopping_patience": 5,
+      "clip_grad_norm": 5.0,
+      "device": "auto",
+      "loss_function": "cross_entropy",
+      "seed": 42,
+      "tunable_params": [
+        "learning_rate",
+        "hidden_dim",
+        "num_layers",
+        "embedding_dim",
+        "dropout",
+        "clip_grad_norm",
+        "weight_decay"
+      ]
+    },
+    "generation": {
+      "temperature": 1.0,
+      "max_length": 1000,
+      "top_k": 40,
+      "top_p": 0.9,
+      "num_samples": 5
+    },
+    "llm": {
+      "model": "deepseek-chat",
+      "api_key": "sk-b295897df8d7404a87a1ae9565e33bab",
+      "temperature": 0.2,
+      "max_tokens": 4096
+    },
+    "logging": {
+      "log_dir": "logs/history_20251031_172757",
+      "save_interval": 1,
+      "metrics": [
+        "loss",
+        "perplexity",
+        "accuracy",
+        "bleu",
+        "character_error_rate"
+      ],
+      "plot_metrics": true,
+      "save_plots": true,
+      "save_samples": true,
+      "sample_interval": 5,
+      "disable_trainer_subdir": true
+    }
+  }
+}

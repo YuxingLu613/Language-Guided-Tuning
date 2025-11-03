@@ -86,6 +86,14 @@ class StrategyAgent:
             "Task type: {task_type}\n"
         ).format(task_type=task_type)
 
+        # 为语言生成任务添加特殊提示
+        if task_type.lower() == "language_generation":
+            prompt += (
+                "\nFor language generation tasks, consider these specialized options:\n"
+                "- Loss functions: perplexity, language_cross_entropy, label_smoothing_language\n"
+                "- Optimizers: adam, adamw, adafactor (specialized for language models)\n\n"
+            )
+
         # Optional guidance from another agent (e.g. Judger)
         if guidance:
             prompt += f"\nREFINED GUIDANCE FROM JUDGER:\n{guidance}\n\n"

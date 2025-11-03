@@ -1,0 +1,103 @@
+{
+  "epoch": 0,
+  "flags": {
+    "use_adaptive_agent": true,
+    "use_aug_agent": true,
+    "use_hpo_agent": true
+  },
+  "use_optimized": false,
+  "judger_reason": "Epoch 0: direct training without optimization",
+  "final_metrics": {
+    "train": {
+      "loss": 1.9071170216021331
+    },
+    "val": {
+      "loss": 1.4200150184333324,
+      "perplexity": 4.137182573785486,
+      "accuracy": 0.5768257464512971,
+      "bleu": 0,
+      "character_error_rate": 1
+    },
+    "epoch": 0
+  },
+  "final_config": {
+    "dataset": {
+      "name": "TinyShakespeare",
+      "path": "data/shakespeare/",
+      "sequence_length": 100,
+      "batch_size": 64,
+      "train_split": 0.9
+    },
+    "model": {
+      "name": "ShakespeareLSTM",
+      "architecture": {
+        "embedding_dim": 256,
+        "hidden_dim": 512,
+        "num_layers": 2,
+        "dropout": 0.5,
+        "bidirectional": false
+      }
+    },
+    "training": {
+      "batch_size": 64,
+      "learning_rate": 0.001,
+      "optimizer": "adam",
+      "optimizer_params": {
+        "weight_decay": 0.001,
+        "momentum": 0.9,
+        "beta1": 0.9,
+        "beta2": 0.999
+      },
+      "scheduler": "cosine",
+      "scheduler_params": {
+        "step_size": 10,
+        "gamma": 0.5,
+        "T_max": 100
+      },
+      "epochs": 10,
+      "early_stopping_patience": 5,
+      "clip_grad_norm": 5.0,
+      "device": "auto",
+      "loss_function": "cross_entropy",
+      "seed": 42,
+      "tunable_params": [
+        "learning_rate",
+        "hidden_dim",
+        "num_layers",
+        "embedding_dim",
+        "dropout",
+        "clip_grad_norm",
+        "weight_decay"
+      ]
+    },
+    "generation": {
+      "temperature": 1.0,
+      "max_length": 1000,
+      "top_k": 40,
+      "top_p": 0.9,
+      "num_samples": 5
+    },
+    "llm": {
+      "model": "deepseek-chat",
+      "api_key": "sk-b295897df8d7404a87a1ae9565e33bab",
+      "temperature": 0.2,
+      "max_tokens": 4096
+    },
+    "logging": {
+      "log_dir": "logs/history_20251101_185005",
+      "save_interval": 1,
+      "metrics": [
+        "loss",
+        "perplexity",
+        "accuracy",
+        "bleu",
+        "character_error_rate"
+      ],
+      "plot_metrics": true,
+      "save_plots": true,
+      "save_samples": true,
+      "sample_interval": 5,
+      "disable_trainer_subdir": true
+    }
+  }
+}

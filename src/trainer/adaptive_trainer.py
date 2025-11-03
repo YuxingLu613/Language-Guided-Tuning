@@ -116,6 +116,7 @@ class AdaptiveTrainer:
         "adagrad": torch.optim.Adagrad,
         "nadam": torch.optim.NAdam,
         "lion": Lion,
+        "adafactor": "_custom_adafactor",  # 为语言模型添加Adafactor优化器
     }
 
     class _FocalLoss(nn.Module):
@@ -157,6 +158,38 @@ class AdaptiveTrainer:
             loss = 1 - dice.mean()
             return loss
 
+    class _PerplexityLoss(nn.Module):
+        """Perplexity loss for language generation tasks."""
+        def __init__(self, ignore_index=-100):
+            super().__init__()
+            self.ignore_index = ignore_index
+            self.ce_loss = nn.CrossEntropyLoss(ignore_index=ignore_index, reduction='none')
+            
+        def forward(self, inputs: torch.Tensor, targets: torch.Tensor):
+            # inputs shape: [batch_size, seq_len, vocab_size]
+            # targets shape: [batch_size, seq_len]
+            batch_size = inputs.size(0)
+            seq_len = inputs.size(1)
+            
+            # Reshape for CrossEntropyLoss
+            inputs_flat = inputs.view(-1, inputs.size(-1))
+            targets_flat = targets.view(-1)
+            
+            # Calculate CE loss
+            losses = self.ce_loss(inputs_flat, targets_flat)
+            
+            # Reshape back and calculate perplexity
+            losses = losses.view(batch_size, -1)
+            # Mask out ignored indices
+            mask = (targets != self.ignore_index).float()
+            # Sum losses and divide by number of tokens
+            token_count = mask.sum(dim=1)
+            loss_sum = (losses * mask).sum(dim=1)
+            # Average loss per sequence
+            avg_loss = loss_sum / token_count.clamp(min=1.0)
+            # Return mean over batch
+            return avg_loss.mean()
+    
     SUPPORTED_LOSSES = {
         # classification
         "cross_entropy": nn.CrossEntropyLoss,
@@ -172,11 +205,15 @@ class AdaptiveTrainer:
         "huber": nn.HuberLoss,
         "smooth_l1": nn.SmoothL1Loss,
         "log_cosh": "_custom_reg",
+        # language generation
+        "perplexity": _PerplexityLoss,
+        "language_cross_entropy": nn.CrossEntropyLoss,
+        "label_smoothing_language": "_custom_language_smoothing",
     }
 
     def __init__(self, model: Optional[nn.Module], task_type: str, config_path: Union[str, Path, dict]):
         self.task_type = task_type.lower()
-        if self.task_type not in {"classification", "regression"}:
+        if self.task_type not in {"classification", "regression", "language_generation"}:
             raise ValueError(f"Unsupported task_type: {task_type}")
         # 加入兼容 dict 直接传递
         if isinstance(config_path, dict):
@@ -336,6 +373,9 @@ class AdaptiveTrainer:
             if self.SUPPORTED_LOSSES[name] == "_custom_label_smoothing":
                 smoothing = self.current_strategy.get("label_smoothing", 0.1)
                 return nn.CrossEntropyLoss(label_smoothing=smoothing)
+            elif self.SUPPORTED_LOSSES[name] == "_custom_language_smoothing":
+                smoothing = self.current_strategy.get("label_smoothing", 0.1)
+                return nn.CrossEntropyLoss(label_smoothing=smoothing)
             # 处理其他可能的自定义损失函数
             raise ValueError(f"Unsupported custom loss function: {name}")
         return self.SUPPORTED_LOSSES[name]()
@@ -354,6 +394,24 @@ class AdaptiveTrainer:
             
         if optimizer_name not in self.SUPPORTED_OPTIMIZERS:
             raise ValueError(f"Unsupported optimizer: {optimizer_name}")
+        
+        # 处理Adafactor优化器（常用于语言模型）
+        if optimizer_name == "adafactor":
+            try:
+                from transformers.optimization import Adafactor
+                return Adafactor(
+                    self.model.parameters(),
+                    lr=lr,
+                    relative_step=False,
+                    scale_parameter=False,
+                    warmup_init=False,
+                    weight_decay=self.current_strategy.get('weight_decay', 0.0)
+                )
+            except ImportError:
+                # 如果没有安装transformers库，回退到AdamW
+                print("Warning: Adafactor optimizer requested but transformers library not found. Falling back to AdamW.")
+                return torch.optim.AdamW(self.model.parameters(), lr=lr, weight_decay=self.current_strategy.get('weight_decay', 0.0))
+        
         optim_cls = self.SUPPORTED_OPTIMIZERS[optimizer_name]
         wd = self.current_strategy.get('weight_decay', 0.0)
 
@@ -964,3 +1022,4 @@ class AdaptiveTrainer:
             print(f"Final model saved to {save_path}")
             
         return metrics
+
